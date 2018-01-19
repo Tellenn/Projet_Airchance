@@ -5,13 +5,14 @@
  */
 package Tables;
 
+import java.sql.ResultSet;
+
 /**
  *
  * @author Andréas
  */
-public interface Avion{
+public interface TableInterface {
     
-    public int getIdAvion();
-    public void setIdAvion(int idAvion);
     public void showTable();
+    public ResultSet getResultSetFromId(String id);
 }
