@@ -79,13 +79,14 @@ CREATE TABLE InstanceVol(
 -- Table: Avion
 ------------------------------------------------------------
 CREATE TABLE Avion(
-	idAvion 	NUMBER(10,0)  NOT NULL  ,
-	nomModele 	VARCHAR2 (25) ,
-	poidsDispo 	NUMBER(10,0)  ,
-	volumeDispo NUMBER(10,0)  ,
+	idAvion 		NUMBER(10,0)  NOT NULL  ,
+	nomModele 		VARCHAR2 (25) ,
+	poidsDispo 		NUMBER(10,0)  ,
+	volumeDispo 	NUMBER(10,0)  ,
 	placesEco 		NUMBER(10,0)  ,
 	placesAffaire  	NUMBER(10,0)  ,
 	placesPrem     	NUMBER(10,0)  ,
+	typeAvion		VARCHAR2(20)  ,
 	CONSTRAINT Avion_Pk PRIMARY KEY (idAvion)
 );
 
