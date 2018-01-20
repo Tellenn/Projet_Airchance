@@ -1,4 +1,4 @@
-package sql;
+package BD;
 
 
 import com.sun.rowset.CachedRowSetImpl;
