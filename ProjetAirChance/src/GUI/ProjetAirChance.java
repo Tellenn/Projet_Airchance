@@ -49,7 +49,7 @@ public class ProjetAirChance extends Application {
     public static void main(String[] args) {
         //launch(args);
         Avion a = new AvionPassager();
-        a.showTable();
+        ((AvionPassager)a).showTable();
     }
     
 }
