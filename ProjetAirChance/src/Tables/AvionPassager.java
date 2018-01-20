@@ -118,7 +118,7 @@ public class AvionPassager implements Avion, TableInterface {
     @Override
     public ResultSet getResultSetFromId(String id) {
         String query = "Select * from Avion where typeAvion='Passager'"
-                + "and idAvion='" + id + "'";
+                + "and idAvion=" + id;
 
         return TableImpl.getResultSet(query);
     }
