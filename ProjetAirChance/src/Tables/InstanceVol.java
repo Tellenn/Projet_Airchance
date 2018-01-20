@@ -18,7 +18,7 @@ public class InstanceVol {
     private int placesRestPrem;
     private int placesRestAff;
     private int poidsRest;
-    private String dateArrivé;
+    private String dateArrive;
     private String dateDepart;
     private String etat;
 
@@ -79,11 +79,11 @@ public class InstanceVol {
     }
 
     public String getDateArrivé() {
-        return dateArrivé;
+        return dateArrive;
     }
 
-    public void setDateArrivé(String dateArrivé) {
-        this.dateArrivé = dateArrivé;
+    public void setDateArrivé(String dateArrive) {
+        this.dateArrive = dateArrive;
     }
 
     public String getDateDepart() {
