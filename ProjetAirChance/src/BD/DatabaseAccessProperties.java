@@ -29,6 +29,7 @@ public class DatabaseAccessProperties {
         dbUrl = prop.getProperty("database.url");
         username = prop.getProperty("database.username");
         password = prop.getProperty("database.password");
+        System.out.println("Database URL : "+dbUrl);
     }
     
     public String getJdbcDriver() {
