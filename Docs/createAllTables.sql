@@ -3,7 +3,7 @@
  ---------------------------------------------------------------
 
 ------------------------------------------------------------
--- Table: Client
+-- Table: Client*
 ------------------------------------------------------------
 CREATE TABLE Client(
 	idClient        NUMBER(10,0)  NOT NULL  ,
@@ -76,7 +76,7 @@ CREATE TABLE InstanceVol(
 );
 
 ------------------------------------------------------------
--- Table: Avion
+-- Table: Avion*
 ------------------------------------------------------------
 CREATE TABLE Avion(
 	idAvion 		NUMBER(10,0)  NOT NULL  ,
@@ -91,7 +91,7 @@ CREATE TABLE Avion(
 );
 
 ------------------------------------------------------------
--- Table: Place
+-- Table: Place*
 ------------------------------------------------------------
 CREATE TABLE Place(
 	numPlace  NUMBER(10,0)  NOT NULL  ,
@@ -102,7 +102,7 @@ CREATE TABLE Place(
 );
 
 ------------------------------------------------------------
--- Table: PersonnelNaviguant
+-- Table: PersonnelNaviguant*
 ------------------------------------------------------------
 CREATE TABLE PersonnelNaviguant(
 	idEmploye NUMBER(10,0)  NOT NULL  ,
@@ -118,7 +118,7 @@ CREATE TABLE PersonnelNaviguant(
 );
 
 ------------------------------------------------------------
--- Table: Langue
+-- Table: Langue*
 ------------------------------------------------------------
 CREATE TABLE Langue(
 	nomLangue  NUMBER(10,0)  NOT NULL ,
@@ -126,7 +126,7 @@ CREATE TABLE Langue(
 );
 
 ------------------------------------------------------------
--- Table: Modele
+-- Table: Modele*
 ------------------------------------------------------------
 CREATE TABLE Modele(
 	nomModele  	VARCHAR2 (25) NOT NULL ,
@@ -136,7 +136,7 @@ CREATE TABLE Modele(
 );
 
 ------------------------------------------------------------
--- Table: Ville
+-- Table: Ville*
 ------------------------------------------------------------
 CREATE TABLE Ville(
 	idVille    NUMBER(10,0)  NOT NULL ,
