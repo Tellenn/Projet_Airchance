@@ -121,7 +121,7 @@ CREATE TABLE PersonnelNaviguant(
 -- Table: Langue*
 ------------------------------------------------------------
 CREATE TABLE Langue(
-	nomLangue  NUMBER(10,0)  NOT NULL ,
+	nomLangue  VARCHAR2 (25)  NOT NULL ,
 	CONSTRAINT Langue_Pk PRIMARY KEY (nomLangue)
 );
 
