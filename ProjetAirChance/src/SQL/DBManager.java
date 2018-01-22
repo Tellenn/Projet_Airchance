@@ -144,4 +144,34 @@ public class DBManager {
             dbDisconnect();
         }
     }
+    
+    /**
+     * Execute a change in the isolation level
+     * @param sqlStmt
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
+    public static void dbChangeIsolation(String level) throws SQLException, ClassNotFoundException {
+        //Declare statement as null
+        Statement stmt = null;
+        try {
+            //Connect to DBManager (Establish Oracle Connection)
+            dbConnect();
+            //Create Statement
+            stmt = conn.createStatement();
+            //Run executeUpdate operation with given sql statement
+            stmt.executeUpdate("SET TRANSACTION ISOLATION LEVEL " + level);
+        } catch (SQLException e) {
+            System.out.println("Problem occurred at executeUpdate operation : " + e);
+            throw e;
+        } finally {
+            if (stmt != null) {
+                //Close statement
+                stmt.close();
+            }
+            //Close connection
+            dbDisconnect();
+        }
+    }
+    
 }
