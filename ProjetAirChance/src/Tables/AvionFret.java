@@ -95,7 +95,8 @@ public class AvionFret implements Avion, TableInterface{
 
     @Override
     public void showTable() {
-        String query = "Select * from Avion where typeAvion='Fret'";
+        //String query = "Select * from Avion where typeAvion='fret'";
+        String query = "Select * from Avion where typeAvion='fret'";
         TableImpl.showTable(query);
     }
 
@@ -114,8 +115,9 @@ public class AvionFret implements Avion, TableInterface{
             if(result.last()){
                 int rows = result.getRow();
                 if (rows > 1) throw new Exception("La requête a renvoyé plus d'un avionFret");
-                result.beforeFirst();
+                
             }
+            result.beforeFirst();
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

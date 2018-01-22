@@ -27,6 +27,11 @@ public class TableImpl {
             rsmd = rs.getMetaData();
             columnsNumber = rsmd.getColumnCount();
             System.out.println("Results :\n");
+            if(!rs.next()){
+                System.out.println("no rows selected;");
+                System.out.println("");
+            }
+            rs.beforeFirst();
             while(rs.next()){
                 for(int i = 1; i <= columnsNumber; i++){
                     if (i > 1) System.out.println(",  ");
@@ -58,11 +63,17 @@ public class TableImpl {
             rsmd = result.getMetaData();
             columnsNumber = rsmd.getColumnCount();
             System.out.println("Results :\n");
+            if(!result.next()){
+                System.out.println("no rows selected;");
+                System.out.println("");
+            }
+            
+            result.beforeFirst();
             while(result.next()){
                 for(int i = 1; i <= columnsNumber; i++){
-                    if (i > 1) System.out.println(",  ");
+                    if (i > 1) System.out.print("|  ");
                     String columnValue = result.getString(i);
-                    System.out.println(columnValue + " "+rsmd.getColumnName(i));
+                    System.out.println(rsmd.getColumnName(i)+ " "+columnValue);
                 }
                 System.out.println("");
             }

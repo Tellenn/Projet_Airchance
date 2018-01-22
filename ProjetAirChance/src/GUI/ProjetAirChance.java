@@ -6,6 +6,7 @@
 package GUI;
 
 import Tables.Avion;
+import Tables.AvionFret;
 import Tables.AvionPassager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -48,8 +49,19 @@ public class ProjetAirChance extends Application {
      */
     public static void main(String[] args) {
         //launch(args);
-        Avion a = new AvionPassager();
-        ((AvionPassager)a).showTable();
+        
+        /*insert into avion values (1, 'A300', 50000, 1500, null, null, null, 'fret');
+        insert into avion values (2, 'A320', 30000, 1000, null, null, null, 'fret');
+        insert into Modele Values ('A300', 2, 7500);
+        insert into Modele values('A320', 2, 6000);*/
+        
+        
+        Avion a = new AvionFret();
+        ((AvionFret)a).showTable();
+        
+        Avion b = new AvionPassager();
+        ((AvionPassager)b).showTable();
+        System.exit(0);
     }
     
 }

@@ -62,8 +62,8 @@ public class Langue implements TableInterface{
             if(result.last()){
                 int rows = result.getRow();
                 if (rows > 1) throw new Exception("La requête a renvoyé plus d'une Langue");
-                result.beforeFirst();
             }
+            result.beforeFirst();
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
