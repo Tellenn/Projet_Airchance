@@ -94,8 +94,8 @@ public class PiloteModele{
             if(result.last()){
                 int rows = result.getRow();
                 if (rows > 1) throw new Exception("La requête a renvoyé plus d'un PiloteModele");
-                result.beforeFirst();
             }
+            result.beforeFirst();
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

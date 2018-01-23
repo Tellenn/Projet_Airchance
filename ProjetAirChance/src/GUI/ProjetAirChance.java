@@ -6,6 +6,7 @@
 package GUI;
 
 import Tables.Avion;
+import Tables.AvionFret;
 import Tables.AvionPassager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -23,18 +24,32 @@ public class ProjetAirChance extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnClient = new Button();
+        btnClient.setText("Partie Client");
+        btnClient.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                System.out.println("Partie client");
             }
         });
         
+        btnClient.setTranslateX(50);
+        
+        Button btnManager = new Button();
+        btnManager.setText("Partie manager");
+        btnManager.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Partie manager");
+            }
+        });
+        btnManager.setTranslateX(-50);
+        
         StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        root.getChildren().add(btnClient);
+        root.getChildren().add(btnManager);
         
         Scene scene = new Scene(root, 300, 250);
         
@@ -48,8 +63,19 @@ public class ProjetAirChance extends Application {
      */
     public static void main(String[] args) {
         //launch(args);
-        Avion a = new AvionPassager();
-        ((AvionPassager)a).showTable();
+        
+        /*insert into avion values (1, 'A300', 50000, 1500, null, null, null, 'fret');
+        insert into avion values (2, 'A320', 30000, 1000, null, null, null, 'fret');
+        insert into Modele Values ('A300', 2, 7500);
+        insert into Modele values('A320', 2, 6000);*/
+        
+        Application.launch(ProjetAirChance.class, args);
+       /* Avion a = new AvionFret();
+        ((AvionFret)a).showTable();
+        
+        Avion b = new AvionPassager();
+        ((AvionPassager)b).showTable();*/
+        System.exit(0);
     }
     
 }

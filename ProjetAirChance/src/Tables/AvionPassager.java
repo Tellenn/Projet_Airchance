@@ -132,8 +132,9 @@ public class AvionPassager implements Avion, TableInterface {
                 if (rows > 1) {
                     throw new Exception("La requête a renvoyé plus d'un avionPassager");
                 }
-                result.beforeFirst();
+                
             }
+            result.beforeFirst();
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

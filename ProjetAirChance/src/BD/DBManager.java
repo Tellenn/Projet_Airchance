@@ -41,7 +41,7 @@ public class DBManager {
                 
                 // Print information about connection warnings
                 SQLWarningsExceptions.printWarnings(conn);
-                
+
             } catch (SQLException e) {
                 System.out.println("Connection Failed! Check output console" + e);
                 e.printStackTrace();
