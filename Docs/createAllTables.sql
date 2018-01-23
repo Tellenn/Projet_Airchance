@@ -3,6 +3,25 @@
  ---------------------------------------------------------------
 
 ------------------------------------------------------------
+-- drop all tables
+------------------------------------------------------------
+DROP TABLE Client 				CASCADE CONSTRAINTS;
+DROP TABLE ReservationFret 		CASCADE CONSTRAINTS;
+DROP TABLE ReservationPassager 	CASCADE CONSTRAINTS;
+DROP TABLE Vol 					CASCADE CONSTRAINTS;
+DROP TABLE InstanceVol 			CASCADE CONSTRAINTS;
+DROP TABLE Avion 				CASCADE CONSTRAINTS;
+DROP TABLE Place 				CASCADE CONSTRAINTS;
+DROP TABLE PersonnelNaviguant 	CASCADE CONSTRAINTS;
+DROP TABLE Langue 				CASCADE CONSTRAINTS;
+DROP TABLE Modele 				CASCADE CONSTRAINTS;
+DROP TABLE Ville 				CASCADE CONSTRAINTS;
+DROP TABLE ResaVolPlace 		CASCADE CONSTRAINTS;
+DROP TABLE EmployeInstanceVol 	CASCADE CONSTRAINTS;
+DROP TABLE LanguePNC 			CASCADE CONSTRAINTS;
+DROP TABLE PiloteModele 		CASCADE CONSTRAINTS;
+
+------------------------------------------------------------
 -- Table: Client*
 ------------------------------------------------------------
 CREATE TABLE Client(
@@ -10,9 +29,9 @@ CREATE TABLE Client(
 	nomClient       VARCHAR2 (25)	,
 	prenomClient    VARCHAR2 (25)	,
 	numRueClient	VARCHAR2 (10)	,
-	rueClient 		VARCHAR2 (25)	,
+	rueClient 		VARCHAR2 (50)	,
 	cpClient 		NUMBER 	 (5)	,
-	villeClient 	VARCHAR2 (25)	,
+	villeClient 	VARCHAR2 (50)	,
 	heuresCumulees  NUMBER	 (10,0)	,
 	numPasseport    VARCHAR2 (25)	,
 	CONSTRAINT Client_Pk PRIMARY KEY (idClient)
@@ -42,7 +61,7 @@ CREATE TABLE ReservationPassager(
 );
 
 ------------------------------------------------------------
--- Table: Vol
+-- Table: Vol*
 ------------------------------------------------------------
 CREATE TABLE Vol(
 	numVol         		NUMBER (10,0) NOT NULL ,
@@ -64,13 +83,14 @@ CREATE TABLE Vol(
 ------------------------------------------------------------
 CREATE TABLE InstanceVol(
 	numInstance     NUMBER (10,0)  NOT NULL ,
-	numVol          VARCHAR2 (25) ,
+	numVol          NUMBER (10,0) ,
 	idAvion         NUMBER (10,0) ,
 	placesRestEco   NUMBER (10,0) ,
 	placesRestPrem  NUMBER (10,0) ,
 	placesRestAff   NUMBER (10,0) ,
 	poidsRest       NUMBER (10,0) ,
 	dateDepart      DATE   		  ,
+	dateArrivee     DATE   		  ,
 	etat            VARCHAR2 (25) ,
 	CONSTRAINT InstanceVol_Pk PRIMARY KEY (numInstance)
 );
@@ -109,9 +129,9 @@ CREATE TABLE PersonnelNaviguant(
 	nomEmploye		VARCHAR2 (25) ,
 	prenomEmploye	VARCHAR2 (25) ,
 	numRueEmploye	VARCHAR2 (10) ,
-	rueEmploye 		VARCHAR2 (25) ,
+	rueEmploye 		VARCHAR2 (50) ,
 	cpEmploye 		VARCHAR2 (5)  ,
-	villeEmploye 	VARCHAR2 (25) ,
+	villeEmploye 	VARCHAR2 (50) ,
 	heuresVol 		NUMBER(10,0)  ,
 	typePN			VARCHAR2 (10) ,
 	CONSTRAINT PNT_Pk PRIMARY KEY (idEmploye)
@@ -170,7 +190,7 @@ CREATE TABLE EmployeInstanceVol(
 -- Table: LanguePNC
 ------------------------------------------------------------
 CREATE TABLE LanguePNC(
-	nomLangue  NUMBER(10,0)  NOT NULL ,
+	nomLangue  VARCHAR2 (25)  NOT NULL ,
 	idEmploye  NUMBER(10,0)  NOT NULL ,
 	CONSTRAINT LanguePNC_Pk PRIMARY KEY (nomLangue,idEmploye)
 );
