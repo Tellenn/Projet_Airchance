@@ -4404,3 +4404,74 @@ INSERT INTO Vol VALUES (17, 1, 715, 9711, null, null, null, 50000, 1, 12);		-- (
 INSERT INTO Vol VALUES (18, 1, 1215, 14279, null, null, null, 60000, 8, 19);	-- (fret) Los Angeles => Kuala Lumpur
 INSERT INTO Vol VALUES (19, 1, 155, 1462 , null, null, null, 80000, 16, 20); 	-- (fret) Amsterdam => Madrid
 INSERT INTO Vol VALUES (20, 1, 95, 550, null, null, null, 100000, 18, 9); 		-- (fret) Toronto => New York
+
+-- Instances vol
+INSERT INTO InstanceVol VALUES (1, 1, 13, , , , null, TO_DATE('2017/12/22 15:00:00', 'yyyy/mm/dd hh24:mi:ss'), TO_DATE('2017/12/22 23:00:00', 'yyyy/mm/dd hh24:mi:ss'), 'Arrive');
+
+-- Langues PNC
+INSERT INTO LanguePNC VALUES ('Français', 6);
+INSERT INTO LanguePNC VALUES ('Français', 7);
+INSERT INTO LanguePNC VALUES ('Français', 8);
+INSERT INTO LanguePNC VALUES ('Français', 9);
+INSERT INTO LanguePNC VALUES ('Français', 10);
+INSERT INTO LanguePNC VALUES ('Français', 11);
+INSERT INTO LanguePNC VALUES ('Français', 12);
+INSERT INTO LanguePNC VALUES ('Français', 13);
+INSERT INTO LanguePNC VALUES ('Français', 14);
+INSERT INTO LanguePNC VALUES ('Français', 15);
+INSERT INTO LanguePNC VALUES ('Français', 16);
+INSERT INTO LanguePNC VALUES ('Français', 17);
+INSERT INTO LanguePNC VALUES ('Français', 18);
+INSERT INTO LanguePNC VALUES ('Français', 19);
+INSERT INTO LanguePNC VALUES ('Français', 20);
+INSERT INTO LanguePNC VALUES ('Anglais', 6);
+INSERT INTO LanguePNC VALUES ('Anglais', 7);
+INSERT INTO LanguePNC VALUES ('Anglais', 8);
+INSERT INTO LanguePNC VALUES ('Anglais', 9);
+INSERT INTO LanguePNC VALUES ('Anglais', 10);
+INSERT INTO LanguePNC VALUES ('Anglais', 11);
+INSERT INTO LanguePNC VALUES ('Anglais', 12);
+INSERT INTO LanguePNC VALUES ('Anglais', 13);
+INSERT INTO LanguePNC VALUES ('Anglais', 14);
+INSERT INTO LanguePNC VALUES ('Anglais', 15);
+INSERT INTO LanguePNC VALUES ('Anglais', 16);
+INSERT INTO LanguePNC VALUES ('Anglais', 17);
+INSERT INTO LanguePNC VALUES ('Anglais', 18);
+INSERT INTO LanguePNC VALUES ('Anglais', 19);
+INSERT INTO LanguePNC VALUES ('Anglais', 20);
+INSERT INTO LanguePNC VALUES ('Espagnol', 6);
+INSERT INTO LanguePNC VALUES ('Russe', 7);
+INSERT INTO LanguePNC VALUES ('Arabe', 8);
+INSERT INTO LanguePNC VALUES ('Allemand', 9);
+INSERT INTO LanguePNC VALUES ('Arabe', 10);
+INSERT INTO LanguePNC VALUES ('Néerlandais', 11);
+INSERT INTO LanguePNC VALUES ('Russe', 12);
+INSERT INTO LanguePNC VALUES ('Italien', 13);
+INSERT INTO LanguePNC VALUES ('Portugais', 14);
+INSERT INTO LanguePNC VALUES ('Espagnol', 15);
+INSERT INTO LanguePNC VALUES ('Espagnol', 16);
+INSERT INTO LanguePNC VALUES ('Allemand', 17);
+INSERT INTO LanguePNC VALUES ('Mandarin', 18);
+INSERT INTO LanguePNC VALUES ('Portugais', 19);
+INSERT INTO LanguePNC VALUES ('Mandarin', 20);
+
+-- Pilote Modele
+INSERT INTO PiloteModele VALUES ('Falcon2000', 5, );
+INSERT INTO PiloteModele VALUES ('Falcon900', 5, );
+INSERT INTO PiloteModele VALUES ('A300', 5, );
+INSERT INTO PiloteModele VALUES ('A320', 5, );
+INSERT INTO PiloteModele VALUES ('A380', 4, );
+INSERT INTO PiloteModele VALUES ('B777', 4, );
+INSERT INTO PiloteModele VALUES ('B747', 4, );
+INSERT INTO PiloteModele VALUES ('A310', 3, );
+INSERT INTO PiloteModele VALUES ('A320', 3, );
+INSERT INTO PiloteModele VALUES ('A340', 3, );
+INSERT INTO PiloteModele VALUES ('A350', 3, );
+INSERT INTO PiloteModele VALUES ('B737', 2, );
+INSERT INTO PiloteModele VALUES ('B747', 2, );
+INSERT INTO PiloteModele VALUES ('B777', 2, );
+INSERT INTO PiloteModele VALUES ('B787', 2, );
+INSERT INTO PiloteModele VALUES ('A300', 1, );
+INSERT INTO PiloteModele VALUES ('A330', 1, );
+INSERT INTO PiloteModele VALUES ('B767', 1, );
+INSERT INTO PiloteModele VALUES ('B777', 1, );

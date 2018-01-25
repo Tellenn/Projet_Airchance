@@ -107,6 +107,7 @@ CREATE TABLE Avion(
 	placesAffaire  	NUMBER(10,0)  ,
 	placesPrem     	NUMBER(10,0)  ,
 	typeAvion		VARCHAR2(20)  ,
+	idDerniereVille NUMBER(10,0)  ,
 	CONSTRAINT Avion_Pk PRIMARY KEY (idAvion)
 );
 
@@ -134,6 +135,7 @@ CREATE TABLE PersonnelNaviguant(
 	villeEmploye 	VARCHAR2 (50) ,
 	heuresVol 		NUMBER(10,0)  ,
 	typePN			VARCHAR2 (10) ,
+	idDerniereVille	NUMBER(10,0)  ,
 	CONSTRAINT PNT_Pk PRIMARY KEY (idEmploye)
 );
 
@@ -187,7 +189,7 @@ CREATE TABLE EmployeInstanceVol(
 );
 
 ------------------------------------------------------------
--- Table: LanguePNC
+-- Table: LanguePNC*
 ------------------------------------------------------------
 CREATE TABLE LanguePNC(
 	nomLangue  VARCHAR2 (25)  NOT NULL ,
@@ -196,7 +198,7 @@ CREATE TABLE LanguePNC(
 );
 
 ------------------------------------------------------------
--- Table: PiloteModele
+-- Table: PiloteModele*
 ------------------------------------------------------------
 CREATE TABLE PiloteModele(
 	nomModele 			VARCHAR2 (25) NOT NULL ,
