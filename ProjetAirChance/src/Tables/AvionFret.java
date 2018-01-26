@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import BD.DBManager;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,20 +25,24 @@ public class AvionFret implements Avion, TableInterface{
     private Modele nomModele;
     private int poidsDispo;
     private int volumeDispo;
+    private Ville idDerniereVille;
     
     public AvionFret(){
         this.idAvion = 0;
         this.nomModele = new Modele();
         this.poidsDispo = 0;
         this.volumeDispo = 0;
+        this.idDerniereVille = new Ville();
     }
     
-    public AvionFret(int idAvion, String nomModele, int poidsDispo, int volumeDispo){
+    public AvionFret(int idAvion, String nomModele, int poidsDispo, int volumeDispo, int idDerniereVille){
         this.idAvion = idAvion;
         this.poidsDispo = poidsDispo;
         this.volumeDispo = volumeDispo;
         this.nomModele = new Modele();
         this.nomModele.importFromId(nomModele);
+        this.idDerniereVille = new Ville();
+        this.idDerniereVille.importFromId(""+idDerniereVille);
     }
     
     
@@ -92,6 +97,21 @@ public class AvionFret implements Avion, TableInterface{
     public void setNomModele(Modele nomModele) {
         this.nomModele = nomModele;
     }
+    
+     /**
+     * @return the idDerniereVille
+     */
+    public Ville getIdDerniereVille() {
+        return idDerniereVille;
+    }
+
+    /**
+     * @param idDerniereVille the idDerniereVille to set
+     */
+    public void setIdDerniereVille(Ville idDerniereVille) {
+        this.idDerniereVille = idDerniereVille;
+    }
+
 
     @Override
     public void showTable() {
@@ -139,14 +159,44 @@ public class AvionFret implements Avion, TableInterface{
             this.poidsDispo = result.getInt("poidsDispo");
             this.volumeDispo = result.getInt("volumeDispo");
             this.nomModele.importFromId(result.getString("nomModele"));
+            this.idDerniereVille.importFromId(""+result.getInt(("idDerniereVille")));
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
+              
+
+    }
+    
+    public static ArrayList<AvionFret> importAllTable(){
+        String queryAll = "Select * from Avion where typeAvion='fret'";
+        ResultSet result;
+        ResultSetMetaData rsmd = null;
+        int columnCount = 0;
+        ArrayList<AvionFret> avionF = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(queryAll);
+            rsmd = result.getMetaData();
+            
+            columnCount = rsmd.getColumnCount();
+            while(result.next()){
+                int idAvion = result.getInt("idAvion");
+                String nomModele = result.getString("nomModele");
+                int poids = result.getInt("poidsDispo");
+                int volume = result.getInt("volumeDispo");
+                int idVille = result.getInt("idDerniereVille");
+                AvionFret tmp = new AvionFret(idAvion, nomModele, poids, volume, idVille);
+                avionF.add(tmp);
+            }
         
             
-
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return avionF;  
     }
     
 }

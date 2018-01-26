@@ -69,12 +69,14 @@ public class ProjetAirChance extends Application {
         insert into Modele Values ('A300', 2, 7500);
         insert into Modele values('A320', 2, 6000);*/
         
-        Application.launch(ProjetAirChance.class, args);
-       /* Avion a = new AvionFret();
+        //Application.launch(ProjetAirChance.class, args);
+        Avion a = new AvionFret();
         ((AvionFret)a).showTable();
         
-        Avion b = new AvionPassager();
+        /*Avion b = new AvionPassager();
         ((AvionPassager)b).showTable();*/
+       
+       AvionFret.importAllTable();
 
         System.exit(0);
     }
