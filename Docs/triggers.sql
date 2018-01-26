@@ -1,4 +1,173 @@
+/*Update les heures employé par rapport au nouveau vol*/
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger updateHeureEmploye
+before insert on EmployeInstanceVol
+for each row
+declare
+	heurevol number;
+	oldhours number;
+	avion number;
+	oldhoursavion number;
+begin
+	select duree into heurevol
+	from vol natural join instanceVol
+	where numInstance = :new.numInstance;
+	
+	select heuresVol into oldhours
+	from PersonnelNaviguant
+	where idEmploye = :new.idEmploye;
+	
+	update PersonnelNaviguant
+	set heuresVol = heurevol+oldhours
+	where idEmploye = :new.idEmploye;
+	
+	select idAvion into avion
+	from InstanceVol
+	where numInstance = :new.numInstance;
+	
+	select heuresModele into oldhoursavion
+	from PiloteModele
+	where nomModele = (
+		select nomModele
+		from Avion
+		where idAvion = avion);
+		
+	update PiloteModele
+	set heuresModele = oldhoursavion+heurevol
+	where nomModele = (
+		select nomModele
+		from Avion
+		where idAvion = avion);
+		
+end;
+/
+	
+/*On vérifie que la distance a effectue soit cohérente avec le rayon possible de l'avion*/
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger coheDistRayon
+before insert or update on InstanceVol
+for each row
+declare
+	rayon integer;
+	dist integer;
+begin
+	select rayonAction into rayon
+	from modele
+	where nomModele = (
+		select nomModele
+		from Avion
+		where idAvion = :new.idAvion);
+		
+	select distance into dist
+	from vol
+	where numVol = :new.numVol;
+
+	if(rayon > dist) then
+		raise_application_error(-20003,'La distance a parcourir est trop grande');
+	end if;
+end;
+/
+
+/* On compte les places reservée sur un InstanceVol pour eviter les doublons*/
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger coheReservPlace
+after insert or update on resaVolPlace
+declare
+	nberror integer;
+begin
+	select count(error) into nberror
+	from (
+		select count(numPlace) as error
+		from resaVolPlace
+		group by numInstance
+		)
+	where error > 1;
+	
+	if nberror > 0 then
+		raise_application_error(-20004,'Deux même placesne peuvent pas');
+	end if;
+end;
+/
+
+/* Verifier qu'une date ai été mise si l'état d'un vol est arrivé*/
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger coheEtatArrive
+before update on instanceVol
+for each row
+begin
+	if(:new.etat = 'arrive' and :new.dateArrivee = null) then
+		raise_application_error(-20005,'Si avion arrivé, entrez l heure d arrivée');
+	end if;
+end;
+/
+
+/* Vérifier pour un vol que la ville d'arrive doit être differente que la ville de départ*/
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger coheVillesVol
+before insert or update on Vol
+for each row
+begin
+	if(:new.idVilleOrigine = :new.idVilleDestination) then
+		raise_application_error(-20006,'Ville depart = ville arrive impossible');
+	end if;
+end;
+/
+
+/*Mise a jour des position avion et PN*/
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger nouvellePosition
+before update on InstanceVol
+for each row
+declare
+	idVilleArrive integer;
+begin
+	if(:new.etat = 'arrive') then
+		select idVilleDestination into idVilleArrive
+		from Vol
+		where numVol = :new.numVol;
+		
+		For employe in (
+			select idEmploye
+			from EmployeInstanceVol
+			where numInstance = :new.numInstance)
+		LOOP
+			update PersonnelNaviguant
+			set idDerniereVille = idVilleArrive
+			where idEmploye = employe.idEmploye;
+		END LOOP;
+		
+		update Avion
+		set idDerniereVille = idVilleArrive
+		where idAvion = :new.idAvion;
+	END if;
+end;
+/
+
+/* Rajouter le poid dispo si une reservation est annulée */
+/* JEU DE TEST A FAIRE, COMPILE */
+create or replace trigger updatePoidSuppr
+before delete on ReservationFret
+for each row
+declare
+	poid integer;
+	nouvPoid integer;
+begin
+	select poidsRest into poid
+	from InstanceVol
+	where numInstance = :old.numInstance;
+	
+	nouvPoid:= poid + :old.poids;
+
+	update instanceVol
+	set poidsRest =  nouvPoid
+	where numInstance = :old.numInstance;
+end;
+/
+
+/** Partie de Quentin*/
+
 -- Si on affecte un PN à un vol qui part d'une ville où il ne se trouve pas
+-- OK
 CREATE OR REPLACE TRIGGER t_1
 AFTER INSERT OR UPDATE ON EmployeInstanceVol
 FOR EACH ROW
@@ -20,6 +189,7 @@ BEGIN
 	END IF;
 END;
 /
+
 -- Si on affecte un avion à un vol qui part d'une ville où il ne se trouve pas
 CREATE OR REPLACE TRIGGER t_2
 AFTER INSERT OR UPDATE ON InstanceVol
