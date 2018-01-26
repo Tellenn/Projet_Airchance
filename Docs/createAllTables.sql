@@ -215,6 +215,7 @@ ALTER TABLE Vol ADD FOREIGN KEY (idVilleDestination) REFERENCES Ville(idVille);
 ALTER TABLE InstanceVol ADD FOREIGN KEY (numVol) REFERENCES Vol(numVol);
 ALTER TABLE InstanceVol ADD FOREIGN KEY (idAvion) REFERENCES Avion(idAvion);
 ALTER TABLE Avion ADD FOREIGN KEY (nomModele) REFERENCES Modele(nomModele);
+ALTER TABLE Avion ADD FOREIGN KEY (idDerniereVille) REFERENCES Ville(idVille);
 ALTER TABLE Place ADD FOREIGN KEY (idAvion) REFERENCES Avion(idAvion);
 ALTER TABLE ResaVolPlace ADD FOREIGN KEY (numReservationP) REFERENCES ReservationPassager(numReservationP);
 ALTER TABLE ResaVolPlace ADD FOREIGN KEY (numInstance) REFERENCES InstanceVol(numInstance);
@@ -225,6 +226,4 @@ ALTER TABLE LanguePNC ADD FOREIGN KEY (nomLangue) REFERENCES Langue(nomLangue);
 ALTER TABLE LanguePNC ADD FOREIGN KEY (idEmploye) REFERENCES PersonnelNaviguant(idEmploye);
 ALTER TABLE PiloteModele ADD FOREIGN KEY (nomModele) REFERENCES Modele(nomModele);
 ALTER TABLE PiloteModele ADD FOREIGN KEY (idEmploye) REFERENCES PersonnelNaviguant(idEmploye);
-
-
-
+ALTER TABLE PersonnelNaviguant ADD FOREIGN KEY (idDerniereVille) REFERENCES Ville(idVille);

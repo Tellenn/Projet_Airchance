@@ -1,10 +1,3 @@
-DROP TRIGGER t_1;
-DROP TRIGGER t_2;
-DROP TRIGGER t_3;
-DROP TRIGGER t_4;
-DROP TRIGGER t_5;
-DROP TRIGGER t_6;
-
 -- Si on affecte un PN à un vol qui part d'une ville où il ne se trouve pas
 CREATE OR REPLACE TRIGGER t_1
 AFTER INSERT OR UPDATE ON EmployeInstanceVol
@@ -126,21 +119,19 @@ BEGIN
 	UPDATE InstanceVol SET poidsRest = poidsRest-:new.poids WHERE numInstance = :new.numInstance;
 END;
 /
+-- PN.heuresVol = SUM(PiloteModele.heuresModele) pour un même pilote
+CREATE OR REPLACE TRIGGER t_7
+AFTER INSERT OR UPDATE ON PersonnelNaviguant
+FOR EACH ROW
+DECLARE
+	totalHeures INTEGER;
+BEGIN
+	SELECT SUM(heuresModele) INTO totalHeures
+	FROM PiloteModele
+	WHERE idEmploye = :new.idEmploye;
 
-
-
-
--- CREATE OR REPLACE TRIGGER t_3
--- AFTER INSERT OR UPDATE ON ReservationFret
--- DECLARE
--- 	poids INTEGER;
--- FOR EACH ROW
--- BEGIN
--- 	SELECT SUM(poidsRest) INTO  poids
--- 	FROM InstanceVol
--- 	WHERE numInstance = :new.numInstance;
-
--- 	IF(poids < :new.poids) THEN
--- 		RAISE_APPLICATION_ERROR(-20003, 'Poids trop important');
--- 	END IF;
--- END;
+	IF(:new.heuresVol != totalHeures) THEN
+		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit être égal à la somme des heuresModele de PiloteModele');
+	END IF;
+END;
+/
