@@ -60,13 +60,13 @@ public class EmployeInstanceVol {
         
             
         try {
-            // this.numInstance.setFromId(result.getString("numInstance"));
+            // this.numInstance.importFromId(result.getString("numInstance"));
             switch (this.idEmploye.getClass().getSimpleName()){
                 case "PNT":
-                    ((PNT)this.idEmploye).setFromId(""+result.getInt("idEmploye"));
+                    ((PNT)this.idEmploye).importFromId(""+result.getInt("idEmploye"));
                     break;
                 case "PNC":
-                    ((PNC)this.idEmploye).setFromId(""+result.getInt("idEmploye"));
+                    ((PNC)this.idEmploye).importFromId(""+result.getInt("idEmploye"));
                     break;
             }
 

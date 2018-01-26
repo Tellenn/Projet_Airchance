@@ -56,7 +56,7 @@ public class Langue implements TableInterface{
     }
 
     @Override
-    public void setFromId(String nomLangue) {
+    public void importFromId(String nomLangue) {
         ResultSet result = getResultSetFromId(nomLangue);
         try {
             if(result.last()){

@@ -75,6 +75,7 @@ public class ProjetAirChance extends Application {
         
         Avion b = new AvionPassager();
         ((AvionPassager)b).showTable();*/
+
         System.exit(0);
     }
     

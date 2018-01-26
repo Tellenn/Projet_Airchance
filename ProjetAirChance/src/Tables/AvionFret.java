@@ -37,7 +37,7 @@ public class AvionFret implements Avion, TableInterface{
         this.poidsDispo = poidsDispo;
         this.volumeDispo = volumeDispo;
         this.nomModele = new Modele();
-        this.nomModele.setFromId(nomModele);
+        this.nomModele.importFromId(nomModele);
     }
     
     
@@ -109,7 +109,7 @@ public class AvionFret implements Avion, TableInterface{
     }
 
     @Override
-    public void setFromId(String id){
+    public void importFromId(String id){
         ResultSet result = getResultSetFromId(id);
         try {
             if(result.last()){
@@ -135,10 +135,10 @@ public class AvionFret implements Avion, TableInterface{
             
         try {
             this.idAvion = result.getInt("idAvion");
-            this.nomModele.setFromId(result.getString("nomModele"));
+            this.nomModele.importFromId(result.getString("nomModele"));
             this.poidsDispo = result.getInt("poidsDispo");
             this.volumeDispo = result.getInt("volumeDispo");
-            this.nomModele.setFromId(result.getString("nomModele"));
+            this.nomModele.importFromId(result.getString("nomModele"));
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }

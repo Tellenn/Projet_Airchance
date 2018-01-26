@@ -15,5 +15,5 @@ public interface TableInterface {
     
     public void showTable();
     public ResultSet getResultSetFromId(String id);
-    public void setFromId(String id);
+    public void importFromId(String id);
 }

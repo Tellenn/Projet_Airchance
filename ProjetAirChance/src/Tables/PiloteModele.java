@@ -112,8 +112,8 @@ public class PiloteModele{
         
             
         try {
-            ((PNT)this.idEmploye).setFromId(""+result.getInt("idEmploye"));
-            this.nomModele.setFromId(result.getString("nomModele"));
+            ((PNT)this.idEmploye).importFromId(""+result.getInt("idEmploye"));
+            this.nomModele.importFromId(result.getString("nomModele"));
             this.heuresModele = result.getInt("heuresModele");
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);

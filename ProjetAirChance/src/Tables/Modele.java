@@ -90,7 +90,7 @@ public class Modele implements TableInterface{
     }
 
     @Override
-    public void setFromId(String nomModele) {
+    public void importFromId(String nomModele) {
         ResultSet result = getResultSetFromId(nomModele);
         try {
             if(result.last()){

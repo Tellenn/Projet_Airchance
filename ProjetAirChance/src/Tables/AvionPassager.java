@@ -38,7 +38,7 @@ public class AvionPassager implements Avion, TableInterface {
         this.placesEco = placesEco;
         this.placesPrem = placesPrem;
         this.nomModele = new Modele();
-        this.nomModele.setFromId(nomModele);
+        this.nomModele.importFromId(nomModele);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class AvionPassager implements Avion, TableInterface {
     }
 
     @Override
-    public void setFromId(String id) {
+    public void importFromId(String id) {
         ResultSet result = getResultSetFromId(id);
         try {
             if (result.last()) {
@@ -154,7 +154,7 @@ public class AvionPassager implements Avion, TableInterface {
             this.placesAffaire = result.getInt("placesAffaire");
             this.placesEco = result.getInt("placesEco");
             this.placesPrem = result.getInt("placesPrem");
-            this.nomModele.setFromId(result.getString("nomModele"));
+            this.nomModele.importFromId(result.getString("nomModele"));
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }

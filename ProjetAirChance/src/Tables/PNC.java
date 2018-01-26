@@ -190,7 +190,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
     }
 
     @Override
-    public void setFromId(String id) {
+    public void importFromId(String id) {
         ResultSet result = getResultSetFromId(id);
         try {
             if(result.last()){

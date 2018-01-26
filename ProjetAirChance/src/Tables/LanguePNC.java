@@ -65,8 +65,8 @@ public class LanguePNC {
         
             
         try {
-            this.nomLangue.setFromId(result.getString("nomLangue"));
-            ((PNC)this.idEmploye).setFromId(""+result.getInt("idEmploye"));
+            this.nomLangue.importFromId(result.getString("nomLangue"));
+            ((PNC)this.idEmploye).importFromId(""+result.getInt("idEmploye"));
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
