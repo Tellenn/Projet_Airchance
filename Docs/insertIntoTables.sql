@@ -4496,21 +4496,21 @@ INSERT INTO Vol VALUES (20, 1, 95, 550, null, null, null, 100000, 18, 9); 		-- (
 --INSERT INTO InstanceVol VALUES (1, 1, 13, , , , null, TO_DATE('2017/12/22 15:00:00', 'yyyy/mm/dd hh24:mi:ss'), TO_DATE('2017/12/22 23:00:00', 'yyyy/mm/dd hh24:mi:ss'), 'Arrive');
 
 -- Langues PNC
-INSERT INTO LanguePNC VALUES ('Français', 6);
-INSERT INTO LanguePNC VALUES ('Français', 7);
-INSERT INTO LanguePNC VALUES ('Français', 8);
-INSERT INTO LanguePNC VALUES ('Français', 9);
-INSERT INTO LanguePNC VALUES ('Français', 10);
-INSERT INTO LanguePNC VALUES ('Français', 11);
-INSERT INTO LanguePNC VALUES ('Français', 12);
-INSERT INTO LanguePNC VALUES ('Français', 13);
-INSERT INTO LanguePNC VALUES ('Français', 14);
-INSERT INTO LanguePNC VALUES ('Français', 15);
-INSERT INTO LanguePNC VALUES ('Français', 16);
-INSERT INTO LanguePNC VALUES ('Français', 17);
-INSERT INTO LanguePNC VALUES ('Français', 18);
-INSERT INTO LanguePNC VALUES ('Français', 19);
-INSERT INTO LanguePNC VALUES ('Français', 20);
+INSERT INTO LanguePNC VALUES ('Francais', 6);
+INSERT INTO LanguePNC VALUES ('Francais', 7);
+INSERT INTO LanguePNC VALUES ('Francais', 8);
+INSERT INTO LanguePNC VALUES ('Francais', 9);
+INSERT INTO LanguePNC VALUES ('Francais', 10);
+INSERT INTO LanguePNC VALUES ('Francais', 11);
+INSERT INTO LanguePNC VALUES ('Francais', 12);
+INSERT INTO LanguePNC VALUES ('Francais', 13);
+INSERT INTO LanguePNC VALUES ('Francais', 14);
+INSERT INTO LanguePNC VALUES ('Francais', 15);
+INSERT INTO LanguePNC VALUES ('Francais', 16);
+INSERT INTO LanguePNC VALUES ('Francais', 17);
+INSERT INTO LanguePNC VALUES ('Francais', 18);
+INSERT INTO LanguePNC VALUES ('Francais', 19);
+INSERT INTO LanguePNC VALUES ('Francais', 20);
 INSERT INTO LanguePNC VALUES ('Anglais', 6);
 INSERT INTO LanguePNC VALUES ('Anglais', 7);
 INSERT INTO LanguePNC VALUES ('Anglais', 8);
