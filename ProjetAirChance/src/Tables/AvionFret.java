@@ -168,81 +168,9 @@ public class AvionFret implements Avion, TableInterface{
 
     }
     
-    /**
-     * importTable -> ArrayList<AvionFret>
-     * récupère dans l'ArrayList les AvionFret obtenus grâce à queryTable
-     * si queryTable est null ou "", sélectionne tous les AvionFret de la table
-     * @param queryTable
-     * @return 
-     */
-    public static ArrayList<AvionFret> importTable(String queryTable){
-        String query;
-        if (queryTable != null && !queryTable.equals("") ){
-            query = queryTable;
-        }else{
-            query = "Select * from Avion where typeAvion='fret'";
-        }
-        
-        ResultSet result;
-        ArrayList<AvionFret> avionF = new ArrayList<>();
-        try {
-            result = DBManager.dbExecuteQuery(query);
-            
-            while(result.next()){
-                int idAvion = result.getInt("idAvion");
-                String nomModele = result.getString("nomModele");
-                int poids = result.getInt("poidsDispo");
-                int volume = result.getInt("volumeDispo");
-                int idVille = result.getInt("idDerniereVille");
-                AvionFret tmp = new AvionFret(idAvion, nomModele, poids, volume, idVille);
-                avionF.add(tmp);
-            }
-        
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return avionF;
-    }
+   
     
-    /**
-     * importTableWithParameter(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, Ville idDerniereVille) -> ArrayList<AvionFret>
-     * récupère les AvionFret de la base avec les paramètre de sélection entrés
-     * si on ne veut pas inclure un paramètre de type int, il faut lui mettre 0
-     * si on ne veut pas inclure un paramètre de type Objet, il faut lui mettre null
-     * @param idAvion
-     * @param nomModele
-     * @param poidsDispo
-     * @param volumeDispo
-     * @param idDerniereVille
-     * @return 
-     */
-    public static ArrayList<AvionFret> importTableWithParameter(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, Ville idDerniereVille){
-        String query = "Select * from Avion where typeAvion='fret'";
-        if (idAvion != 0){
-            query += " and idAvion="+idAvion;
-        }
-        if (nomModele != null){
-            query += " and nomModele='"+nomModele.getNomModele()+"'";
-        }
-        if (poidsDispo != 0){
-            query += " and poidsDispo="+poidsDispo;
-        }
-        
-        if (volumeDispo != 0){
-            query += " and volumeDispo="+volumeDispo;
-        }
-        
-        if (idDerniereVille != null){
-            query += "and idDerniereVille="+idDerniereVille.getIdVille();
-        }
-        
-        return importTable(query);
-        
-    }
+    
         
     
     
