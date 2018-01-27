@@ -147,56 +147,22 @@ public class DBManager {
     
     /**
      * Execute a change in the isolation level
-     * @param sqlStmt
+     * @param level 0=readUncommitted 1=readCommitted 2=repeatableRead 3=Serializable
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public static void dbChangeIsolation(String level) throws SQLException, ClassNotFoundException {
-        //Declare statement as null
-        Statement stmt = null;
-        try {
-            //Connect to DBManager (Establish Oracle Connection)
-            //dbConnect();
-            //Create Statement
-            stmt = conn.createStatement();
-            //Run executeUpdate operation with given sql statement
-            stmt.executeUpdate("SET TRANSACTION ISOLATION LEVEL " + level);
-        } catch (SQLException e) {
-            System.out.println("Problem occurred at executeUpdate operation : " + e);
-            throw e;
-        } finally {
-            if (stmt != null) {
-                //Close statement
-                stmt.close();
-            }
-            //Close connection
-           // dbDisconnect();
-        }
+    public static void dbChangeIsolation(int level) throws SQLException, ClassNotFoundException {
+        conn.setTransactionIsolation(level);
     }
     
-     public static void commit()
+     public static void commit() throws SQLException
      {
-         String query = "commit";
-         try {
-            dbExecuteUpdate(query);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         conn.commit();        
      }
     
-    public static void changeAutocommit(String level)
+    public static void changeAutocommit(boolean level) throws SQLException
     {
-        String query = "set autocommit "+level;
-        System.out.println(query);
-        try {
-            dbExecuteUpdate(query);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        conn.setAutoCommit(level);
     }
     
 }
