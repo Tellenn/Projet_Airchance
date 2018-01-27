@@ -83,7 +83,7 @@ public class DBManager {
         CachedRowSetImpl crs = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
+            //dbConnect();
             System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
@@ -110,7 +110,7 @@ public class DBManager {
                 stmt.close();  
             }
             //Close connection
-            dbDisconnect();
+            //dbDisconnect();
         }
         //Return CachedRowSet
         return crs;
@@ -127,7 +127,7 @@ public class DBManager {
         Statement stmt = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
+            //dbConnect();
             //Create Statement
             stmt = conn.createStatement();
             //Run executeUpdate operation with given sql statement
@@ -141,37 +141,28 @@ public class DBManager {
                 stmt.close();
             }
             //Close connection
-            dbDisconnect();
+           // dbDisconnect();
         }
     }
     
     /**
      * Execute a change in the isolation level
-     * @param sqlStmt
+     * @param level 0=readUncommitted 1=readCommitted 2=repeatableRead 3=Serializable
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public static void dbChangeIsolation(String level) throws SQLException, ClassNotFoundException {
-        //Declare statement as null
-        Statement stmt = null;
-        try {
-            //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
-            //Create Statement
-            stmt = conn.createStatement();
-            //Run executeUpdate operation with given sql statement
-            stmt.executeUpdate("SET TRANSACTION ISOLATION LEVEL " + level);
-        } catch (SQLException e) {
-            System.out.println("Problem occurred at executeUpdate operation : " + e);
-            throw e;
-        } finally {
-            if (stmt != null) {
-                //Close statement
-                stmt.close();
-            }
-            //Close connection
-            dbDisconnect();
-        }
+    public static void dbChangeIsolation(int level) throws SQLException, ClassNotFoundException {
+        conn.setTransactionIsolation(level);
+    }
+    
+     public static void commit() throws SQLException
+     {
+         conn.commit();        
+     }
+    
+    public static void changeAutocommit(boolean level) throws SQLException
+    {
+        conn.setAutoCommit(level);
     }
     
 }

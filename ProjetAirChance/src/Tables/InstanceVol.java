@@ -13,7 +13,7 @@ public class InstanceVol {
 
     private String numInstance;
     private String numVol;
-    private String idAvion;
+    private int idAvion;
     private int placesRestEco;
     private int placesRestPrem;
     private int placesRestAff;
@@ -38,11 +38,11 @@ public class InstanceVol {
         this.numVol = numVol;
     }
 
-    public String getIdAvion() {
+    public int getIdAvion() {
         return idAvion;
     }
 
-    public void setIdAvion(String idAvion) {
+    public void setIdAvion(int idAvion) {
         this.idAvion = idAvion;
     }
 
