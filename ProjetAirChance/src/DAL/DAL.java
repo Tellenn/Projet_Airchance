@@ -7,13 +7,9 @@ package DAL;
 
 import BD.DBManager;
 import Tables.AvionFret;
-<<<<<<< HEAD
-import Tables.Modele;
-=======
 import Tables.AvionPassager;
 import Tables.Modele;
 import Tables.Place;
->>>>>>> master
 import Tables.Ville;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -94,8 +90,6 @@ public class DAL {
         
     }
     
-<<<<<<< HEAD
-=======
     /**
      * importTable -> ArrayList<AvionPassager>
      * récupère dans l'ArrayList les AvionPassagers obtenus grâce à queryTable
@@ -279,6 +273,5 @@ public class DAL {
         
         return placesAvion;
     }
->>>>>>> master
     
 }
