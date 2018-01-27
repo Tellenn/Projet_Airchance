@@ -5,10 +5,12 @@
  */
 package GUI;
 
+import DAL.DAL;
 import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Modele;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -70,7 +72,7 @@ public class ProjetAirChance extends Application {
         insert into Modele Values ('A300', 2, 7500);
         insert into Modele values('A320', 2, 6000);*/
         
-        Application.launch(ProjetAirChance.class, args);
+        //Application.launch(ProjetAirChance.class, args);
         /*Avion a = new AvionFret();
         ((AvionFret)a).showTable();
         
@@ -78,15 +80,14 @@ public class ProjetAirChance extends Application {
         ((AvionPassager)b).showTable();*/
        
         
-        //AvionFret.importTable(null);
+        DAL dal = new DAL();
         
-        //AvionFret.importTableWithParameter(0, null, 50000, 0, null);
-        //AvionFret.importTableWithParameter(0, null, 0, 1500, null);
+        ArrayList<AvionFret> avionsF = dal.importTableAvionFret();
         
-        /*Modele modTest = new Modele();
-        modTest.importFromId("A330");
+        Modele mod = new Modele();
+        mod.importFromId("A330");
         
-        AvionFret.importTableWithParameter(0, modTest, 0, 0, null);*/
+        ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);
 
         System.exit(0);
     }
