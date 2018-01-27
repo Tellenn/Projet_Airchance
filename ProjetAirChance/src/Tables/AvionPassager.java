@@ -230,6 +230,7 @@ public class AvionPassager implements Avion, TableInterface {
         } catch (SQLException ex) {
             Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
         }
+<<<<<<< HEAD
     }
     
      /**
@@ -310,6 +311,7 @@ public class AvionPassager implements Avion, TableInterface {
         
         return importTable(query);
         
+=======
+>>>>>>> master
     }
-
 }

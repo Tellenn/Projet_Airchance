@@ -81,6 +81,13 @@ public class Place {
         this.classe = classe;
     }
     
+<<<<<<< HEAD
+=======
+    public void setRes(boolean res) {
+        this.estReservee = res;
+    }
+    
+>>>>>>> master
     public ResultSet getResultSetFromId(String numPlace,String avionId,String numInstance) {
         String query = "";
         if (numInstance.equals(""))
@@ -97,7 +104,11 @@ public class Place {
     
     public void importFromId(String numPlace,String avionId,String numInstance) {
         ResultSet result = getResultSetFromId(numPlace,avionId,"");
+<<<<<<< HEAD
          ResultSet resultPlaceRes = null;
+=======
+        ResultSet resultPlaceRes = null;
+>>>>>>> master
         if(!numInstance.equals(""))
         {
             resultPlaceRes = getResultSetFromId(numPlace,avionId,numInstance);
@@ -151,6 +162,7 @@ public class Place {
     }
     
     
+<<<<<<< HEAD
     public static ArrayList<Place> importTableWithParameter(int numPlace, int idAvion, String position, String classe, String numInstance){
         String query = "Select * from Place where idAvion="+idAvion;
         if (numPlace != 0){
@@ -253,6 +265,8 @@ public class Place {
         
         return placesAvion;
     }
+=======
+>>>>>>> master
     
     
     public boolean equals(Place p)

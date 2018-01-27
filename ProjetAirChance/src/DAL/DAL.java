@@ -7,7 +7,13 @@ package DAL;
 
 import BD.DBManager;
 import Tables.AvionFret;
+<<<<<<< HEAD
 import Tables.Modele;
+=======
+import Tables.AvionPassager;
+import Tables.Modele;
+import Tables.Place;
+>>>>>>> master
 import Tables.Ville;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -88,5 +94,191 @@ public class DAL {
         
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     * importTable -> ArrayList<AvionPassager>
+     * récupère dans l'ArrayList les AvionPassagers obtenus grâce à queryTable
+     * si queryTable est null ou "", sélectionne tous les AvionPassagers de la table
+     * @param queryTable la requête qui va permettre de récupérer les avions de la table
+     * @return ArrayList<AvionPassager>
+     */
+    public static ArrayList<AvionPassager> importTableAvionPassager(String queryTable){
+        String query;
+        if (queryTable != null && !queryTable.equals("") ){
+            query = queryTable;
+        }else{
+            query = "Select * from Avion where typeAvion='passager'";
+        }
+        
+        ResultSet result;
+        ArrayList<AvionPassager> avionP = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            
+            while(result.next()){
+                int idAvion = result.getInt("idAvion");
+                String nomModele = result.getString("nomModele");
+                int placePrem = result.getInt("placePrem");
+                int placeAff = result.getInt("placeAff");
+                int placeEco = result.getInt("placeEco");
+                int idVille = result.getInt("idDerniereVille");
+                AvionPassager tmp = new AvionPassager(idAvion, nomModele, placePrem, placeAff,placeEco, idVille);
+                avionP.add(tmp);
+            }
+        
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return avionP;
+    }
+    
+    
+    /**
+     * Il faut passer 0 si on ne veut pas utiliser un parametre int, "" pour une string et null pour un autre objet
+     * @param idAvion 
+     * @param nomModele
+     * @param placePrem
+     * @param placeAff
+     * @param placeEco
+     * @param idDerniereVille
+     * @return ArrayList<AvionPassager> correspondant aux parametres passés
+     */
+    public static ArrayList<AvionPassager> importAvionPassagerWithParameter(int idAvion, Modele nomModele, int placePrem, int placeAff, int placeEco, Ville idDerniereVille){
+        String query = "Select * from Avion where typeAvion='passager'";
+        if (idAvion != 0){
+            query += " and idAvion="+idAvion;
+        }
+        if (nomModele != null){
+            query += " and nomModele='"+nomModele.getNomModele()+"'";
+        }
+        if (placePrem != 0){
+            query += " and placePrem<="+placePrem;
+        }
+        
+        if (placeAff != 0){
+            query += " and placeAff<="+placeAff;
+        }
+        
+        if (placeEco != 0){
+            query += " and placeEco<="+placeEco;
+        }
+        
+        if (idDerniereVille != null){
+            query += "and idDerniereVille="+idDerniereVille.getIdVille();
+        }
+        
+        return importTableAvionPassager(query);
+    }
+    
+    
+    
+    public static ArrayList<Place> importPlaceWithParameter(int numPlace, int idAvion, String position, String classe, String numInstance){
+        String query = "Select * from Place where idAvion="+idAvion;
+        if (numPlace != 0){
+            query += " and numPlace="+numPlace;
+        }
+        if (!position.equals("")){
+            query += " and position='"+position+"'";
+        }
+        
+        if (!classe.equals("")){
+            query += " and classe<="+classe;
+        }
+        ArrayList<Place> placeTot = importTablePlace(query);
+        
+        if (!numInstance.equals(""))
+        {
+            query = "Select * from ResaVolPlace natural join Place where idAvion="+idAvion;
+            if (numPlace != 0){
+                query += " and numPlace="+numPlace;
+            }
+            if (!position.equals("")){
+                query += " and position='"+position+"'";
+            }
+            if (!classe.equals("")){
+                query += " and classe='"+classe+"'";
+            }
+            if (!numInstance.equals("")){
+                query += " and numInstance='"+numInstance+"'";
+            }
+            ArrayList<String> placeRes = getPlaceRes(query);
+
+            for (int i=0;i<placeTot.size();i++)
+            {
+                if(placeRes.indexOf(""+placeTot.get(i).getNumPlace())!=-1)
+                {
+                    placeTot.get(i).setRes(true);
+                }
+            }
+        }
+        
+        return placeTot;        
+    }
+    
+    private static ArrayList<String> getPlaceRes(String queryTable) {
+        String query;
+        if (queryTable != null && !queryTable.equals("") ){
+            query = queryTable;
+        }else{
+            query = "Select numPlace from ResaVolPlace";
+        }
+         ResultSet result;
+        ArrayList<String> placesAvion = new ArrayList<String>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            
+            while(result.next()){
+                int numPlace = result.getInt("numPlace");
+                placesAvion.add(""+numPlace);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return placesAvion;
+    }
+    
+    private static ArrayList<Place> importTablePlace(String queryTable) {
+        String query;
+        boolean estRes = false;
+        if (queryTable != null && !queryTable.equals("") ){
+            query = queryTable;
+        }else{
+            query = "Select * from Place";
+        }
+        
+        ResultSet result;
+        ArrayList<Place> placesAvion = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            
+            while(result.next()){
+                int numPlace = result.getInt("numPlace");
+                int idAvion = result.getInt("idAvion");
+                String classe = result.getString("classe");
+                String position = result.getString("position");
+                
+                
+                
+                Place tmp = new Place(numPlace, idAvion, classe, position,estRes);
+                placesAvion.add(tmp);
+            }
+        
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return placesAvion;
+    }
+>>>>>>> master
     
 }
