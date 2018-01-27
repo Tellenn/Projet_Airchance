@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 
+import BD.DBManager;
+import Tables.Place;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class NewEmptyJUnitTest
 {
-    
+    private DBManager manager;
     public NewEmptyJUnitTest()
     {
     }
@@ -35,11 +39,13 @@ public class NewEmptyJUnitTest
     @Before
     public void setUp()
     {
+        DBManager.dbConnect();
     }
     
     @After
-    public void tearDown()
+    public void tearDown() throws SQLException
     {
+        DBManager.dbDisconnect();
     }
 
     // TODO add test methods here.
@@ -47,4 +53,21 @@ public class NewEmptyJUnitTest
     //
     // @Test
     // public void hello() {}
+    
+    @Test
+    public void getAllPlaces()
+    {
+        int nbPlaces = Place.importTableWithParameter(0, 7, "", "", "").size();
+        System.out.println(nbPlaces);
+        assertTrue("Error wrong number of places for plane 7",nbPlaces == 150);
+    }
+    
+    @Test
+    public void tryCommit()
+    {
+        manager.changeAutocommit("off");
+        manager.commit();
+        
+    }
+    
 }

@@ -83,7 +83,7 @@ public class DBManager {
         CachedRowSetImpl crs = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
+            //dbConnect();
             System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
@@ -110,7 +110,7 @@ public class DBManager {
                 stmt.close();  
             }
             //Close connection
-            dbDisconnect();
+            //dbDisconnect();
         }
         //Return CachedRowSet
         return crs;
@@ -127,7 +127,7 @@ public class DBManager {
         Statement stmt = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
+            //dbConnect();
             //Create Statement
             stmt = conn.createStatement();
             //Run executeUpdate operation with given sql statement
@@ -141,7 +141,7 @@ public class DBManager {
                 stmt.close();
             }
             //Close connection
-            dbDisconnect();
+           // dbDisconnect();
         }
     }
     
@@ -156,7 +156,7 @@ public class DBManager {
         Statement stmt = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
+            //dbConnect();
             //Create Statement
             stmt = conn.createStatement();
             //Run executeUpdate operation with given sql statement
@@ -170,7 +170,32 @@ public class DBManager {
                 stmt.close();
             }
             //Close connection
-            dbDisconnect();
+           // dbDisconnect();
+        }
+    }
+    
+     public static void commit()
+     {
+         String query = "commit";
+         try {
+            dbExecuteUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }
+    
+    public static void changeAutocommit(String level)
+    {
+        String query = "set autocommit "+level;
+        System.out.println(query);
+        try {
+            dbExecuteUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

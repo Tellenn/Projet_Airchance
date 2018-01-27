@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import BD.DBManager;
+import Tables.Place;
+import Tables.TableImpl;
 
 /**
  *
@@ -24,6 +26,8 @@ public class testBD
     {
         DBManager manager = new DBManager();
         manager.dbConnect();
+        System.out.println("HELLO");
+        System.out.println(Place.importTableWithParameter(0, 7, "", "", "").size());
         try
         {
             manager.dbDisconnect();
