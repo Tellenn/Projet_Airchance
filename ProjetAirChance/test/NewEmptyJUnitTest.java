@@ -5,6 +5,7 @@
  */
 
 import BD.DBManager;
+import DAL.DAL;
 import Tables.Place;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -61,7 +62,7 @@ public class NewEmptyJUnitTest
     public void getAllPlaces()
     {
         DBManager.dbConnect();
-        int nbPlaces = Place.importTableWithParameter(0, 7, "", "", "").size();
+        int nbPlaces = DAL.importPlaceWithParameter(0, 7, "", "", "").size();
         System.out.println(nbPlaces);
         assertTrue("Error wrong number of places for plane 7",nbPlaces == 150);
         try {

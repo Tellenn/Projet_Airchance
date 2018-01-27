@@ -27,7 +27,6 @@ public class testBD
         DBManager manager = new DBManager();
         manager.dbConnect();
         System.out.println("HELLO");
-        System.out.println(Place.importTableWithParameter(0, 7, "", "", "").size());
         try
         {
             manager.dbDisconnect();
