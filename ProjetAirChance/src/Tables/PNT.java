@@ -5,9 +5,11 @@
  */
 package Tables;
 
+import BD.DBManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +18,6 @@ import java.util.logging.Logger;
  * @author Andréas
  */
 public class PNT implements PersonnelNavigant, TableInterface{
-
 
 
     private int idEmploye;
@@ -28,6 +29,7 @@ public class PNT implements PersonnelNavigant, TableInterface{
     private String villeEmploye;
     private int heuresVol;
     private Ville idDerniereVille;
+    private Map<Modele, Integer> piloteModele;
     
     public PNT(){
         this.idEmploye = 0;
@@ -39,6 +41,7 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.villeEmploye = "";
         this.heuresVol = 0;
         this.idDerniereVille = new Ville();
+        this.piloteModele = new HashMap<>();
     }
     
     public PNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
@@ -52,10 +55,93 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.heuresVol = heuresVol;
         this.idDerniereVille = new Ville();
         this.idDerniereVille.importFromId(idDerniereVille+"");
+        this.piloteModele = new HashMap<>();
+        fillPiloteModele();
+        
+    }
+    
+    
+    private void fillPiloteModele() {
+        String query = "Select * from PiloteModele where idEmploye="+this.idEmploye;
+        ResultSet result;
+        
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            
+            while (result.next()){
+                String nomModele = result.getString("nomModele");
+                int heuresModele = result.getInt("heuresModele");
+                Modele tmp = new Modele();
+                tmp.importFromId(nomModele);
+                this.piloteModele.put(tmp, heuresModele);
+            }
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(PNT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+
+     
+    @Override
+    public void showTable() {
+        String query = "Select * from PersonnelNaviguant where typePN='PNT'";
+        TableImpl.showTable(query);
     }
 
+    @Override
+    public ResultSet getResultSetFromId(String id) {
+        String query = "Select * from PersonnelNaviguant where typePN='PNT'"
+                + "and idEmploye="+id;
+        return TableImpl.getResultSet(query);
+    }
+
+    @Override
+    public void importFromId(String id) {
+        ResultSet result = getResultSetFromId(id);
+        try {
+            if(result.last()){
+                int rows = result.getRow();
+                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un PNT");
+            }
+            result.beforeFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        try {
+            if(!result.next()) throw new Exception("La requête n'a pas abouti avec l'idEmploye "+id);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+            
+        try {
+            this.idEmploye = result.getInt("idEmploye");
+            this.nomEmploye = result.getString("nomEmploye");
+            this.prenomEmploye = result.getString("prenomEmploye");
+            this.numRueEmploye = result.getString("numRueEmploye");
+            this.rueEmploye = result.getString("rueEmploye");
+            this.cpEmploye = result.getString("cpEmploye");
+            this.villeEmploye = result.getString("villeEmploye");
+            this.heuresVol = result.getInt("heuresVol");
+            this.idDerniereVille.importFromId(result.getInt("idDerniereVille")+"");
+            fillPiloteModele();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
     
-    /**
+    }
+    
+    
+    
+      /**
      * @return the idEmploye
      */
     @Override
@@ -197,59 +283,18 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.idDerniereVille = idDerniereVille;
     }
     
-    
-    @Override
-    public void showTable() {
-        String query = "Select * from PersonnelNaviguant where typePN='PNT'";
-        TableImpl.showTable(query);
+      /**
+     * @return the piloteModele
+     */
+    public Map<Modele, Integer> getPiloteModele() {
+        return piloteModele;
     }
 
-    @Override
-    public ResultSet getResultSetFromId(String id) {
-        String query = "Select * from PersonnelNaviguant where typePN='PNT'"
-                + "and idEmploye="+id;
-        return TableImpl.getResultSet(query);
+    /**
+     * @param piloteModele the piloteModele to set
+     */
+    public void setPiloteModele(Map<Modele, Integer> piloteModele) {
+        this.piloteModele = piloteModele;
     }
 
-    @Override
-    public void importFromId(String id) {
-        ResultSet result = getResultSetFromId(id);
-        try {
-            if(result.last()){
-                int rows = result.getRow();
-                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un PNT");
-            }
-            result.beforeFirst();
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        try {
-            if(!result.next()) throw new Exception("La requête n'a pas abouti avec l'idEmploye "+id);
-        } catch (Exception ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-            
-        try {
-            this.idEmploye = result.getInt("idEmploye");
-            this.nomEmploye = result.getString("nomEmploye");
-            this.prenomEmploye = result.getString("prenomEmploye");
-            this.numRueEmploye = result.getString("numRueEmploye");
-            this.rueEmploye = result.getString("rueEmploye");
-            this.cpEmploye = result.getString("cpEmploye");
-            this.villeEmploye = result.getString("villeEmploye");
-            this.heuresVol = result.getInt("heuresVol");
-            this.idDerniereVille.importFromId(result.getInt("idDerniereVille")+"");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-    }
-    
 }
