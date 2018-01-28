@@ -10,6 +10,7 @@ import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Modele;
 import Tables.PNC;
+import Tables.PNT;
 import Tables.Place;
 import Tables.Ville;
 import java.sql.ResultSet;
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author Andréas
  */
-public class DAL {
+public class ImportDAL {
      
     
     
@@ -148,13 +149,67 @@ public class DAL {
             }
         
             
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return pnc;
+    }
+    
+    public ArrayList<PNT> importTablePNT(){
+        return importTablePNT(0, "", "", "", "", "", "", 0, null);
+    }
+    
+    public ArrayList<PNT> importTablePNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, Ville idDerniereVille){
+        String query = "Select * from PersonnelNaviguant where typePN='PNT'";
+        if(idEmploye != 0){
+            query += " and idEmploye="+idEmploye;
+        }
+        if (!"".equals(nomEmploye)){
+            query += " and nomEmploye='"+nomEmploye+"'";
+        }
+        if (!"".equals(prenomEmploye)){
+            query += " and prenomEmploye='"+prenomEmploye+"'";
+        }
+        if (!"".equals(numRueEmploye)){
+            query += " and numRueEmploye='"+numRueEmploye+"'";
+        }
+        if (!"".equals(rueEmploye)){
+            query += " and rueEmploye='"+rueEmploye+"'";
+        }
+        if (!"".equals(cpEmploye)){
+            query += " and cpEmploye='"+cpEmploye+"'";
+        }
+        if (!"".equals(villeEmploye)){
+            query += " and villeEmploye='"+villeEmploye+"'";
+        }
+        if (heuresVol != 0){
+            query += " and heuresVol="+heuresVol;
+        }
+        if (idDerniereVille != null){
+            query += " and idDerniereVille="+idDerniereVille.getIdVille();
+        }
+        
+        ResultSet result;
+        ArrayList<PNT> pnt = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            
+            
+            while(result.next()){
+                int idEmployeRes = result.getInt("idEmploye");
+                PNT tmp = new PNT();
+                tmp.importFromId(""+idEmployeRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                pnt.add(tmp);
+            }
+        
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return pnt;
     }
     
     /**

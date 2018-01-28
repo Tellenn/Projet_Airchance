@@ -7,6 +7,7 @@ package Tables;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 public class PNT implements PersonnelNavigant, TableInterface{
 
 
+
     private int idEmploye;
     private String nomEmploye;
     private String prenomEmploye;
@@ -25,6 +27,7 @@ public class PNT implements PersonnelNavigant, TableInterface{
     private String cpEmploye;
     private String villeEmploye;
     private int heuresVol;
+    private Ville idDerniereVille;
     
     public PNT(){
         this.idEmploye = 0;
@@ -35,9 +38,10 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.cpEmploye = "";
         this.villeEmploye = "";
         this.heuresVol = 0;
+        this.idDerniereVille = new Ville();
     }
     
-    public PNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol){
+    public PNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -46,6 +50,8 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.cpEmploye = cpEmploye;
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
+        this.idDerniereVille = new Ville();
+        this.idDerniereVille.importFromId(idDerniereVille+"");
     }
 
     
@@ -177,6 +183,20 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.heuresVol = heuresVol;
     }
     
+        /**
+     * @return the idDerniereVille
+     */
+    public Ville getIdDerniereVille() {
+        return idDerniereVille;
+    }
+
+    /**
+     * @param idDerniereVille the idDerniereVille to set
+     */
+    public void setIdDerniereVille(Ville idDerniereVille) {
+        this.idDerniereVille = idDerniereVille;
+    }
+    
     
     @Override
     public void showTable() {
@@ -224,6 +244,7 @@ public class PNT implements PersonnelNavigant, TableInterface{
             this.cpEmploye = result.getString("cpEmploye");
             this.villeEmploye = result.getString("villeEmploye");
             this.heuresVol = result.getInt("heuresVol");
+            this.idDerniereVille.importFromId(result.getInt("idDerniereVille")+"");
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
