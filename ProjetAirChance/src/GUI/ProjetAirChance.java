@@ -10,6 +10,7 @@ import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Modele;
+import Tables.PNC;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -82,12 +83,14 @@ public class ProjetAirChance extends Application {
         
         DAL dal = new DAL();
         
-        ArrayList<AvionFret> avionsF = dal.importTableAvionFret();
-        
+        /*ArrayList<AvionFret> avionsF = dal.importTableAvionFret();
+        */
         Modele mod = new Modele();
         mod.importFromId("A330");
         
         ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);
+        
+        ArrayList<PNC> test = dal.importTablePNC(12, "", "", "", "", "", "", 0, null);
 
         System.exit(0);
     }

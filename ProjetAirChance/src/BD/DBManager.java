@@ -83,7 +83,7 @@ public class DBManager {
         CachedRowSetImpl crs = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            //dbConnect();
+            dbConnect();
             System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
