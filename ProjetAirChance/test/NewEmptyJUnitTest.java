@@ -48,7 +48,7 @@ public class NewEmptyJUnitTest
     @Before
     public void setUp()
     {
-
+        DBManager.dbConnect();
     }
 
     @After
@@ -65,27 +65,18 @@ public class NewEmptyJUnitTest
     @Test
     public void getAllPlaces()
     {
-        DBManager.dbConnect();
+        
         int nbPlaces = ImportDAL.importPlaceWithParameter(0, 7, "", "", "").size();
         System.out.println(nbPlaces);
         assertTrue("Error wrong number of places for plane 7", nbPlaces == 150);
-        try
-        {
-            DBManager.dbDisconnect();
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Test
     public void changeAutoCommit()
     {
-        DBManager.dbConnect();
         try
         {
             manager.changeAutocommit(false);
-            DBManager.dbDisconnect();
         } catch (SQLException ex)
         {
             assertFalse("Error while changing autocommit", true);
@@ -95,12 +86,10 @@ public class NewEmptyJUnitTest
     @Test
     public void tryCommit()
     {
-        DBManager.dbConnect();
         try
         {
             manager.changeAutocommit(false);
             manager.commit();
-            DBManager.dbDisconnect();
         } catch (SQLException ex)
         {
             assertFalse("Error while trying commit", true);
@@ -110,11 +99,9 @@ public class NewEmptyJUnitTest
     @Test
     public void tryChangeIsolationLevel()
     {
-        DBManager.dbConnect();
         try
         {
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            DBManager.dbDisconnect();
         } catch (SQLException ex)
         {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,21 +114,17 @@ public class NewEmptyJUnitTest
 
     @Test
     public void exportFret()
-    {
-        manager.dbConnect();
-        
+    {        
         try
         {
-            manager.changeAutocommit(true);
+            manager.changeAutocommit(false);
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
             AvionFret avion = new AvionFret(0, "Falcon900", 500, 500, 1);
             
             ExportDAL dal = new ExportDAL();
             dal.exportAvionFret(avion);
-            
-            manager.commit();
-            manager.dbDisconnect();
+            manager.rollBack();
 
         } catch (SQLException ex)
         {
@@ -159,13 +142,11 @@ public class NewEmptyJUnitTest
     }
     
     @Test
-    public void exportPasager()
+    public void exportPassager()
     {
-        manager.dbConnect();
-        
         try
         {
-            manager.changeAutocommit(true);
+            manager.changeAutocommit(false);
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
             AvionPassager avion = new AvionPassager(0, "Falcon900", 3,0,0,1);
@@ -179,10 +160,8 @@ public class NewEmptyJUnitTest
             
             ExportDAL dal = new ExportDAL();
             dal.exportAvionPassager(avion);
+            manager.rollBack();
             
-            manager.commit();
-            manager.dbDisconnect();
-
         } catch (SQLException ex)
         {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
