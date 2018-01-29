@@ -70,7 +70,7 @@ INSERT INTO Modele VALUES ('B777', 2, 15000);
 INSERT INTO Modele VALUES ('B787', 2, 15000);
 INSERT INTO Modele VALUES ('Falcon900', 1, 8800);
 INSERT INTO Modele VALUES ('Falcon2000', 1, 7000);
-INSERT INTO Modele VALUES ('G200', 1, 6300);
+INSERT INTO Modele VALUES ('G200', 1, 9700);
 INSERT INTO Modele VALUES ('G500', 1, 9260);
 INSERT INTO Modele VALUES ('Falcon7X', 1, 11020);
 INSERT INTO Modele VALUES ('Falcon8X', 1, 11945);
@@ -3684,35 +3684,35 @@ INSERT INTO PersonnelNaviguant VALUES (20, 'Briard', 'Jules', '11', 'rue Reine E
 
 -- Vols
 -- (passagers) Paris => New York
-INSERT INTO Vol VALUES (1, 0, 480, 5835, 150, 50, 50, null, 1, 9);
+INSERT INTO Vol VALUES (1, 0, 480, 5835, 0, 0, 8, null, 1, 9);
 -- (passagers) Paris => Genève
-INSERT INTO Vol VALUES (2, 0, 65, 422, 50, 30, 20, null, 1, 3);
+INSERT INTO Vol VALUES (2, 0, 65, 422, 0, 0, 8, null, 1, 3);
 -- (passagers) Paris => Moscou
-INSERT INTO Vol VALUES (3, 0, 220, 2477, 100, 50, 50, null, 1, 4);
+INSERT INTO Vol VALUES (3, 0, 220, 2477, 0, 0, 8, null, 1, 4);
 -- (passagers) Londres => Dubai
-INSERT INTO Vol VALUES (4, 0, 415, 5479, 300, 100, 100, null, 5, 7);
+INSERT INTO Vol VALUES (4, 0, 415, 5479, 0, 0, 8, null, 5, 7);
 -- (passagers) Londres => Tokyo
-INSERT INTO Vol VALUES (5, 0, 710, 9600, 150, 100, 50, null, 5, 12);
+INSERT INTO Vol VALUES (5, 0, 710, 9600, 0, 0, 8, null, 5, 12);
 -- (passagers) Londres => Toronto	
-INSERT INTO Vol VALUES (6, 0, 475, 5736, 200, 150, 100, null, 5, 18);
+INSERT INTO Vol VALUES (6, 0, 475, 5736, 0, 0, 8, null, 5, 18);
 -- (passagers) Francfort => Denver		
-INSERT INTO Vol VALUES (7, 0, 620, 8125, 150, 50, 50, null, 6, 10);
+INSERT INTO Vol VALUES (7, 0, 620, 8125, 0, 0, 8, null, 6, 10);
 -- (passagers) Francfort => Hong Kong			
-INSERT INTO Vol VALUES (8, 0, 655, 9145, 200, 100, 50, null, 6, 14);
+INSERT INTO Vol VALUES (8, 0, 655, 9145, 0, 0, 8, null, 6, 14);
 -- (passagers) Francfort => Kuala Lumpur		
-INSERT INTO Vol VALUES (9, 0, 855, 10003, 150, 100, 50, null, 6, 19);
+INSERT INTO Vol VALUES (9, 0, 855, 10003, 0, 0, 8, null, 6, 19);
 -- (passagers) Madrid => Los Angeles
-INSERT INTO Vol VALUES (10, 0, 890, 9406, 150, 100, 50, null, 20, 8);
+INSERT INTO Vol VALUES (10, 0, 890, 9406, 0, 0, 8, null, 20, 8);
 -- (passagers) Madrid => Istanbul
-INSERT INTO Vol VALUES (11, 0, 265, 2762, 200, 150, 50, null, 20, 17);
+INSERT INTO Vol VALUES (11, 0, 265, 2762, 0, 0, 8, null, 20, 17);
 -- (passagers) Madrid => Shanghai
-INSERT INTO Vol VALUES (12, 0, 780, 10255, 150, 60, 30, null, 20, 13);
+INSERT INTO Vol VALUES (12, 0, 780, 10255, 0, 0, 8, null, 20, 13);
 -- (passagers) Amsterdam => Pekin
-INSERT INTO Vol VALUES (13, 0, 560, 7824, 150, 60, 30, null, 16, 11);
+INSERT INTO Vol VALUES (13, 0, 560, 7824, 0, 0, 8, null, 16, 11);
 -- (passagers) Amsterdam => Lyon
-INSERT INTO Vol VALUES (14, 0, 95, 734, 100, 30, 15, null, 16, 2);
+INSERT INTO Vol VALUES (14, 0, 95, 734, 0, 0, 8, null, 16, 2);
 -- (passagers) Amsterdam => Rio de Janeiro
-INSERT INTO Vol VALUES (15, 0, 725, 9577, 100, 50, 25, null, 16, 15);
+INSERT INTO Vol VALUES (15, 0, 725, 9577, 0, 0, 8, null, 16, 15);
 -- (fret) Rio de Janeiro => Paris
 INSERT INTO Vol VALUES (16, 1, 695, 9171, null, null, null, 30000, 15, 1);
 -- (fret) Paris => Tokyo
