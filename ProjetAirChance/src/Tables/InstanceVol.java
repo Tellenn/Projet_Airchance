@@ -7,6 +7,10 @@ package Tables;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -219,12 +223,53 @@ public class InstanceVol implements TableInterface{
 
     @Override
     public ResultSet getResultSetFromId(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "Select * from InstanceVol where numInstance="+id;
+        return TableImpl.getResultSet(query);
     }
 
     @Override
     public void importFromId(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet result = getResultSetFromId(id);
+        try {
+            if(result.last()){
+                int rows = result.getRow();
+                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un InstanceVol");
+            }
+            result.beforeFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        try {
+            if(!result.next()) throw new Exception("La requête n'a pas abouti avec le numInstance "+id);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+            
+        try {
+            this.numInstance = result.getInt("numInstance");
+            this.numVol = new Vol();
+            this.numVol.importFromId(""+result.getInt("numVol"));
+            this.idAvion = (this.numVol.getType() == 1) ? new AvionPassager() : new AvionFret();
+            this.idAvion.importFromId(""+result.getInt("idAvion"));
+            this.placesRestEco = result.getInt("placesRestEco");
+            this.placesRestAff = result.getInt("placesRestAff");
+            this.placesRestPrem = result.getInt("placesRestPrem");
+            this.poidsRest = result.getInt("poidsRest");
+            
+            LocalDate localDateDepart = result.getObject("dateDepart", LocalDate.class);
+            this.dateDepart = Date.valueOf(localDateDepart);
+
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
 }
