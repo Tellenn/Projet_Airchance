@@ -91,6 +91,11 @@ public class Place
     {
         this.estReservee = res;
     }
+    
+    public boolean getRes( )
+    {
+        return this.estReservee;
+    }
 
     public ResultSet getResultSetFromId(String numPlace, String avionId, String numInstance)
     {

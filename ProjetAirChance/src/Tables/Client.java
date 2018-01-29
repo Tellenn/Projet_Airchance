@@ -5,6 +5,8 @@
  */
 package Tables;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Pault
@@ -22,6 +24,29 @@ public class Client {
     private String villeClient;
     private int heuresCumulees;
     private String numPasseport;
+    private boolean aReduction;
+    private ArrayList<Reservation> reservations;
+
+    public ArrayList<Reservation> getReservations()
+    {
+        return reservations;
+    }
+
+    public void setReservations(ArrayList<Reservation> reservations)
+    {
+        this.reservations = reservations;
+    }
+    
+    public void addReservation(Reservation r)
+    {
+        this.reservations.add(r);
+    }
+    
+    public void removeReservation(Reservation r)
+    {
+        this.reservations.remove(r);
+    }
+    
 
     public String getIdClient() {
         return idClient;
@@ -107,7 +132,16 @@ public class Client {
         heuresCumulees = 0;
         numPasseport = "";
     }
+
+    public boolean isaReduction()
+    {
+        return aReduction;
+    }
+
+    public void setaReduction(boolean aReduction)
+    {
+        this.aReduction = aReduction;
+    }
     
-    
-    
+        
 }

@@ -5,47 +5,37 @@
  */
 package Tables;
 
+import java.sql.Date;
+import java.util.ArrayList;
+
 /**
  *
  * @author Pault
  */
 public class Reservation
 {
-    private int numPlace;
-    private int idAvion;
     private int prix;
     private int idResa;
-    private int numInstance;
+    private ArrayList<Reservations> reservations;
+    private Date dateReservation;
 
-    public int getNumPlace()
+    public Reservation(int idResa, ArrayList<Reservations> reservations)
     {
-        return numPlace;
+        
+        this.idResa = idResa;
+        this.reservations = reservations;
+    }
+    
+    public Date getDateReservation()
+    {
+        return dateReservation;
     }
 
-    public void setNumPlace(int numPlace)
+    public void setDateReservation(Date dateReservation)
     {
-        this.numPlace = numPlace;
+        this.dateReservation = dateReservation;
     }
 
-    public int getIdAvion()
-    {
-        return idAvion;
-    }
-
-    public void setIdAvion(int idAvion)
-    {
-        this.idAvion = idAvion;
-    }
-
-    public int getPrix()
-    {
-        return prix;
-    }
-
-    public void setPrix(int prix)
-    {
-        this.prix = prix;
-    }
 
     public int getIdResa()
     {
@@ -57,15 +47,30 @@ public class Reservation
         this.idResa = idResa;
     }
 
-    public int getNumInstance()
+    public ArrayList<Reservations> getReservations()
     {
-        return numInstance;
+        return reservations;
     }
 
-    public void setNumInstance(int numInstance)
+    public void setReservations(ArrayList<Reservations> reservations)
     {
-        this.numInstance = numInstance;
+        this.reservations = reservations;
+        this.prix = 0;
+        for(Reservations reservation : reservations)
+        {
+            this.prix += reservation.getPrix();
+        }
     }
     
+    public void addReservations(Reservations reservation)
+    {
+        this.reservations.add(reservation);
+        this.prix += reservation.getPrix();
+    }
     
+    public void removeReservations(Reservations reservation)
+    {
+        this.reservations.remove(reservation);
+        this.prix -= reservation.getPrix();
+    }
 }
