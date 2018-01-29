@@ -15,11 +15,9 @@ import java.util.logging.Logger;
  *
  * @author Andréas
  */
-public class PNC implements PersonnelNavigant, TableInterface{
+public class PNC implements PersonnelNavigant, TableInterface
+{
 
-    
-
-    
     private int idEmploye;
     private String nomEmploye;
     private String prenomEmploye;
@@ -30,8 +28,9 @@ public class PNC implements PersonnelNavigant, TableInterface{
     private int heuresVol;
     private Ville idDerniereVille;
     private ArrayList<Langue> langues;
-    
-    public PNC(){
+
+    public PNC()
+    {
         this.idEmploye = 0;
         this.nomEmploye = "";
         this.prenomEmploye = "";
@@ -43,8 +42,9 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.idDerniereVille = new Ville();
         this.langues = new ArrayList<>();
     }
-    
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue){
+
+    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue)
+    {
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -54,22 +54,23 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
         this.idDerniereVille = new Ville();
-        this.idDerniereVille.importFromId(""+idDerniereVille);
+        this.idDerniereVille.importFromId("" + idDerniereVille);
         this.langues = new ArrayList<>();
-        
-        for(int i = 0; i < langue.size(); i++){
+
+        for (int i = 0; i < langue.size(); i++)
+        {
             Langue tmp = new Langue();
             tmp.importFromId(langue.get(i));
             this.langues.add(tmp);
         }
     }
 
-    
     /**
      * @return the idEmploye
      */
     @Override
-    public int getIdEmploye() {
+    public int getIdEmploye()
+    {
         return idEmploye;
     }
 
@@ -77,7 +78,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param idEmploye the idEmploye to set
      */
     @Override
-    public void setIdEmploye(int idEmploye) {
+    public void setIdEmploye(int idEmploye)
+    {
         this.idEmploye = idEmploye;
     }
 
@@ -85,7 +87,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the nomEmploye
      */
     @Override
-    public String getNomEmploye() {
+    public String getNomEmploye()
+    {
         return nomEmploye;
     }
 
@@ -93,7 +96,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param nomEmploye the nomEmploye to set
      */
     @Override
-    public void setNomEmploye(String nomEmploye) {
+    public void setNomEmploye(String nomEmploye)
+    {
         this.nomEmploye = nomEmploye;
     }
 
@@ -101,7 +105,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the prenomEmploye
      */
     @Override
-    public String getPrenomEmploye() {
+    public String getPrenomEmploye()
+    {
         return prenomEmploye;
     }
 
@@ -109,7 +114,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param prenomEmploye the prenomEmploye to set
      */
     @Override
-    public void setPrenomEmploye(String prenomEmploye) {
+    public void setPrenomEmploye(String prenomEmploye)
+    {
         this.prenomEmploye = prenomEmploye;
     }
 
@@ -117,7 +123,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the numRueEmploye
      */
     @Override
-    public String getNumRueEmploye() {
+    public String getNumRueEmploye()
+    {
         return numRueEmploye;
     }
 
@@ -125,7 +132,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param numRueEmploye the numRueEmploye to set
      */
     @Override
-    public void setNumRueEmploye(String numRueEmploye) {
+    public void setNumRueEmploye(String numRueEmploye)
+    {
         this.numRueEmploye = numRueEmploye;
     }
 
@@ -133,7 +141,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the rueEmploye
      */
     @Override
-    public String getRueEmploye() {
+    public String getRueEmploye()
+    {
         return rueEmploye;
     }
 
@@ -141,7 +150,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param rueEmploye the rueEmploye to set
      */
     @Override
-    public void setRueEmploye(String rueEmploye) {
+    public void setRueEmploye(String rueEmploye)
+    {
         this.rueEmploye = rueEmploye;
     }
 
@@ -149,7 +159,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the cpEmploye
      */
     @Override
-    public String getCpEmploye() {
+    public String getCpEmploye()
+    {
         return cpEmploye;
     }
 
@@ -157,7 +168,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param cpEmploye the cpEmploye to set
      */
     @Override
-    public void setCpEmploye(String cpEmploye) {
+    public void setCpEmploye(String cpEmploye)
+    {
         this.cpEmploye = cpEmploye;
     }
 
@@ -165,7 +177,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the villeEmploye
      */
     @Override
-    public String getVilleEmploye() {
+    public String getVilleEmploye()
+    {
         return villeEmploye;
     }
 
@@ -173,7 +186,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param villeEmploye the villeEmploye to set
      */
     @Override
-    public void setVilleEmploye(String villeEmploye) {
+    public void setVilleEmploye(String villeEmploye)
+    {
         this.villeEmploye = villeEmploye;
     }
 
@@ -181,7 +195,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @return the heuresVol
      */
     @Override
-    public int getHeuresVol() {
+    public int getHeuresVol()
+    {
         return heuresVol;
     }
 
@@ -189,77 +204,94 @@ public class PNC implements PersonnelNavigant, TableInterface{
      * @param heuresVol the heuresVol to set
      */
     @Override
-    public void setHeuresVol(int heuresVol) {
+    public void setHeuresVol(int heuresVol)
+    {
         this.heuresVol = heuresVol;
     }
-    
+
     /**
      * @return the idDerniereVille
      */
-    public Ville getIdDerniereVille() {
+    public Ville getIdDerniereVille()
+    {
         return idDerniereVille;
     }
 
     /**
      * @param idDerniereVille the idDerniereVille to set
      */
-    public void setIdDerniereVille(Ville idDerniereVille) {
+    public void setIdDerniereVille(Ville idDerniereVille)
+    {
         this.idDerniereVille = idDerniereVille;
     }
-    
+
     /**
      * @return the langues
      */
-    public ArrayList<Langue> getLangues() {
+    public ArrayList<Langue> getLangues()
+    {
         return langues;
     }
 
     /**
      * @param langues the langues to set
      */
-    public void setLangues(ArrayList<Langue> langues) {
+    public void setLangues(ArrayList<Langue> langues)
+    {
         this.langues = langues;
     }
-    
-    
+
     @Override
-    public void showTable() {
+    public void showTable()
+    {
         String query = "Select * from PersonnelNaviguant where typePN='PNC'";
         TableImpl.showTable(query);
     }
 
     @Override
-    public ResultSet getResultSetFromId(String id) {
+    public ResultSet getResultSetFromId(String id)
+    {
         String query = "Select * from PersonnelNaviguant where typePN='PNC'"
-                + "and idEmploye="+id;
+                + "and idEmploye=" + id;
         return TableImpl.getResultSet(query);
     }
 
     @Override
-    public void importFromId(String id) {
+    public void importFromId(String id)
+    {
         ResultSet result = getResultSetFromId(id);
-        try {
-            if(result.last()){
+        try
+        {
+            if (result.last())
+            {
                 int rows = result.getRow();
-                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un PNC");
+                if (rows > 1)
+                {
+                    throw new Exception("La requête a renvoyé plus d'un PNC");
+                }
             }
             result.beforeFirst();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        try {
-            if(!result.next()) throw new Exception("La requête n'a pas abouti avec l'idEmploye "+id);
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-            
-        try {
+
+        try
+        {
+            if (!result.next())
+            {
+                throw new Exception("La requête n'a pas abouti avec l'idEmploye " + id);
+            }
+        } catch (Exception ex)
+        {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try
+        {
             this.idEmploye = result.getInt("idEmploye");
             this.nomEmploye = result.getString("nomEmploye");
             this.prenomEmploye = result.getString("prenomEmploye");
@@ -268,29 +300,34 @@ public class PNC implements PersonnelNavigant, TableInterface{
             this.cpEmploye = result.getString("cpEmploye");
             this.villeEmploye = result.getString("villeEmploye");
             this.heuresVol = result.getInt("heuresVol");
-            this.idDerniereVille.importFromId(""+result.getInt("idDerniereVille"));
+            this.idDerniereVille.importFromId("" + result.getInt("idDerniereVille"));
 
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        String queryLangue = "Select * from LanguePNC where idEmploye="+id;
+
+        String queryLangue = "Select * from LanguePNC where idEmploye=" + id;
         ResultSet langueRes = TableImpl.getResultSet(queryLangue);
         ArrayList<String> langueString = new ArrayList<>();
-        
-        try {
-            while(langueRes.next()){
+
+        try
+        {
+            while (langueRes.next())
+            {
                 langueString.add(langueRes.getString("nomLangue"));
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        for(int i = 0; i < langueString.size(); i++){
+
+        for (int i = 0; i < langueString.size(); i++)
+        {
             Langue tmp = new Langue();
             tmp.importFromId(langueString.get(i));
             this.langues.add(tmp);
         }
-        
+
     }
 }

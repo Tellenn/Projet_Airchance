@@ -23,27 +23,29 @@ import static org.junit.Assert.*;
  */
 public class NewEmptyJUnitTest
 {
+
     private DBManager manager;
+
     public NewEmptyJUnitTest()
     {
     }
-    
+
     @BeforeClass
     public static void setUpClass()
     {
     }
-    
+
     @AfterClass
     public static void tearDownClass()
     {
     }
-    
+
     @Before
     public void setUp()
     {
-       
+
     }
-    
+
     @After
     public void tearDown() throws SQLException
     {
@@ -55,59 +57,67 @@ public class NewEmptyJUnitTest
     //
     // @Test
     // public void hello() {}
-    
     @Test
     public void getAllPlaces()
     {
         DBManager.dbConnect();
         int nbPlaces = ImportDAL.importPlaceWithParameter(0, 7, "", "", "").size();
         System.out.println(nbPlaces);
-        assertTrue("Error wrong number of places for plane 7",nbPlaces == 150);
-        try {
+        assertTrue("Error wrong number of places for plane 7", nbPlaces == 150);
+        try
+        {
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Test
     public void changeAutoCommit()
     {
         DBManager.dbConnect();
-        try {
+        try
+        {
             manager.changeAutocommit(false);
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
-            assertFalse("Error while changing autocommit",true);
+        } catch (SQLException ex)
+        {
+            assertFalse("Error while changing autocommit", true);
         }
     }
-    
+
     @Test
     public void tryCommit()
     {
         DBManager.dbConnect();
-        try {
+        try
+        {
             manager.changeAutocommit(false);
             manager.commit();
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
-            assertFalse("Error while trying commit",true);
+        } catch (SQLException ex)
+        {
+            assertFalse("Error while trying commit", true);
         }
     }
-    
-     @Test
+
+    @Test
     public void tryChangeIsolationLevel()
     {
         DBManager.dbConnect();
-        try {
+        try
+        {
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
-            assertFalse("Error while trying changing the isolation level",true);
-        } catch (ClassNotFoundException ex) {
+            assertFalse("Error while trying changing the isolation level", true);
+        } catch (ClassNotFoundException ex)
+        {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }
