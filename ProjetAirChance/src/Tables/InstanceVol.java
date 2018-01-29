@@ -8,6 +8,7 @@ package Tables;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,28 +126,28 @@ public class InstanceVol implements TableInterface{
     /**
      * @return the dateArrive
      */
-    public java.sql.Date getDateArrive() {
+    public String getDateArrive() {
         return dateArrive;
     }
 
     /**
      * @param dateArrive the dateArrive to set
      */
-    public void setDateArrive(java.sql.Date dateArrive) {
+    public void setDateArrive(String dateArrive) {
         this.dateArrive = dateArrive;
     }
 
     /**
      * @return the dateDepart
      */
-    public java.sql.Date getDateDepart() {
+    public String getDateDepart() {
         return dateDepart;
     }
 
     /**
      * @param dateDepart the dateDepart to set
      */
-    public void setDateDepart(java.sql.Date dateDepart) {
+    public void setDateDepart(String dateDepart) {
         this.dateDepart = dateDepart;
     }
 
@@ -162,6 +163,10 @@ public class InstanceVol implements TableInterface{
      */
     public void setEtat(String etat) {
         this.etat = etat;
+        System.out.println(dateDepart);
+        /*SimpleDateFormat f = new SimpleDateFormat("yyyy/mm/dd hh24:mi:ss");
+        Date d = f.parse(dateDepart);
+        System.out.println(d);*/
     }
 
   
@@ -178,7 +183,7 @@ public class InstanceVol implements TableInterface{
         this.placesRestPrem = 0;
         this.poidsRest = 0;
         this.dateArrive = null;
-        this.dateDepart = new Date(new java.util.Date().getTime());
+        this.dateDepart = "";
         this.etat = "Cree";
     }
     
@@ -196,7 +201,7 @@ public class InstanceVol implements TableInterface{
         this.placesRestAff = placesRestAff;
         this.placesRestPrem = placesRestPrem;
         this.dateArrive = null;
-        this.dateDepart = new Date(new java.util.Date().getTime());
+        this.dateDepart = "";
         this.etat = etat;
     }
 
@@ -211,8 +216,8 @@ public class InstanceVol implements TableInterface{
     private int placesRestPrem;
     private int placesRestAff;
     private int poidsRest;
-    private java.sql.Date dateArrive;
-    private java.sql.Date dateDepart;
+    private String dateArrive;
+    private String dateDepart;
     private String etat;
 
 
@@ -278,8 +283,13 @@ public class InstanceVol implements TableInterface{
             this.placesRestAff = result.getInt("placesRestAff");
             this.placesRestPrem = result.getInt("placesRestPrem");
             this.poidsRest = result.getInt("poidsRest");
-            this.dateDepart = result.getDate("dateDepart");
-            this.dateArrive = result.getDate("dateArrivee");       
+            String dateDepart = result.getTimestamp("dateDepart").toString();
+            String[] parts = dateDepart.split(".");
+            this.dateDepart = parts[0];
+            String dateArrivee = result.getTimestamp("dateArrivee").toString();
+            parts = dateArrivee.split(".");
+            this.dateArrive = parts[0];
+            //this.dateArrive = result.getTimestamp("dateArrivee");       
             this.etat = result.getString("etat");
 
 

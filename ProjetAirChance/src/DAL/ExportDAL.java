@@ -9,6 +9,7 @@ import BD.DBManager;
 import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
+import Tables.InstanceVol;
 import Tables.Langue;
 import Tables.Modele;
 import Tables.PNC;
@@ -18,6 +19,11 @@ import Tables.Ville;
 import Tables.Vol;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,57 +36,49 @@ public class ExportDAL
 {
 
 
-    public int readMaxIdPN()
-    {
-        try
-        {
+    // <editor-fold defaultstate="collapsed" desc=" READERS MAX ">
+    public int readMaxIdPN() {
+        try {
             String query = "Select max(idEmploye) from PersonnelNaviguant";
             ResultSet res;
             res = DBManager.dbExecuteQuery(query);
             res.next();
             return res.getInt(1);
-        } catch (SQLException | ClassNotFoundException ex)
-        {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
-
-    public int readMaxIdVille()
-    {
-        try
-        {
+    
+    public int readMaxIdVille() {
+        try {
             String query = "Select max(idVille) from Ville";
             ResultSet res;
             res = DBManager.dbExecuteQuery(query);
             res.next();
             return res.getInt(1);
-        } catch (SQLException | ClassNotFoundException ex)
-        {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
-
-    public boolean isNomModeleExists(Modele mod)
-    {
+    
+    public boolean isNomModeleExists(Modele mod) {
         String query = "Select * from Modele where nomModele='" + mod.getNomModele() + "'";
         ResultSet result;
         boolean itsHere = false;
-
-        try
-        {
+        
+        try {
             result = DBManager.dbExecuteQuery(query);
             itsHere = result.last();
-        } catch (SQLException | ClassNotFoundException ex)
-        {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return itsHere;
     }
     
-    private int readMaxNumVol(){
-        try{
+    private int readMaxNumVol() {
+        try {
             String query = "Select max(numVol) from Vol";
             ResultSet res;
             res = DBManager.dbExecuteQuery(query);
@@ -91,6 +89,34 @@ public class ExportDAL
         }
         return 0;
     }
+    
+    private int readMaxNumInstance() {
+        try {
+            String query = "Select max(NumInstance) from InstanceVol";
+            ResultSet res;
+            res = DBManager.dbExecuteQuery(query);
+            res.next();
+            return res.getInt(1);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public int readMaxIdAvion() {
+        try {
+            String query = "Select max(idAvion) from Avion";
+            ResultSet res;
+            res = DBManager.dbExecuteQuery(query);
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+// </editor-fold>
 
     public void exportPNT(ArrayList<PNT> pntArray)
     {
@@ -326,7 +352,7 @@ public class ExportDAL
         exportAvionsPassager(avions);
     }
 
-    private void exportAvionsPassager(ArrayList<AvionPassager> avions) throws Exception
+    public void exportAvionsPassager(ArrayList<AvionPassager> avions) throws Exception
     {
         int maxId;
         String query;
@@ -387,7 +413,7 @@ public class ExportDAL
         exportAvionsFret(avions);
     }
 
-    private void exportAvionsFret(ArrayList<AvionFret> avions) throws Exception
+    public void exportAvionsFret(ArrayList<AvionFret> avions) throws Exception
     {
         int maxId;
         String query;
@@ -415,20 +441,55 @@ public class ExportDAL
         }
     }
     
-    public int readMaxIdAvion()
-    {
-        try
+    public void exportInstanceVol(ArrayList<InstanceVol> instances){
+        int maxId;
+        String query;
+
+        for (InstanceVol iv : instances)
         {
-            String query = "Select max(idAvion) from Avion";
-            ResultSet res;
-            res = DBManager.dbExecuteQuery(query);
-            res.next();
-            return res.getInt(1);
-        } catch (SQLException | ClassNotFoundException ex)
-        {
-            Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            if (iv.getNumInstance() == 0)
+            {
+                maxId = readMaxNumInstance()+ 1;
+                String arrivée = (iv.getDateArrive() != null) ? "TO_DATE('" + iv.getDateArrive() + "', 'yyyy/mm/dd hh24:mi:ss')" : "null";
+                query = "Insert into InstanceVol values (" + maxId + ", " + iv.getNumVol().getNumVol() + ", " + iv.getIdAvion().getIdAvion() + ", "
+                        + iv.getPlacesRestEco() + ", " + iv.getPlacesRestAff() + ", " + iv.getPlacesRestPrem() + ", " + iv.getPoidsRest() + ", "
+                        + "TO_DATE('"+iv.getDateDepart()+"', 'yyyy/mm/dd hh24:mi:ss') , "+arrivée+", '"+iv.getEtat()+"')";
+
+            } else
+            {
+                maxId = iv.getNumInstance();
+
+                String arrivée;
+                if(iv.getDateArrive() != null){
+                    arrivée = "TO_DATE('" + iv.getDateArrive() + "', 'yyyy/mm/dd hh24:mi:ss')";
+                }else{
+                    arrivée = "null";
+                }
+                
+                query = "Update InstanceVol set numVol=" + iv.getNumVol().getNumVol() + ", idAvion=" + iv.getIdAvion().getIdAvion() + ", placesRestEco=" + iv.getPlacesRestEco() + ", "
+                        + "placesRestAff=" + iv.getPlacesRestAff() + ", placesRestPrem=" + iv.getPlacesRestPrem() + ", poidsRest=" + iv.getPoidsRest() + ", dateDepart=TO_DATE('" + iv.getDateDepart() + "', 'yyyy/mm/dd hh24:mi:ss'), "
+                        + "dateArrivee="+arrivée+", etat='"+iv.getEtat()+"'"
+                        + " Where numInstance="+maxId;
+            }
+
+            try
+            {
+
+                DBManager.dbExecuteUpdate(query);
+
+
+            } catch (SQLException | ClassNotFoundException ex)
+            {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        return -1;
     }
+    
+    public void exportInstanceVol(InstanceVol iv){
+        ArrayList<InstanceVol> ivs = new ArrayList<>();
+        ivs.add(iv);
+        exportInstanceVol(ivs);
+    }
+   
 
 }
