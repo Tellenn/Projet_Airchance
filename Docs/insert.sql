@@ -1,22 +1,22 @@
 -- Clients
-INSERT INTO Client VALUES (1, 'Lagrange', 'Véronique', '96', 'rue Clement Marot', '93380', 'PIERREFITTE-SUR-SEINE', 0, '');
-INSERT INTO Client VALUES (2, 'Bisson', 'Grégoire', '49', 'avenue Jules Ferry', '02200', 'SOISSONS', 0, '');
+INSERT INTO Client VALUES (1, 'Lagrange', 'Véronique', '96', 'rue Clement Marot', '93380', 'PIERREFITTE-SUR-SEINE', 3380, '');
+INSERT INTO Client VALUES (2, 'Bisson', 'Grégoire', '49', 'avenue Jules Ferry', '02200', 'SOISSONS', 655, '');
 INSERT INTO Client VALUES (3, 'de Brisay', 'Arthur', '69', 'rue de Lille', '59280', 'ARMENTIÈRES', 0, '');
-INSERT INTO Client VALUES (4, 'Dupuis', 'Eloise', '90', 'place Maurice-Charretier', '94220', 'CHARENTON-LE-PONT', 0, '');
-INSERT INTO Client VALUES (5, 'Guerin', 'Jacques', '19', 'rue Goya', '77350', 'LE MÉE-SUR-SEINE', 0, '');
+INSERT INTO Client VALUES (4, 'Dupuis', 'Eloise', '90', 'place Maurice-Charretier', '94220', 'CHARENTON-LE-PONT', 1135, '');
+INSERT INTO Client VALUES (5, 'Guerin', 'Jacques', '19', 'rue Goya', '77350', 'LE MÉE-SUR-SEINE', 1135, '');
 INSERT INTO Client VALUES (6, 'Marmion', 'Robert', '47', 'Avenue De Marlioz', '92160', 'ANTONY', 0, '');
-INSERT INTO Client VALUES (7, 'Cousteau', 'Agate', '32', 'rue Grande Fusterie', '69500', 'BRON', 0, '');
+INSERT INTO Client VALUES (7, 'Cousteau', 'Agate', '32', 'rue Grande Fusterie', '69500', 'BRON', 480, '');
 INSERT INTO Client VALUES (8, 'Cheney', 'Fabrice', '60', 'rue Gustave Eiffel', '44400', 'REZÉ', 0, '');
-INSERT INTO Client VALUES (9, 'Ruel', 'Raymond', '97', 'boulevard Bryas', '92400', 'COURBEVOIE', 0, '');
-INSERT INTO Client VALUES (10, 'Lamy', 'Susanne', '31', 'place Maurice-Charretier', '28000', 'CHARTRES', 0, '');
+INSERT INTO Client VALUES (9, 'Ruel', 'Raymond', '97', 'boulevard Bryas', '92400', 'COURBEVOIE', 480, '');
+INSERT INTO Client VALUES (10, 'Lamy', 'Susanne', '31', 'place Maurice-Charretier', '28000', 'CHARTRES', 480, '');
 INSERT INTO Client VALUES (11, 'Brault', 'Oliver', '64', 'avenue Ferdinand de Lesseps', '33170', 'GRADIGNAN', 0, '');
 INSERT INTO Client VALUES (12, 'Gosselin', 'Tristan', '22', 'Place de la Madeleine', '75008', 'PARIS', 0, '');
 INSERT INTO Client VALUES (13, 'Bazin', 'Pauline', '34', 'rue de Raymond Poincaré', '92200', 'NEUILLY-SUR-SEINE', 0, '');
 INSERT INTO Client VALUES (14, 'Dubé', 'Louis', '59', 'Rue du Palais', '93800', 'ÉPINAY-SUR-SEINE', 0, '');
-INSERT INTO Client VALUES (15, 'Melanson', 'Didier', '58', 'cours Jean Jaures', '33100', 'BORDEAUX', 0, '');
-INSERT INTO Client VALUES (16, 'Soucy', 'Madelaine', '59', 'Place de la Gare', '16100', 'COGNAC', 0, '');
-INSERT INTO Client VALUES (17, 'Belisle', 'Raymond', '73', 'Rue de la Pompe', '59700', 'MARCQ-EN-BAROEUL', 0, '');
-INSERT INTO Client VALUES (18, 'Dagenais', 'Tanguy', '33', 'avenue de Provence', '06220', 'VALLAURIS', 0, '');
+INSERT INTO Client VALUES (15, 'Melanson', 'Didier', '58', 'cours Jean Jaures', '33100', 'BORDEAUX', 655, '');
+INSERT INTO Client VALUES (16, 'Soucy', 'Madelaine', '59', 'Place de la Gare', '16100', 'COGNAC', 2900, '');
+INSERT INTO Client VALUES (17, 'Belisle', 'Raymond', '73', 'Rue de la Pompe', '59700', 'MARCQ-EN-BAROEUL', 655, '');
+INSERT INTO Client VALUES (18, 'Dagenais', 'Tanguy', '33', 'avenue de Provence', '06220', 'VALLAURIS', 480, '');
 INSERT INTO Client VALUES (19, 'Grondin', 'Virginie', '67', 'Place de la Gare', '68000', 'COLMAR', 0, '');
 INSERT INTO Client VALUES (20, 'Gervais', 'Victor', '11', 'rue Léon Dierx', '87280', 'LIMOGES', 0, '');
 
@@ -70,14 +70,14 @@ INSERT INTO Modele VALUES ('B777', 2, 15000);
 INSERT INTO Modele VALUES ('B787', 2, 15000);
 INSERT INTO Modele VALUES ('Falcon900', 1, 8800);
 INSERT INTO Modele VALUES ('Falcon2000', 1, 7000);
-INSERT INTO Modele VALUES ('G200', 1, 6300);
+INSERT INTO Modele VALUES ('G200', 1, 9700);
 INSERT INTO Modele VALUES ('G500', 1, 9260);
 INSERT INTO Modele VALUES ('Falcon7X', 1, 11020);
 INSERT INTO Modele VALUES ('Falcon8X', 1, 11945);
 
 -- Avions
 INSERT INTO Avion VALUES (1, 'A300', 50000, 1500, null, null, null, 'fret', 1);
-INSERT INTO Avion VALUES (2, 'A320', 30000, 1000, null, null, null, 'fret', 1);
+INSERT INTO Avion VALUES (2, 'A320', 30000, 1000, null, null, null, 'fret', 18);
 INSERT INTO Avion VALUES (3, 'A330', 60000, 1700, null, null, null, 'fret', 1);
 INSERT INTO Avion VALUES (4, 'B747', 110000, 3200, null, null, null, 'fret', 1);
 INSERT INTO Avion VALUES (5, 'B767', 50000, 1500, null, null, null, 'fret', 1);
@@ -93,14 +93,14 @@ INSERT INTO Avion VALUES (14, 'B747', null, null, 250, 100, 50, 'passagers', 1);
 INSERT INTO Avion VALUES (15, 'B747', null, null, 250, 100, 50, 'passagers', 1);
 INSERT INTO Avion VALUES (16, 'B777', null, null, 300, 150, 50, 'passagers', 1);
 INSERT INTO Avion VALUES (17, 'B787', null, null, 250, 50, 30, 'passagers', 1);
-INSERT INTO Avion VALUES (18, 'Falcon900', null, null, 0, 0, 12, 'passagers', 1);
+INSERT INTO Avion VALUES (18, 'Falcon900', null, null, 0, 0, 12, 'passagers', 9);
 INSERT INTO Avion VALUES (19, 'Falcon900', null, null, 0, 0, 12, 'passagers', 1);
-INSERT INTO Avion VALUES (20, 'Falcon2000', null, null, 0, 0, 8, 'passagers', 1);
-INSERT INTO Avion VALUES (21, 'G200', null, null, 0, 0, 10, 'passagers', 1);
+INSERT INTO Avion VALUES (20, 'Falcon2000', null, null, 0, 0, 8, 'passagers', 14);
+INSERT INTO Avion VALUES (21, 'G200', null, null, 0, 0, 10, 'passagers', 15);
 INSERT INTO Avion VALUES (22, 'G500', null, null, 0, 0, 18, 'passagers', 1);
 INSERT INTO Avion VALUES (23, 'Falcon7X', null, null, 0, 0, 16, 'passagers', 1);
 INSERT INTO Avion VALUES (24, 'Falcon7X', null, null, 0, 0, 16, 'passagers', 1);
-INSERT INTO Avion VALUES (25, 'Falcon8X', null, null, 0, 0, 19, 'passagers', 1);
+INSERT INTO Avion VALUES (25, 'Falcon8X', null, null, 0, 0, 19, 'passagers', 5);
 
 -- Places
 INSERT INTO Place VALUES(1, 7, 'Hublot', 'Eco');
@@ -3661,58 +3661,58 @@ INSERT INTO Place VALUES(19, 25, 'Couloir', 'Premiere');
 INSERT INTO Place VALUES(20, 25, 'Hublot', 'Premiere');
 
 -- Personnels Naviguant
-INSERT INTO PersonnelNaviguant VALUES (1, 'Carriere', 'Remy', '91', 'place Stanislas', '54100', 'NANCY', 0, 'PNT', 1);
-INSERT INTO PersonnelNaviguant VALUES (2, 'Lamarre', 'Julien', '80', 'rue des six freres Ruellan', '44230', 'SAINT-SÉBASTIEN-SUR-LOIRE', 0, 'PNT', 1);
+INSERT INTO PersonnelNaviguant VALUES (1, 'Carriere', 'Remy', '91', 'place Stanislas', '54100', 'NANCY', 480, 'PNT', 9);
+INSERT INTO PersonnelNaviguant VALUES (2, 'Lamarre', 'Julien', '80', 'rue des six freres Ruellan', '44230', 'SAINT-SÉBASTIEN-SUR-LOIRE', 0, 'PNT', 5);
 INSERT INTO PersonnelNaviguant VALUES (3, 'Deblois', 'Edouard', '99', 'Rue Roussy', '93130', 'NOISY-LE-SEC', 0, 'PNT', 1);
-INSERT INTO PersonnelNaviguant VALUES (4, 'Tardif', 'Hugues', '38', 'rue Petite Fusterie', '62200', 'BOULOGNE-SUR-MER', 0, 'PNT', 1);
-INSERT INTO PersonnelNaviguant VALUES (5, 'Marseau', 'Gabrielle', '84', 'quai Saint-Nicolas', '37100', 'TOURS', 0, 'PNT', 1);
-INSERT INTO PersonnelNaviguant VALUES (6, 'Vaillancourt', 'Bernadette', '75', 'rue des Coudriers', '31600', 'MURET', 0, 'PNC', 1);
+INSERT INTO PersonnelNaviguant VALUES (4, 'Tardif', 'Hugues', '38', 'rue Petite Fusterie', '62200', 'BOULOGNE-SUR-MER', 725, 'PNT', 15);
+INSERT INTO PersonnelNaviguant VALUES (5, 'Marseau', 'Gabrielle', '84', 'quai Saint-Nicolas', '37100', 'TOURS', 655, 'PNT', 14);
+INSERT INTO PersonnelNaviguant VALUES (6, 'Vaillancourt', 'Bernadette', '75', 'rue des Coudriers', '31600', 'MURET', 725, 'PNC', 15);
 INSERT INTO PersonnelNaviguant VALUES (7, 'Chatigny', 'Hortense', '64', 'Rue St Ferreol', '57050', 'METZ', 0, 'PNC', 1);
-INSERT INTO PersonnelNaviguant VALUES (8, 'Morneau', 'Arianne', '1', 'rue Saint Germain', '93220', 'GAGNY', 0, 'PNC', 1);
+INSERT INTO PersonnelNaviguant VALUES (8, 'Morneau', 'Arianne', '1', 'rue Saint Germain', '93220', 'GAGNY', 0, 'PNC', 5);
 INSERT INTO PersonnelNaviguant VALUES (9, 'Mercier', 'Diane', '30', 'boulevard d''Alsace', '78140', 'VÉLIZY-VILLACOUBLAY', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (10, 'Roussel', 'Virginie', '57', 'route de Lyon', '92130', 'ISSY-LES-MOULINEAUX', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (11, 'Gendron', 'Marie', '52', 'rue de Penthièvre', '29000', 'QUIMPER', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (12, 'Beaudouin', 'Corinne', '92', 'avenue de l''Amandier', '33000', 'BORDEAUX', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (13, 'LaGarde', 'Romain', '24', 'cours Jean Jaures', '33800', 'BORDEAUX', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (14, 'Gadbois', 'Ines', '45', 'Boulevard de Normandie', '38600', 'FONTAINE', 0, 'PNC', 1);
-INSERT INTO PersonnelNaviguant VALUES (15, 'Auger', 'Cerise', '30', 'rue du President Roosevelt', '91600', 'SAVIGNY-SUR-ORGE', 0, 'PNC', 1);
+INSERT INTO PersonnelNaviguant VALUES (15, 'Auger', 'Cerise', '30', 'rue du President Roosevelt', '91600', 'SAVIGNY-SUR-ORGE', 480, 'PNC', 9);
 INSERT INTO PersonnelNaviguant VALUES (16, 'Laux', 'Louise', '93', 'Rue de Verdun', '71300', 'MONTCEAU-LES-MINES', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (17, 'Jodoin', 'Anne', '46', 'boulevard de Prague', '93160', 'NOISY-LE-GRAND', 0, 'PNC', 1);
-INSERT INTO PersonnelNaviguant VALUES (18, 'Lauzier', 'Thierry', '14', 'cours Jean Jaures', '33100', 'BORDEAUX', 0, 'PNC', 1);
+INSERT INTO PersonnelNaviguant VALUES (18, 'Lauzier', 'Thierry', '14', 'cours Jean Jaures', '33100', 'BORDEAUX', 655, 'PNC', 14);
 INSERT INTO PersonnelNaviguant VALUES (19, 'Proulx', 'Josephine', '43', 'avenue Voltaire', '06520', 'MAGAGNOSC', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (20, 'Briard', 'Jules', '11', 'rue Reine Elisabeth', '48000', 'MENDE', 0, 'PNC', 1);
 
 -- Vols
 -- (passagers) Paris => New York
-INSERT INTO Vol VALUES (1, 0, 480, 5835, 150, 50, 50, null, 1, 9);
+INSERT INTO Vol VALUES (1, 0, 480, 5835, 0, 0, 8, null, 1, 9);
 -- (passagers) Paris => Genève
-INSERT INTO Vol VALUES (2, 0, 65, 422, 50, 30, 20, null, 1, 3);
+INSERT INTO Vol VALUES (2, 0, 65, 422, 0, 0, 8, null, 1, 3);
 -- (passagers) Paris => Moscou
-INSERT INTO Vol VALUES (3, 0, 220, 2477, 100, 50, 50, null, 1, 4);
+INSERT INTO Vol VALUES (3, 0, 220, 2477, 0, 0, 8, null, 1, 4);
 -- (passagers) Londres => Dubai
-INSERT INTO Vol VALUES (4, 0, 415, 5479, 300, 100, 100, null, 5, 7);
+INSERT INTO Vol VALUES (4, 0, 415, 5479, 0, 0, 8, null, 5, 7);
 -- (passagers) Londres => Tokyo
-INSERT INTO Vol VALUES (5, 0, 710, 9600, 150, 100, 50, null, 5, 12);
+INSERT INTO Vol VALUES (5, 0, 710, 9600, 0, 0, 8, null, 5, 12);
 -- (passagers) Londres => Toronto	
-INSERT INTO Vol VALUES (6, 0, 475, 5736, 200, 150, 100, null, 5, 18);
+INSERT INTO Vol VALUES (6, 0, 475, 5736, 0, 0, 8, null, 5, 18);
 -- (passagers) Francfort => Denver		
-INSERT INTO Vol VALUES (7, 0, 620, 8125, 150, 50, 50, null, 6, 10);
+INSERT INTO Vol VALUES (7, 0, 620, 8125, 0, 0, 8, null, 6, 10);
 -- (passagers) Francfort => Hong Kong			
-INSERT INTO Vol VALUES (8, 0, 655, 9145, 200, 100, 50, null, 6, 14);
+INSERT INTO Vol VALUES (8, 0, 655, 9145, 0, 0, 8, null, 6, 14);
 -- (passagers) Francfort => Kuala Lumpur		
-INSERT INTO Vol VALUES (9, 0, 855, 10003, 150, 100, 50, null, 6, 19);
+INSERT INTO Vol VALUES (9, 0, 855, 10003, 0, 0, 8, null, 6, 19);
 -- (passagers) Madrid => Los Angeles
-INSERT INTO Vol VALUES (10, 0, 890, 9406, 150, 100, 50, null, 20, 8);
+INSERT INTO Vol VALUES (10, 0, 890, 9406, 0, 0, 8, null, 20, 8);
 -- (passagers) Madrid => Istanbul
-INSERT INTO Vol VALUES (11, 0, 265, 2762, 200, 150, 50, null, 20, 17);
+INSERT INTO Vol VALUES (11, 0, 265, 2762, 0, 0, 8, null, 20, 17);
 -- (passagers) Madrid => Shanghai
-INSERT INTO Vol VALUES (12, 0, 780, 10255, 150, 60, 30, null, 20, 13);
+INSERT INTO Vol VALUES (12, 0, 780, 10255, 0, 0, 8, null, 20, 13);
 -- (passagers) Amsterdam => Pekin
-INSERT INTO Vol VALUES (13, 0, 560, 7824, 150, 60, 30, null, 16, 11);
+INSERT INTO Vol VALUES (13, 0, 560, 7824, 0, 0, 8, null, 16, 11);
 -- (passagers) Amsterdam => Lyon
-INSERT INTO Vol VALUES (14, 0, 95, 734, 100, 30, 15, null, 16, 2);
+INSERT INTO Vol VALUES (14, 0, 95, 734, 0, 0, 8, null, 16, 2);
 -- (passagers) Amsterdam => Rio de Janeiro
-INSERT INTO Vol VALUES (15, 0, 725, 9577, 100, 50, 25, null, 16, 15);
+INSERT INTO Vol VALUES (15, 0, 725, 9577, 0, 0, 8, null, 16, 15);
 -- (fret) Rio de Janeiro => Paris
 INSERT INTO Vol VALUES (16, 1, 695, 9171, null, null, null, 30000, 15, 1);
 -- (fret) Paris => Tokyo
@@ -3841,23 +3841,38 @@ INSERT INTO LanguePNC VALUES ('Portugais', 19);
 INSERT INTO LanguePNC VALUES ('Mandarin', 20);
 
 -- Pilote Modele
-INSERT INTO PiloteModele VALUES ('Falcon2000', 5, 0);
+INSERT INTO PiloteModele VALUES ('Falcon2000', 5, 655);
 INSERT INTO PiloteModele VALUES ('Falcon900', 5, 0);
 INSERT INTO PiloteModele VALUES ('Falcon7X', 5, 0);
 INSERT INTO PiloteModele VALUES ('Falcon8X', 5, 0);
-INSERT INTO PiloteModele VALUES ('G200', 4, 0);
+INSERT INTO PiloteModele VALUES ('G200', 4, 725);
 INSERT INTO PiloteModele VALUES ('G500', 4, 0);
 INSERT INTO PiloteModele VALUES ('B777', 4, 0);
 INSERT INTO PiloteModele VALUES ('B747', 4, 0);
+INSERT INTO PiloteModele VALUES ('Falcon7X', 3, 0);
 INSERT INTO PiloteModele VALUES ('A310', 3, 0);
 INSERT INTO PiloteModele VALUES ('A320', 3, 0);
 INSERT INTO PiloteModele VALUES ('A340', 3, 0);
 INSERT INTO PiloteModele VALUES ('A350', 3, 0);
+INSERT INTO PiloteModele VALUES ('Falcon8X', 2, 0);
 INSERT INTO PiloteModele VALUES ('B737', 2, 0);
 INSERT INTO PiloteModele VALUES ('B747', 2, 0);
 INSERT INTO PiloteModele VALUES ('B777', 2, 0);
 INSERT INTO PiloteModele VALUES ('B787', 2, 0);
+INSERT INTO PiloteModele VALUES ('Falcon900', 1, 480);
 INSERT INTO PiloteModele VALUES ('A300', 1, 0);
 INSERT INTO PiloteModele VALUES ('A330', 1, 0);
 INSERT INTO PiloteModele VALUES ('B767', 1, 0);
 INSERT INTO PiloteModele VALUES ('B777', 1, 0);
+
+-- EmployeInstanceVol
+INSERT INTO EmployeInstanceVol VALUES (1, 5);
+INSERT INTO EmployeInstanceVol VALUES (1, 18);
+INSERT INTO EmployeInstanceVol VALUES (2, 4);
+INSERT INTO EmployeInstanceVol VALUES (2, 6);
+INSERT INTO EmployeInstanceVol VALUES (3, 1);
+INSERT INTO EmployeInstanceVol VALUES (3, 15);
+INSERT INTO EmployeInstanceVol VALUES (4, 2);
+INSERT INTO EmployeInstanceVol VALUES (4, 8);
+INSERT INTO EmployeInstanceVol VALUES (5, 3);
+INSERT INTO EmployeInstanceVol VALUES (5, 7);

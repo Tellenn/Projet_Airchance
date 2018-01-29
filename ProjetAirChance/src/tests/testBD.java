@@ -26,7 +26,6 @@ public class testBD
     {
         DBManager manager = new DBManager();
         manager.dbConnect();
-        System.out.println("HELLO");
         try
         {
             manager.dbDisconnect();
