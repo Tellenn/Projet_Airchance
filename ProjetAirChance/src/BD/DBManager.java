@@ -110,7 +110,7 @@ public class DBManager {
                 stmt.close();  
             }
             //Close connection
-            //dbDisconnect();
+            dbDisconnect();
         }
         //Return CachedRowSet
         return crs;
@@ -127,7 +127,8 @@ public class DBManager {
         Statement stmt = null;
         try {
             //Connect to DBManager (Establish Oracle Connection)
-            //dbConnect();
+            dbConnect();
+            System.out.println("dbExecuteUpdate : "+sqlStmt);
             //Create Statement
             stmt = conn.createStatement();
             //Run executeUpdate operation with given sql statement
@@ -141,7 +142,7 @@ public class DBManager {
                 stmt.close();
             }
             //Close connection
-           // dbDisconnect();
+            //dbDisconnect();
         }
     }
     

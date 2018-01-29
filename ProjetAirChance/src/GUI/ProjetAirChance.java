@@ -5,13 +5,20 @@
  */
 package GUI;
 
-import DAL.DAL;
+import BD.DBManager;
+import DAL.ExportDAL;
+import DAL.ImportDAL;
 import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Modele;
 import Tables.PNC;
+import Tables.PNT;
+import Tables.Ville;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -81,17 +88,42 @@ public class ProjetAirChance extends Application {
         ((AvionPassager)b).showTable();*/
        
         
-        DAL dal = new DAL();
+        ImportDAL dal = new ImportDAL();
+        ExportDAL dalExp = new ExportDAL();
         
         /*ArrayList<AvionFret> avionsF = dal.importTableAvionFret();
-        */
+        
         Modele mod = new Modele();
         mod.importFromId("A330");
         
-        ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);
+        ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);*/
+        try {
+            //dal.importTablePNT();
+            //ArrayList<PNT> test = dal.importTablePNT(0, "", "", "", "", "", "", 0, null);
+            
+            /*
+            PNT test = new PNT(0, "Garcia", "Jose", "38", "rue de la Chance", "38000", "Grenoble", 0, 1);
+            PNT test2 = new PNT(4, "Tardif", "Hugues", "38", "petite fusterie", "62200", "BOULOGNE-SUR-MER", 0, 1);
+            ArrayList<PNT> exported = new ArrayList<>();
+            //exported.add(test);
+            exported.add(test2);
+            dalExp.exportPNT(exported);*/
+            
+            
+            /*
+            ArrayList<String> lang = new ArrayList<>();
+            lang.add("Anglais");
+            lang.add("Francais");
+            lang.add("Allemand");
+            PNC test = new PNC(23, "Dubooooosc", "Frank", "39", "rue de la Chimie", "38100", "St martin truc", 0, 1, lang);
+            dalExp.exportPNC(test);
+            */
+            
+            DBManager.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjetAirChance.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        ArrayList<PNC> test = dal.importTablePNC(12, "", "", "", "", "", "", 0, null);
-
         System.exit(0);
     }
     
