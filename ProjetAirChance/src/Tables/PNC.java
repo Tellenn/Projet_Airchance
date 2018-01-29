@@ -44,7 +44,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.langues = new ArrayList<>();
     }
     
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue){
+    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -57,13 +57,95 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.idDerniereVille.importFromId(""+idDerniereVille);
         this.langues = new ArrayList<>();
         
+        /*
         for(int i = 0; i < langue.size(); i++){
             Langue tmp = new Langue();
             tmp.importFromId(langue.get(i));
             this.langues.add(tmp);
         }
+        */
     }
 
+    
+    public void fillLanguePNC(){
+        
+        String queryLangue = "Select * from LanguePNC where idEmploye="+this.idEmploye;
+        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
+        ArrayList<String> langueString = new ArrayList<>();
+        
+        try {
+            while(langueRes.next()){
+                langueString.add(langueRes.getString("nomLangue"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i = 0; i < langueString.size(); i++){
+            Langue tmp = new Langue();
+            tmp.importFromId(langueString.get(i));
+            this.langues.add(tmp);
+        }
+        
+    }
+    
+    
+    @Override
+    public void showTable() {
+        String query = "Select * from PersonnelNaviguant where typePN='PNC'";
+        TableImpl.showTable(query);
+    }
+
+    @Override
+    public ResultSet getResultSetFromId(String id) {
+        String query = "Select * from PersonnelNaviguant where typePN='PNC'"
+                + "and idEmploye="+id;
+        return TableImpl.getResultSet(query);
+    }
+
+    @Override
+    public void importFromId(String id) {
+        ResultSet result = getResultSetFromId(id);
+        try {
+            if(result.last()){
+                int rows = result.getRow();
+                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un PNC");
+            }
+            result.beforeFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        try {
+            if(!result.next()) throw new Exception("La requête n'a pas abouti avec l'idEmploye "+id);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+            
+        try {
+            this.idEmploye = result.getInt("idEmploye");
+            this.nomEmploye = result.getString("nomEmploye");
+            this.prenomEmploye = result.getString("prenomEmploye");
+            this.numRueEmploye = result.getString("numRueEmploye");
+            this.rueEmploye = result.getString("rueEmploye");
+            this.cpEmploye = result.getString("cpEmploye");
+            this.villeEmploye = result.getString("villeEmploye");
+            this.heuresVol = result.getInt("heuresVol");
+            this.idDerniereVille.importFromId(""+result.getInt("idDerniereVille"));
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    
     
     /**
      * @return the idEmploye
@@ -219,78 +301,5 @@ public class PNC implements PersonnelNavigant, TableInterface{
      */
     public void setLangues(ArrayList<Langue> langues) {
         this.langues = langues;
-    }
-    
-    
-    @Override
-    public void showTable() {
-        String query = "Select * from PersonnelNaviguant where typePN='PNC'";
-        TableImpl.showTable(query);
-    }
-
-    @Override
-    public ResultSet getResultSetFromId(String id) {
-        String query = "Select * from PersonnelNaviguant where typePN='PNC'"
-                + "and idEmploye="+id;
-        return TableImpl.getResultSet(query);
-    }
-
-    @Override
-    public void importFromId(String id) {
-        ResultSet result = getResultSetFromId(id);
-        try {
-            if(result.last()){
-                int rows = result.getRow();
-                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un PNC");
-            }
-            result.beforeFirst();
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        try {
-            if(!result.next()) throw new Exception("La requête n'a pas abouti avec l'idEmploye "+id);
-        } catch (Exception ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-            
-        try {
-            this.idEmploye = result.getInt("idEmploye");
-            this.nomEmploye = result.getString("nomEmploye");
-            this.prenomEmploye = result.getString("prenomEmploye");
-            this.numRueEmploye = result.getString("numRueEmploye");
-            this.rueEmploye = result.getString("rueEmploye");
-            this.cpEmploye = result.getString("cpEmploye");
-            this.villeEmploye = result.getString("villeEmploye");
-            this.heuresVol = result.getInt("heuresVol");
-            this.idDerniereVille.importFromId(""+result.getInt("idDerniereVille"));
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        String queryLangue = "Select * from LanguePNC where idEmploye="+id;
-        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
-        ArrayList<String> langueString = new ArrayList<>();
-        
-        try {
-            while(langueRes.next()){
-                langueString.add(langueRes.getString("nomLangue"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        for(int i = 0; i < langueString.size(); i++){
-            Langue tmp = new Langue();
-            tmp.importFromId(langueString.get(i));
-            this.langues.add(tmp);
-        }
-        
     }
 }

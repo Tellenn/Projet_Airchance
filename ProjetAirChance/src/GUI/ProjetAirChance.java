@@ -98,7 +98,7 @@ public class ProjetAirChance extends Application {
         
         ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);*/
         try {
-            //dal.importTablePNT();
+
             //ArrayList<PNT> test = dal.importTablePNT(0, "", "", "", "", "", "", 0, null);
             
             /*

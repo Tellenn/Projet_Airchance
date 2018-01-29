@@ -142,8 +142,16 @@ public class ImportDAL {
             
             while(result.next()){
                 int idEmployeRes = result.getInt("idEmploye");
-                PNC tmp = new PNC();
-                tmp.importFromId(""+idEmployeRes);
+                String nomEmployeRes = result.getString("nomEmploye");
+                String prenomEmployeRes = result.getString("prenomEmploye");
+                String numRueEmployeRes = result.getString("numRueEmploye");
+                String rueEmployeRes = result.getString("rueEmploye");
+                String cpEmployeRes = result.getString("cpEmploye");
+                String villeEmployeRes = result.getString("villeEmploye");
+                int heuresVolRes = result.getInt("heuresVol");
+                int idDerniereVilleRes = result.getInt("idDerniereVille");
+                PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
+
                 //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 pnc.add(tmp);
             }
@@ -198,8 +206,15 @@ public class ImportDAL {
             
             while(result.next()){
                 int idEmployeRes = result.getInt("idEmploye");
-                PNT tmp = new PNT();
-                tmp.importFromId(""+idEmployeRes);
+                String nomEmployeRes = result.getString("nomEmploye");
+                String prenomEmployeRes = result.getString("prenomEmploye");
+                String numRueEmployeRes = result.getString("numRueEmploye");
+                String rueEmployeRes = result.getString("rueEmploye");
+                String cpEmployeRes = result.getString("cpEmploye");
+                String villeEmployeRes = result.getString("villeEmploye");
+                int heuresVolRes = result.getInt("heuresVol");
+                int idDerniereVilleRes = result.getInt("idDerniereVille");
+                PNT tmp = new PNT(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
                 //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 pnt.add(tmp);
             }
