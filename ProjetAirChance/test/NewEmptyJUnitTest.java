@@ -5,7 +5,10 @@
  */
 
 import BD.DBManager;
+import DAL.ExportDAL;
 import DAL.ImportDAL;
+import Tables.AvionFret;
+import Tables.AvionPassager;
 import Tables.Place;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,27 +28,29 @@ import static org.junit.Assert.*;
  */
 public class NewEmptyJUnitTest
 {
+
     private DBManager manager;
+
     public NewEmptyJUnitTest()
     {
     }
-    
+
     @BeforeClass
     public static void setUpClass()
     {
     }
-    
+
     @AfterClass
     public static void tearDownClass()
     {
     }
-    
+
     @Before
     public void setUp()
     {
-       
+
     }
-    
+
     @After
     public void tearDown() throws SQLException
     {
@@ -57,59 +62,140 @@ public class NewEmptyJUnitTest
     //
     // @Test
     // public void hello() {}
-    
     @Test
     public void getAllPlaces()
     {
         DBManager.dbConnect();
         int nbPlaces = ImportDAL.importPlaceWithParameter(0, 7, "", "", "").size();
         System.out.println(nbPlaces);
-        assertTrue("Error wrong number of places for plane 7",nbPlaces == 150);
-        try {
+        assertTrue("Error wrong number of places for plane 7", nbPlaces == 150);
+        try
+        {
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Test
     public void changeAutoCommit()
     {
         DBManager.dbConnect();
-        try {
+        try
+        {
             manager.changeAutocommit(false);
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
-            assertFalse("Error while changing autocommit",true);
+        } catch (SQLException ex)
+        {
+            assertFalse("Error while changing autocommit", true);
         }
     }
-    
+
     @Test
     public void tryCommit()
     {
         DBManager.dbConnect();
-        try {
+        try
+        {
             manager.changeAutocommit(false);
             manager.commit();
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
-            assertFalse("Error while trying commit",true);
+        } catch (SQLException ex)
+        {
+            assertFalse("Error while trying commit", true);
         }
     }
-    
-     @Test
+
+    @Test
     public void tryChangeIsolationLevel()
     {
         DBManager.dbConnect();
-        try {
+        try
+        {
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
             DBManager.dbDisconnect();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
-            assertFalse("Error while trying changing the isolation level",true);
-        } catch (ClassNotFoundException ex) {
+            assertFalse("Error while trying changing the isolation level", true);
+        } catch (ClassNotFoundException ex)
+        {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Test
+    public void exportFret()
+    {
+        manager.dbConnect();
+        
+        try
+        {
+            manager.changeAutocommit(true);
+            manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
+
+            AvionFret avion = new AvionFret(0, "Falcon900", 500, 500, 1);
+            
+            ExportDAL dal = new ExportDAL();
+            dal.exportAvionFret(avion);
+            
+            manager.commit();
+            manager.dbDisconnect();
+
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying to export an avionFret", true);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying to export an avionFret", true);
+        } catch (Exception ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying to export an avionFret", true);
+        }
+    }
     
+    @Test
+    public void exportPasager()
+    {
+        manager.dbConnect();
+        
+        try
+        {
+            manager.changeAutocommit(true);
+            manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
+
+            AvionPassager avion = new AvionPassager(0, "Falcon900", 3,0,0,1);
+            
+            ArrayList<Place> p = new ArrayList<>();
+            for(int i=0;i<3;i++)
+            {
+                p.add(new Place(i,"couloir","eco",false));
+            }
+            avion.setPlaces(p);
+            
+            ExportDAL dal = new ExportDAL();
+            dal.exportAvionPassager(avion);
+            
+            manager.commit();
+            manager.dbDisconnect();
+
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying to export an avionPassager", true);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying to export an avionPassager", true);
+        } catch (Exception ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying to export an avionPassager", true);
+        }
+    }
+
 }
