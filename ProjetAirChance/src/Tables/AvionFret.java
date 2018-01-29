@@ -87,7 +87,7 @@ public class AvionFret implements Avion, TableInterface{
        /**
      * @return the nomModele
      */
-    public Modele getNomModele() {
+    public Modele getModele() {
         return nomModele;
     }
 

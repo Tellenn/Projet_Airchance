@@ -5,7 +5,9 @@
  */
 
 import BD.DBManager;
+import DAL.ExportDAL;
 import DAL.ImportDAL;
+import Tables.AvionFret;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -110,6 +112,29 @@ public class NewEmptyJUnitTest
         {
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
             DBManager.dbDisconnect();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertFalse("Error while trying changing the isolation level", true);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Test
+    public void exportFret()
+    {
+        DBManager.dbConnect();
+        try
+        {
+            manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            DBManager.dbDisconnect();
+
+            AvionFret avion = new AvionFret(0, "Falcon900", 500, 500, 1);
+            
+            ExportDAL dal = new ExportDAL();
+
         } catch (SQLException ex)
         {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);

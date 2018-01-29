@@ -56,6 +56,12 @@ public class AvionPassager implements Avion, TableInterface
     {
         return this.idAvion;
     }
+    
+    
+    public ArrayList<Place> getPlaces ()
+    {
+        return this.avionPlaces;
+    }
 
     @Override
     public void setIdAvion(int idAvion)
@@ -114,7 +120,7 @@ public class AvionPassager implements Avion, TableInterface
     /**
      * @return the nomModele
      */
-    public Modele getNomModele()
+    public Modele getModele()
     {
         return nomModele;
     }
