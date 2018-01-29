@@ -153,14 +153,14 @@ public class InstanceVol implements TableInterface{
     /**
      * @return the etat
      */
-    public EtatInstance getEtat() {
+    public String getEtat() {
         return etat;
     }
 
     /**
      * @param etat the etat to set
      */
-    public void setEtat(EtatInstance etat) {
+    public void setEtat(String etat) {
         this.etat = etat;
     }
 
@@ -179,14 +179,18 @@ public class InstanceVol implements TableInterface{
         this.poidsRest = 0;
         this.dateArrive = null;
         this.dateDepart = new Date(new java.util.Date().getTime());
-        this.etat = EtatInstance.CREE;
+        this.etat = "Cree";
     }
     
-    public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, java.sql.Date dateArrivee, java.sql.Date dateDepart, EtatInstance etat) {
+    public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, java.sql.Date dateArrivee, java.sql.Date dateDepart, String etat) {
         this.numInstance = numInstance;
         this.numVol = new Vol();
         this.numVol.importFromId("" + numVol);
-        this.idAvion = (this.numVol.getType() == 1) ? new AvionPassager() : new AvionFret();
+        try {
+            this.idAvion = ("passagers".equals(readTypeAvion(idAvion))) ? new AvionPassager() : new AvionFret();
+        } catch (Exception ex) {
+            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.idAvion.importFromId("" + idAvion);
         this.placesRestEco = placesRestEco;
         this.placesRestAff = placesRestAff;
@@ -198,9 +202,7 @@ public class InstanceVol implements TableInterface{
 
 // </editor-fold>
 
-    public enum EtatInstance{
-        CREE, EN_COURS, ARRIVE, ANNULE
-    }
+
     // https://stackoverflow.com/questions/530012/how-to-convert-java-util-date-to-java-sql-date
     private int numInstance;
     private Vol numVol;
@@ -211,9 +213,24 @@ public class InstanceVol implements TableInterface{
     private int poidsRest;
     private java.sql.Date dateArrive;
     private java.sql.Date dateDepart;
-    private EtatInstance etat;
+    private String etat;
 
 
+    
+    private String readTypeAvion(int idAvion) throws Exception{
+        try {
+            String query = "Select * from Avion where idAvion="+idAvion;
+            ResultSet result;
+            
+            result = TableImpl.getResultSet(query);
+            result.next();
+            return result.getString("typeAvion");
+        } catch (SQLException ex) {
+            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        throw new Exception("Le type d'avion n'a pas pu etre lu avec l'idAvion="+idAvion);
+
+    }
     
       @Override
     public void showTable() {
@@ -249,25 +266,27 @@ public class InstanceVol implements TableInterface{
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
+
             
         try {
             this.numInstance = result.getInt("numInstance");
             this.numVol = new Vol();
             this.numVol.importFromId(""+result.getInt("numVol"));
-            this.idAvion = (this.numVol.getType() == 1) ? new AvionPassager() : new AvionFret();
+            this.idAvion = ("passagers".equals(readTypeAvion(result.getInt("idAvion")))) ? new AvionPassager() : new AvionFret();
             this.idAvion.importFromId(""+result.getInt("idAvion"));
             this.placesRestEco = result.getInt("placesRestEco");
             this.placesRestAff = result.getInt("placesRestAff");
             this.placesRestPrem = result.getInt("placesRestPrem");
             this.poidsRest = result.getInt("poidsRest");
-            
-            LocalDate localDateDepart = result.getObject("dateDepart", LocalDate.class);
-            this.dateDepart = Date.valueOf(localDateDepart);
+            this.dateDepart = result.getDate("dateDepart");
+            this.dateArrive = result.getDate("dateArrivee");       
+            this.etat = result.getString("etat");
 
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

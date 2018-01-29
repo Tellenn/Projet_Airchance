@@ -129,6 +129,7 @@ public class ProjetAirChance extends Application {
             */
 
            InstanceVol iv = new InstanceVol();
+           iv.importFromId("2");
             
             /*DBManager.commit();
         } catch (SQLException ex) {

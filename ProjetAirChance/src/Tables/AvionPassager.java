@@ -28,8 +28,8 @@ public class AvionPassager implements Avion, TableInterface
     private Ville ville;
     private ArrayList<Place> avionPlaces;
 
-    public AvionPassager()
-    {
+// <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR AVIONPASSAGER ">
+    public AvionPassager() {
         this.idAvion = 0;
         this.placesEco = 0;
         this.placesAffaire = 0;
@@ -37,9 +37,8 @@ public class AvionPassager implements Avion, TableInterface
         this.nomModele = new Modele();
         this.avionPlaces = new ArrayList<Place>();
     }
-
-    public AvionPassager(int idAvion, String nomModele, int placesEco, int placesAffaire, int placesPrem, int idVille)
-    {
+    
+    public AvionPassager(int idAvion, String nomModele, int placesEco, int placesAffaire, int placesPrem, int idVille) {
         this.idAvion = idAvion;
         this.placesAffaire = placesAffaire;
         this.placesEco = placesEco;
@@ -51,98 +50,90 @@ public class AvionPassager implements Avion, TableInterface
         this.avionPlaces = new ArrayList<Place>();
     }
 
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
     @Override
-    public int getIdAvion()
-    {
+    public int getIdAvion() {
         return this.idAvion;
     }
     
-    
-    public ArrayList<Place> getPlaces ()
-    {
+    public ArrayList<Place> getPlaces() {
         return this.avionPlaces;
     }
-
-    public Ville getIdDerniereVille()
-    {
+    
+    public Ville getIdDerniereVille() {
         return ville;
     }
-
+    
     @Override
-    public void setIdAvion(int idAvion)
-    {
+    public void setIdAvion(int idAvion) {
         this.idAvion = idAvion;
     }
 
     /**
      * @return the placesEco
      */
-    public int getPlacesEco()
-    {
+    public int getPlacesEco() {
         return placesEco;
     }
 
     /**
      * @param placesEco the placesEco to set
      */
-    public void setPlacesEco(int placesEco)
-    {
+    public void setPlacesEco(int placesEco) {
         this.placesEco = placesEco;
     }
 
     /**
      * @return the placesAffaire
      */
-    public int getPlacesAffaire()
-    {
+    public int getPlacesAffaire() {
         return placesAffaire;
     }
 
     /**
      * @param placesAffaire the placesAffaire to set
      */
-    public void setPlacesAffaire(int placesAffaire)
-    {
+    public void setPlacesAffaire(int placesAffaire) {
         this.placesAffaire = placesAffaire;
     }
 
     /**
      * @return the placesPrem
      */
-    public int getPlacesPrem()
-    {
+    public int getPlacesPrem() {
         return placesPrem;
     }
 
     /**
      * @param placesPrem the placesPrem to set
      */
-    public void setPlacesPrem(int placesPrem)
-    {
+    public void setPlacesPrem(int placesPrem) {
         this.placesPrem = placesPrem;
     }
 
     /**
      * @return the nomModele
      */
-    public Modele getModele()
-    {
+    public Modele getModele() {
         return nomModele;
     }
 
     /**
      * @param nomModele the nomModele to set
      */
-    public void setNomModele(Modele nomModele)
-    {
+    public void setNomModele(Modele nomModele) {
         this.nomModele = nomModele;
     }
+
+// </editor-fold>
 
     @Override
     public void showTable()
     {
 
-        String query = "Select * from Avion where typeAvion='Passager'";
+        String query = "Select * from Avion where typeAvion='passagers'";
         TableImpl.showTable(query);
 
     }
@@ -150,7 +141,7 @@ public class AvionPassager implements Avion, TableInterface
     @Override
     public ResultSet getResultSetFromId(String id)
     {
-        String query = "Select * from Avion where typeAvion='Passager'"
+        String query = "Select * from Avion where typeAvion='passagers'"
                 + "and idAvion=" + id;
 
         return TableImpl.getResultSet(query);
