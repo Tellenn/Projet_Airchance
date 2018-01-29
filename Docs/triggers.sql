@@ -8,37 +8,43 @@ declare
 	oldhours number;
 	avion number;
 	oldhoursavion number;
+	typeE VARCHAR2(10);
 begin
-	select duree into heurevol
-	from vol natural join instanceVol
-	where numInstance = :new.numInstance;
-	
-	select heuresVol into oldhours
+	select typePN into typeE
 	from PersonnelNaviguant
 	where idEmploye = :new.idEmploye;
-	
-	update PersonnelNaviguant
-	set heuresVol = heurevol+oldhours
-	where idEmploye = :new.idEmploye;
-	
-	select idAvion into avion
-	from InstanceVol
-	where numInstance = :new.numInstance;
-	
-	select heuresModele into oldhoursavion
-	from PiloteModele
-	where nomModele = (
-		select nomModele
-		from Avion
-		where idAvion = avion);
+
+	IF(typeE = 'PNT') THEN
+		select duree into heurevol
+		from vol natural join instanceVol
+		where numInstance = :new.numInstance;
 		
-	update PiloteModele
-	set heuresModele = oldhoursavion+heurevol
-	where nomModele = (
-		select nomModele
-		from Avion
-		where idAvion = avion);
+		select heuresVol into oldhours
+		from PersonnelNaviguant
+		where idEmploye = :new.idEmploye;
 		
+		update PersonnelNaviguant
+		set heuresVol = heurevol+oldhours
+		where idEmploye = :new.idEmploye;
+		
+		select idAvion into avion
+		from InstanceVol
+		where numInstance = :new.numInstance;
+		
+		select heuresModele into oldhoursavion
+		from PiloteModele
+		where nomModele = (
+			select nomModele
+			from Avion
+			where idAvion = avion) and idEmploye=:new.idEmploye;
+			
+		update PiloteModele
+		set heuresModele = oldhoursavion+heurevol
+		where nomModele = (
+			select nomModele
+			from Avion
+			where idAvion = avion);
+	END IF;
 end;
 /
 	
@@ -62,7 +68,7 @@ begin
 	from vol
 	where numVol = :new.numVol;
 
-	if(rayon > dist) then
+	if(dist > rayon) then
 		raise_application_error(-20003,'La distance a parcourir est trop grande');
 	end if;
 end;
@@ -75,16 +81,16 @@ after insert or update on resaVolPlace
 declare
 	nberror integer;
 begin
-	select count(error) into nberror
+	select count(mistake) into nberror
 	from (
-		select count(numPlace) as error
+		select count(numPlace) as mistake
 		from resaVolPlace
-		group by numInstance
+		group by numInstance, numPlace
 		)
-	where error > 1;
+	where mistake > 1;
 	
 	if nberror > 0 then
-		raise_application_error(-20004,'Deux même placesne peuvent pas');
+		raise_application_error(-20004,'Deux meme placesne peuvent pas');
 	end if;
 end;
 /
@@ -206,7 +212,7 @@ BEGIN
 	FROM Vol
 	WHERE numVol = :new.numVol;
 
-	IF(villeAvion != villeVol) THEN
+	IF((villeAvion != villeVol) AND (:new.etat = 'Cree')) THEN
 		RAISE_APPLICATION_ERROR(-20002, 'Avion pas dans la bonne ville pour repartir');
 	END IF;
 END;
@@ -290,18 +296,18 @@ BEGIN
 END;
 /
 -- PN.heuresVol = SUM(PiloteModele.heuresModele) pour un même pilote
-CREATE OR REPLACE TRIGGER t_7
-AFTER INSERT OR UPDATE ON PersonnelNaviguant
-FOR EACH ROW
-DECLARE
-	totalHeures INTEGER;
-BEGIN
-	SELECT SUM(heuresModele) INTO totalHeures
-	FROM PiloteModele
-	WHERE idEmploye = :new.idEmploye;
+-- CREATE OR REPLACE TRIGGER t_7
+-- AFTER INSERT OR UPDATE ON PersonnelNaviguant
+-- FOR EACH ROW
+-- DECLARE
+-- 	totalHeures INTEGER;
+-- BEGIN
+-- 	SELECT SUM(heuresModele) INTO totalHeures
+-- 	FROM PiloteModele
+-- 	WHERE idEmploye = :new.idEmploye;
 
-	IF(:new.heuresVol != totalHeures) THEN
-		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit être égal à la somme des heuresModele de PiloteModele');
-	END IF;
-END;
-/
+-- 	IF((:new.heuresVol > totalHeures) OR (:new.heuresVol < totalHeures)) THEN
+-- 		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit être égal à la somme des heuresModele de PiloteModele');
+-- 	END IF;
+-- END;
+-- /
