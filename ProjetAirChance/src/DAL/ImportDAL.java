@@ -93,10 +93,10 @@ public class ImportDAL {
     }
     
     public ArrayList<PNC> importTablePNC(){
-        return importTablePNC(0, "", "", "", "", "", "", 0, 0);
+        return importTablePNC(0, "", "", "", "", "", "", 0, null);
     }
     
-    public ArrayList<PNC> importTablePNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
+    public ArrayList<PNC> importTablePNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, Ville idDerniereVille){
         String query = "Select * from PersonnelNaviguant where typePN='PNC'";
         if(idEmploye != 0){
             query += " and idEmploye="+idEmploye;
@@ -122,30 +122,27 @@ public class ImportDAL {
         if (heuresVol != 0){
             query += " and heuresVol="+heuresVol;
         }
-        if (idDerniereVille != 0){
-            query += " and idDerniereVille="+idDerniereVille;
+        if (idDerniereVille != null){
+            query += " and idDerniereVille="+idDerniereVille.getIdVille();
         }
         
-        ResultSet result;
+        ResultSet result, resultLangue;
         ArrayList<PNC> pnc = new ArrayList<>();
+        ArrayList<String> languePNC = new ArrayList<>();
         try {
             result = DBManager.dbExecuteQuery(query);
-
+            if (idEmploye != 0){
+                resultLangue = DBManager.dbExecuteQuery("Select * from LanguePNC where idEmploye="+idEmploye);
+                while (resultLangue.next()){
+                    languePNC.add(resultLangue.getString("nomLangue"));
+                }
+            }
             
             
             while(result.next()){
                 int idEmployeRes = result.getInt("idEmploye");
-                String nomEmployeRes = result.getString("nomEmploye");
-                String prenomEmployeRes = result.getString("prenomEmploye");
-                String numRueEmployeRes = result.getString("numRueEmploye");
-                String rueEmployeRes = result.getString("rueEmploye");
-                String cpEmployeRes = result.getString("cpEmploye");
-                String villeEmployeRes = result.getString("villeEmploye");
-                int heuresVolRes = result.getInt("heuresVol");
-                int idDerniereVilleRes = result.getInt("idDerniereVille");
-                PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
-                tmp.fillLanguePNC();
-
+                PNC tmp = new PNC();
+                tmp.importFromId(""+idEmployeRes);
                 //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 pnc.add(tmp);
             }
