@@ -15,9 +15,11 @@ import java.util.logging.Logger;
  *
  * @author Andréas
  */
-public class PNC implements PersonnelNavigant, TableInterface
-{
+public class PNC implements PersonnelNavigant, TableInterface{
 
+    
+
+    
     private int idEmploye;
     private String nomEmploye;
     private String prenomEmploye;
@@ -29,13 +31,7 @@ public class PNC implements PersonnelNavigant, TableInterface
     private Ville idDerniereVille;
     private ArrayList<Langue> langues;
     
-// <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR PNC ">
-    public PNC() {
-=======
-
-    public PNC()
-    {
->>>>>>> Paul
+    public PNC(){
         this.idEmploye = 0;
         this.nomEmploye = "";
         this.prenomEmploye = "";
@@ -47,14 +43,8 @@ public class PNC implements PersonnelNavigant, TableInterface
         this.idDerniereVille = new Ville();
         this.langues = new ArrayList<>();
     }
-<<<<<<< HEAD
     
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille) {
-=======
-
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue)
-    {
->>>>>>> Paul
+    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue){
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -64,47 +54,171 @@ public class PNC implements PersonnelNavigant, TableInterface
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
         this.idDerniereVille = new Ville();
-        this.idDerniereVille.importFromId("" + idDerniereVille);
+        this.idDerniereVille.importFromId(""+idDerniereVille);
         this.langues = new ArrayList<>();
-
-<<<<<<< HEAD
-        /*
+        
         for(int i = 0; i < langue.size(); i++){
-=======
-        for (int i = 0; i < langue.size(); i++)
-        {
->>>>>>> Paul
             Langue tmp = new Langue();
             tmp.importFromId(langue.get(i));
             this.langues.add(tmp);
         }
-         */
     }
 
-<<<<<<< HEAD
-// </editor-fold>
-
     
-    public void fillLanguePNC(){
-        
-        String queryLangue = "Select * from LanguePNC where idEmploye="+this.idEmploye;
-        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
-        ArrayList<String> langueString = new ArrayList<>();
-        
-        try {
-            while(langueRes.next()){
-                langueString.add(langueRes.getString("nomLangue"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        for(int i = 0; i < langueString.size(); i++){
-            Langue tmp = new Langue();
-            tmp.importFromId(langueString.get(i));
-            this.langues.add(tmp);
-        }
-        
+    /**
+     * @return the idEmploye
+     */
+    @Override
+    public int getIdEmploye() {
+        return idEmploye;
+    }
+
+    /**
+     * @param idEmploye the idEmploye to set
+     */
+    @Override
+    public void setIdEmploye(int idEmploye) {
+        this.idEmploye = idEmploye;
+    }
+
+    /**
+     * @return the nomEmploye
+     */
+    @Override
+    public String getNomEmploye() {
+        return nomEmploye;
+    }
+
+    /**
+     * @param nomEmploye the nomEmploye to set
+     */
+    @Override
+    public void setNomEmploye(String nomEmploye) {
+        this.nomEmploye = nomEmploye;
+    }
+
+    /**
+     * @return the prenomEmploye
+     */
+    @Override
+    public String getPrenomEmploye() {
+        return prenomEmploye;
+    }
+
+    /**
+     * @param prenomEmploye the prenomEmploye to set
+     */
+    @Override
+    public void setPrenomEmploye(String prenomEmploye) {
+        this.prenomEmploye = prenomEmploye;
+    }
+
+    /**
+     * @return the numRueEmploye
+     */
+    @Override
+    public String getNumRueEmploye() {
+        return numRueEmploye;
+    }
+
+    /**
+     * @param numRueEmploye the numRueEmploye to set
+     */
+    @Override
+    public void setNumRueEmploye(String numRueEmploye) {
+        this.numRueEmploye = numRueEmploye;
+    }
+
+    /**
+     * @return the rueEmploye
+     */
+    @Override
+    public String getRueEmploye() {
+        return rueEmploye;
+    }
+
+    /**
+     * @param rueEmploye the rueEmploye to set
+     */
+    @Override
+    public void setRueEmploye(String rueEmploye) {
+        this.rueEmploye = rueEmploye;
+    }
+
+    /**
+     * @return the cpEmploye
+     */
+    @Override
+    public String getCpEmploye() {
+        return cpEmploye;
+    }
+
+    /**
+     * @param cpEmploye the cpEmploye to set
+     */
+    @Override
+    public void setCpEmploye(String cpEmploye) {
+        this.cpEmploye = cpEmploye;
+    }
+
+    /**
+     * @return the villeEmploye
+     */
+    @Override
+    public String getVilleEmploye() {
+        return villeEmploye;
+    }
+
+    /**
+     * @param villeEmploye the villeEmploye to set
+     */
+    @Override
+    public void setVilleEmploye(String villeEmploye) {
+        this.villeEmploye = villeEmploye;
+    }
+
+    /**
+     * @return the heuresVol
+     */
+    @Override
+    public int getHeuresVol() {
+        return heuresVol;
+    }
+
+    /**
+     * @param heuresVol the heuresVol to set
+     */
+    @Override
+    public void setHeuresVol(int heuresVol) {
+        this.heuresVol = heuresVol;
+    }
+    
+    /**
+     * @return the idDerniereVille
+     */
+    public Ville getIdDerniereVille() {
+        return idDerniereVille;
+    }
+
+    /**
+     * @param idDerniereVille the idDerniereVille to set
+     */
+    public void setIdDerniereVille(Ville idDerniereVille) {
+        this.idDerniereVille = idDerniereVille;
+    }
+    
+    /**
+     * @return the langues
+     */
+    public ArrayList<Langue> getLangues() {
+        return langues;
+    }
+
+    /**
+     * @param langues the langues to set
+     */
+    public void setLangues(ArrayList<Langue> langues) {
+        this.langues = langues;
     }
     
     
@@ -160,186 +274,23 @@ public class PNC implements PersonnelNavigant, TableInterface
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        String queryLangue = "Select * from LanguePNC where idEmploye="+id;
+        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
+        ArrayList<String> langueString = new ArrayList<>();
+        
+        try {
+            while(langueRes.next()){
+                langueString.add(langueRes.getString("nomLangue"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i = 0; i < langueString.size(); i++){
+            Langue tmp = new Langue();
+            tmp.importFromId(langueString.get(i));
+            this.langues.add(tmp);
+        }
         
     }
-    
-    
-    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
-    /**
-     * @return the idEmploye
-     */
-    @Override
-    public int getIdEmploye()
-    {
-        return idEmploye;
-    }
-
-    /**
-     * @param idEmploye the idEmploye to set
-     */
-    @Override
-    public void setIdEmploye(int idEmploye)
-    {
-        this.idEmploye = idEmploye;
-    }
-
-    /**
-     * @return the nomEmploye
-     */
-    @Override
-    public String getNomEmploye()
-    {
-        return nomEmploye;
-    }
-
-    /**
-     * @param nomEmploye the nomEmploye to set
-     */
-    @Override
-    public void setNomEmploye(String nomEmploye)
-    {
-        this.nomEmploye = nomEmploye;
-    }
-
-    /**
-     * @return the prenomEmploye
-     */
-    @Override
-    public String getPrenomEmploye()
-    {
-        return prenomEmploye;
-    }
-
-    /**
-     * @param prenomEmploye the prenomEmploye to set
-     */
-    @Override
-    public void setPrenomEmploye(String prenomEmploye)
-    {
-        this.prenomEmploye = prenomEmploye;
-    }
-
-    /**
-     * @return the numRueEmploye
-     */
-    @Override
-    public String getNumRueEmploye()
-    {
-        return numRueEmploye;
-    }
-
-    /**
-     * @param numRueEmploye the numRueEmploye to set
-     */
-    @Override
-    public void setNumRueEmploye(String numRueEmploye)
-    {
-        this.numRueEmploye = numRueEmploye;
-    }
-
-    /**
-     * @return the rueEmploye
-     */
-    @Override
-    public String getRueEmploye()
-    {
-        return rueEmploye;
-    }
-
-    /**
-     * @param rueEmploye the rueEmploye to set
-     */
-    @Override
-    public void setRueEmploye(String rueEmploye)
-    {
-        this.rueEmploye = rueEmploye;
-    }
-
-    /**
-     * @return the cpEmploye
-     */
-    @Override
-    public String getCpEmploye()
-    {
-        return cpEmploye;
-    }
-
-    /**
-     * @param cpEmploye the cpEmploye to set
-     */
-    @Override
-    public void setCpEmploye(String cpEmploye)
-    {
-        this.cpEmploye = cpEmploye;
-    }
-
-    /**
-     * @return the villeEmploye
-     */
-    @Override
-    public String getVilleEmploye()
-    {
-        return villeEmploye;
-    }
-
-    /**
-     * @param villeEmploye the villeEmploye to set
-     */
-    @Override
-    public void setVilleEmploye(String villeEmploye)
-    {
-        this.villeEmploye = villeEmploye;
-    }
-
-    /**
-     * @return the heuresVol
-     */
-    @Override
-    public int getHeuresVol()
-    {
-        return heuresVol;
-    }
-
-    /**
-     * @param heuresVol the heuresVol to set
-     */
-    @Override
-    public void setHeuresVol(int heuresVol)
-    {
-        this.heuresVol = heuresVol;
-    }
-
-    /**
-     * @return the idDerniereVille
-     */
-    public Ville getIdDerniereVille()
-    {
-        return idDerniereVille;
-    }
-
-    /**
-     * @param idDerniereVille the idDerniereVille to set
-     */
-    public void setIdDerniereVille(Ville idDerniereVille)
-    {
-        this.idDerniereVille = idDerniereVille;
-    }
-
-    /**
-     * @return the langues
-     */
-    public ArrayList<Langue> getLangues()
-    {
-        return langues;
-    }
-
-    /**
-     * @param langues the langues to set
-     */
-    public void setLangues(ArrayList<Langue> langues)
-    {
-        this.langues = langues;
-    }
-
-// </editor-fold>
 }
