@@ -7,6 +7,7 @@ package Tables;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +16,10 @@ import java.util.logging.Logger;
  * @author Andréas
  */
 public class PNC implements PersonnelNavigant, TableInterface{
+
+    
+
+    
     private int idEmploye;
     private String nomEmploye;
     private String prenomEmploye;
@@ -23,6 +28,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
     private String cpEmploye;
     private String villeEmploye;
     private int heuresVol;
+    private Ville idDerniereVille;
+    private ArrayList<Langue> langues;
     
     public PNC(){
         this.idEmploye = 0;
@@ -33,9 +40,11 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.cpEmploye = "";
         this.villeEmploye = "";
         this.heuresVol = 0;
+        this.idDerniereVille = new Ville();
+        this.langues = new ArrayList<>();
     }
     
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol){
+    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue){
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -44,6 +53,15 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.cpEmploye = cpEmploye;
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
+        this.idDerniereVille = new Ville();
+        this.idDerniereVille.importFromId(""+idDerniereVille);
+        this.langues = new ArrayList<>();
+        
+        for(int i = 0; i < langue.size(); i++){
+            Langue tmp = new Langue();
+            tmp.importFromId(langue.get(i));
+            this.langues.add(tmp);
+        }
     }
 
     
@@ -175,6 +193,34 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.heuresVol = heuresVol;
     }
     
+    /**
+     * @return the idDerniereVille
+     */
+    public Ville getIdDerniereVille() {
+        return idDerniereVille;
+    }
+
+    /**
+     * @param idDerniereVille the idDerniereVille to set
+     */
+    public void setIdDerniereVille(Ville idDerniereVille) {
+        this.idDerniereVille = idDerniereVille;
+    }
+    
+    /**
+     * @return the langues
+     */
+    public ArrayList<Langue> getLangues() {
+        return langues;
+    }
+
+    /**
+     * @param langues the langues to set
+     */
+    public void setLangues(ArrayList<Langue> langues) {
+        this.langues = langues;
+    }
+    
     
     @Override
     public void showTable() {
@@ -222,10 +268,29 @@ public class PNC implements PersonnelNavigant, TableInterface{
             this.cpEmploye = result.getString("cpEmploye");
             this.villeEmploye = result.getString("villeEmploye");
             this.heuresVol = result.getInt("heuresVol");
+            this.idDerniereVille.importFromId(""+result.getInt("idDerniereVille"));
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+        
+        String queryLangue = "Select * from LanguePNC where idEmploye="+id;
+        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
+        ArrayList<String> langueString = new ArrayList<>();
+        
+        try {
+            while(langueRes.next()){
+                langueString.add(langueRes.getString("nomLangue"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i = 0; i < langueString.size(); i++){
+            Langue tmp = new Langue();
+            tmp.importFromId(langueString.get(i));
+            this.langues.add(tmp);
+        }
+        
     }
 }

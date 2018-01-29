@@ -9,6 +9,7 @@ import BD.DBManager;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Modele;
+import Tables.PNC;
 import Tables.Place;
 import Tables.Ville;
 import java.sql.ResultSet;
@@ -22,7 +23,10 @@ import java.util.logging.Logger;
  * @author Andréas
  */
 public class DAL {
-     /**
+     
+    
+    
+    /**
      * importTable -> ArrayList<AvionFret>
      * récupère dans l'ArrayList les AvionFret obtenus grâce à queryTable
      * @return 
@@ -71,11 +75,9 @@ public class DAL {
             
             while(result.next()){
                 int idAvionRes = result.getInt("idAvion");
-                String nomModeleRes = result.getString("nomModele");
-                int poidsRes = result.getInt("poidsDispo");
-                int volumeRes = result.getInt("volumeDispo");
-                int idVilleRes = result.getInt("idDerniereVille");
-                AvionFret tmp = new AvionFret(idAvionRes, nomModeleRes, poidsRes, volumeRes, idVilleRes);
+                AvionFret tmp = new AvionFret();
+                tmp.importFromId(""+idAvionRes);
+                //AvionFret tmp = new AvionFret(idAvionRes, nomModeleRes, poidsRes, volumeRes, idVilleRes);
                 avionF.add(tmp);
             }
         
@@ -88,6 +90,71 @@ public class DAL {
         
         return avionF;
         
+    }
+    
+    public ArrayList<PNC> importTablePNC(){
+        return importTablePNC(0, "", "", "", "", "", "", 0, null);
+    }
+    
+    public ArrayList<PNC> importTablePNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, Ville idDerniereVille){
+        String query = "Select * from PersonnelNaviguant where typePN='PNC'";
+        if(idEmploye != 0){
+            query += " and idEmploye="+idEmploye;
+        }
+        if (!"".equals(nomEmploye)){
+            query += " and nomEmploye='"+nomEmploye+"'";
+        }
+        if (!"".equals(prenomEmploye)){
+            query += " and prenomEmploye='"+prenomEmploye+"'";
+        }
+        if (!"".equals(numRueEmploye)){
+            query += " and numRueEmploye='"+numRueEmploye+"'";
+        }
+        if (!"".equals(rueEmploye)){
+            query += " and rueEmploye='"+rueEmploye+"'";
+        }
+        if (!"".equals(cpEmploye)){
+            query += " and cpEmploye='"+cpEmploye+"'";
+        }
+        if (!"".equals(villeEmploye)){
+            query += " and villeEmploye='"+villeEmploye+"'";
+        }
+        if (heuresVol != 0){
+            query += " and heuresVol="+heuresVol;
+        }
+        if (idDerniereVille != null){
+            query += " and idDerniereVille="+idDerniereVille.getIdVille();
+        }
+        
+        ResultSet result, resultLangue;
+        ArrayList<PNC> pnc = new ArrayList<>();
+        ArrayList<String> languePNC = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            if (idEmploye != 0){
+                resultLangue = DBManager.dbExecuteQuery("Select * from LanguePNC where idEmploye="+idEmploye);
+                while (resultLangue.next()){
+                    languePNC.add(resultLangue.getString("nomLangue"));
+                }
+            }
+            
+            
+            while(result.next()){
+                int idEmployeRes = result.getInt("idEmploye");
+                PNC tmp = new PNC();
+                tmp.importFromId(""+idEmployeRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                pnc.add(tmp);
+            }
+        
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return pnc;
     }
     
     /**
@@ -273,5 +340,9 @@ public class DAL {
         
         return placesAvion;
     }
+    
+    
+    
+    
     
 }

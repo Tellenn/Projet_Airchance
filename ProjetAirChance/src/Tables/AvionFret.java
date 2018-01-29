@@ -122,7 +122,7 @@ public class AvionFret implements Avion, TableInterface{
 
     @Override
     public ResultSet getResultSetFromId(String id) {
-        String query = "Select * from Avion where typeAvion='Fret'"
+        String query = "Select * from Avion where typeAvion='fret'"
                 + "and idAvion="+id;
            
         return TableImpl.getResultSet(query);
