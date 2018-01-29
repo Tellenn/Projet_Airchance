@@ -383,7 +383,7 @@ public class ImportDAL {
         }
         
         if (!classe.equals("")){
-            query += " and classe<="+classe;
+            query += " and classe="+classe;
         }
         ArrayList<Place> placeTot = importTablePlace(query);
         
