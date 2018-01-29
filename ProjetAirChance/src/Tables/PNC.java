@@ -31,7 +31,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
     private Ville idDerniereVille;
     private ArrayList<Langue> langues;
     
-    public PNC(){
+// <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR PNC ">
+    public PNC() {
         this.idEmploye = 0;
         this.nomEmploye = "";
         this.prenomEmploye = "";
@@ -44,7 +45,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.langues = new ArrayList<>();
     }
     
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
+    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille) {
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -54,17 +55,19 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
         this.idDerniereVille = new Ville();
-        this.idDerniereVille.importFromId(""+idDerniereVille);
+        this.idDerniereVille.importFromId("" + idDerniereVille);
         this.langues = new ArrayList<>();
-        
+
         /*
         for(int i = 0; i < langue.size(); i++){
             Langue tmp = new Langue();
             tmp.importFromId(langue.get(i));
             this.langues.add(tmp);
         }
-        */
+         */
     }
+
+// </editor-fold>
 
     
     public void fillLanguePNC(){
@@ -146,7 +149,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
     }
     
     
-    
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
     /**
      * @return the idEmploye
      */
@@ -274,7 +277,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
     public void setHeuresVol(int heuresVol) {
         this.heuresVol = heuresVol;
     }
-    
+
     /**
      * @return the idDerniereVille
      */
@@ -288,7 +291,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
     public void setIdDerniereVille(Ville idDerniereVille) {
         this.idDerniereVille = idDerniereVille;
     }
-    
+
     /**
      * @return the langues
      */
@@ -302,4 +305,6 @@ public class PNC implements PersonnelNavigant, TableInterface{
     public void setLangues(ArrayList<Langue> langues) {
         this.langues = langues;
     }
+
+// </editor-fold>
 }

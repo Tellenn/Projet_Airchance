@@ -11,6 +11,7 @@ import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
 import Tables.Ville;
+import Tables.Vol;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class ExportDAL {
 
-    public int readMaxIdPN() {
+    private int readMaxIdPN() {
         try {
             String query = "Select max(idEmploye) from PersonnelNaviguant";
             ResultSet res;
@@ -33,10 +34,10 @@ public class ExportDAL {
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return -1;
+        return 0;
     }
     
-    public int readMaxIdVille(){
+    private int readMaxIdVille(){
         try {
             String query = "Select max(idVille) from Ville";
             ResultSet res;
@@ -46,10 +47,10 @@ public class ExportDAL {
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return -1;
+        return 0;
     }
 
-    public boolean isNomModeleExists(Modele mod) {
+    private boolean isNomModeleExists(Modele mod) {
         String query = "Select * from Modele where nomModele='" + mod.getNomModele() + "'";
         ResultSet result;
         boolean itsHere = false;
@@ -61,6 +62,19 @@ public class ExportDAL {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return itsHere;
+    }
+    
+    private int readMaxNumVol(){
+        try{
+            String query = "Select max(numVol) from Vol";
+            ResultSet res;
+            res = DBManager.dbExecuteQuery(query);
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     public void exportPNT(ArrayList<PNT> pntArray) {
@@ -231,6 +245,36 @@ public class ExportDAL {
         ArrayList<Ville> villes = new ArrayList<>();
         villes.add(v);
         exportVille(villes);
+    }
+    
+    public void exportVol(ArrayList<Vol> vols){
+        int maxId;
+        String query;
+
+        for (Vol vol : vols) {
+            if ((maxId = vol.getNumVol()) != 0) {
+                query = "Update Vol set type=" + (vol.getType()-1) + ", duree=" + vol.getDuree() + ", distance="+vol.getDistance()+", placesMinEco="+vol.getPlacesMinEco()+""
+                        + ", placesMinAff="+vol.getPlacesMinAff()+", placesMinPrem="+vol.getPlacesMinPrem()+", poidsMin="+vol.getPoidsMin()+", idVilleOrigine="+vol.getIdVilleOrigine().getIdVille()+""
+                        + ", idVilleDestination="+vol.getIdVilleDestination().getIdVille()
+                        + " Where numVol=" + maxId;
+            } else {
+                maxId = readMaxNumVol()+1;
+                query = "Insert into Vol values (" + maxId + ", " + (vol.getType()-1)+ ", " + vol.getDuree()+ ", "+vol.getDistance()+", "+vol.getPlacesMinEco()+""
+                        + ", "+vol.getPlacesMinAff()+", "+vol.getPlacesMinPrem()+", "+vol.getPoidsMin()+", "+vol.getIdVilleOrigine().getIdVille()+", "+vol.getIdVilleDestination().getIdVille()+")";     
+            }
+
+            try {
+                DBManager.dbExecuteUpdate(query);
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void exportVol(Vol v){
+        ArrayList<Vol> vols = new ArrayList<>();
+        vols.add(v);
+        exportVol(vols);
     }
 
 }

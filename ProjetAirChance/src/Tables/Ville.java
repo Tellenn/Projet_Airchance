@@ -23,19 +23,23 @@ public class Ville implements TableInterface{
     private String paysVille;
     
     
-    public Ville(){
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR VILLE ">
+    public Ville() {
         this.idVille = 0;
         this.nomVille = "";
         this.paysVille = "";
     }
     
-    public Ville(int idVille, String nomVille, String paysVille){
+    public Ville(int idVille, String nomVille, String paysVille) {
         this.idVille = idVille;
         this.nomVille = nomVille;
         this.paysVille = paysVille;
     }
+
+// </editor-fold>
     
-     /**
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    /**
      * @return the idVille
      */
     public int getIdVille() {
@@ -77,6 +81,9 @@ public class Ville implements TableInterface{
         this.paysVille = paysVille;
     }
 
+// </editor-fold>
+    
+    
     @Override
     public void showTable() {
         String query = "Select * from Ville";

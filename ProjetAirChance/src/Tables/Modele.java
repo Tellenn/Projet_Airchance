@@ -22,20 +22,24 @@ public class Modele implements TableInterface{
     private int nbPilotes;
     private int rayonAction;
     
-    public Modele(){
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR MODELE ">
+    public Modele() {
         this.nomModele = "";
         this.nbPilotes = 0;
         this.rayonAction = 0;
     }
     
-    public Modele(String nomModele, int nbPilotes, int rayonAction){
+    public Modele(String nomModele, int nbPilotes, int rayonAction) {
         this.nomModele = nomModele;
         this.nbPilotes = nbPilotes;
         this.rayonAction = rayonAction;
     }
+
+// </editor-fold>
     
     
-     /**
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    /**
      * @return the nomModele
      */
     public String getNomModele() {
@@ -76,6 +80,8 @@ public class Modele implements TableInterface{
     public void setRayonAction(int rayonAction) {
         this.rayonAction = rayonAction;
     }
+
+// </editor-fold>
 
     @Override
     public void showTable() {

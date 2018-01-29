@@ -11,6 +11,7 @@ import DAL.ImportDAL;
 import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
+import Tables.InstanceVol;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
@@ -100,6 +101,7 @@ public class ProjetAirChance extends Application {
         ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);*/
         try {
 
+            //dal.importTablePNT(0, "", "", "", "", "", "", 0, 1);
             //ArrayList<PNT> test = dal.importTablePNT(0, "", "", "", "", "", "", 0, null);
             
             /*
@@ -120,6 +122,13 @@ public class ProjetAirChance extends Application {
             dalExp.exportPNC(test);
             */
 
+            /*
+            dal.importTableVol();
+            Vol v = new Vol(1, 1, 1000, 1000, 500, 100, 5, 0, 15, 1);
+            dalExp.exportVol(v);
+   
+*/
+            InstanceVol iv = new InstanceVol();
             
             DBManager.commit();
         } catch (SQLException ex) {

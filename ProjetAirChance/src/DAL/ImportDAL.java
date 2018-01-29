@@ -13,6 +13,7 @@ import Tables.PNC;
 import Tables.PNT;
 import Tables.Place;
 import Tables.Ville;
+import Tables.Vol;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ImportDAL {
      * @return 
      */
     public ArrayList<AvionFret> importTableAvionFret(){
-        return importTableAvionFret(0, null, 0, 0, null);
+        return importTableAvionFret(0, null, 0, 0, 0);
     }
     
     /**
@@ -48,7 +49,7 @@ public class ImportDAL {
      * @param idDerniereVille
      * @return 
      */
-    public ArrayList<AvionFret> importTableAvionFret(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, Ville idDerniereVille){
+    public ArrayList<AvionFret> importTableAvionFret(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, int idDerniereVille){
         String query = "Select * from Avion where typeAvion='fret'";
         if (idAvion != 0){
             query += " and idAvion="+idAvion;
@@ -64,8 +65,8 @@ public class ImportDAL {
             query += " and volumeDispo="+volumeDispo;
         }
         
-        if (idDerniereVille != null){
-            query += "and idDerniereVille="+idDerniereVille.getIdVille();
+        if (idDerniereVille != 0){
+            query += "and idDerniereVille="+idDerniereVille;
         }
         
         
@@ -83,9 +84,7 @@ public class ImportDAL {
             }
         
             
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -94,10 +93,10 @@ public class ImportDAL {
     }
     
     public ArrayList<PNC> importTablePNC(){
-        return importTablePNC(0, "", "", "", "", "", "", 0, null);
+        return importTablePNC(0, "", "", "", "", "", "", 0, 0);
     }
     
-    public ArrayList<PNC> importTablePNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, Ville idDerniereVille){
+    public ArrayList<PNC> importTablePNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
         String query = "Select * from PersonnelNaviguant where typePN='PNC'";
         if(idEmploye != 0){
             query += " and idEmploye="+idEmploye;
@@ -123,21 +122,15 @@ public class ImportDAL {
         if (heuresVol != 0){
             query += " and heuresVol="+heuresVol;
         }
-        if (idDerniereVille != null){
-            query += " and idDerniereVille="+idDerniereVille.getIdVille();
+        if (idDerniereVille != 0){
+            query += " and idDerniereVille="+idDerniereVille;
         }
         
-        ResultSet result, resultLangue;
+        ResultSet result;
         ArrayList<PNC> pnc = new ArrayList<>();
-        ArrayList<String> languePNC = new ArrayList<>();
         try {
             result = DBManager.dbExecuteQuery(query);
-            if (idEmploye != 0){
-                resultLangue = DBManager.dbExecuteQuery("Select * from LanguePNC where idEmploye="+idEmploye);
-                while (resultLangue.next()){
-                    languePNC.add(resultLangue.getString("nomLangue"));
-                }
-            }
+
             
             
             while(result.next()){
@@ -151,6 +144,7 @@ public class ImportDAL {
                 int heuresVolRes = result.getInt("heuresVol");
                 int idDerniereVilleRes = result.getInt("idDerniereVille");
                 PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
+                tmp.fillLanguePNC();
 
                 //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 pnc.add(tmp);
@@ -165,10 +159,10 @@ public class ImportDAL {
     }
     
     public ArrayList<PNT> importTablePNT(){
-        return importTablePNT(0, "", "", "", "", "", "", 0, null);
+        return importTablePNT(0, "", "", "", "", "", "", 0, 0);
     }
     
-    public ArrayList<PNT> importTablePNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, Ville idDerniereVille){
+    public ArrayList<PNT> importTablePNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
         String query = "Select * from PersonnelNaviguant where typePN='PNT'";
         if(idEmploye != 0){
             query += " and idEmploye="+idEmploye;
@@ -194,8 +188,8 @@ public class ImportDAL {
         if (heuresVol != 0){
             query += " and heuresVol="+heuresVol;
         }
-        if (idDerniereVille != null){
-            query += " and idDerniereVille="+idDerniereVille.getIdVille();
+        if (idDerniereVille != 0){
+            query += " and idDerniereVille="+idDerniereVille;
         }
         
         ResultSet result;
@@ -216,6 +210,7 @@ public class ImportDAL {
                 int idDerniereVilleRes = result.getInt("idDerniereVille");
                 PNT tmp = new PNT(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
                 //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                tmp.fillPiloteModele();
                 pnt.add(tmp);
             }
         
@@ -316,6 +311,91 @@ public class ImportDAL {
         return importTableVille(0, "", "");
     }
     
+    public ArrayList<Vol> importTableVol(int numVol, int type, int duree, int distance, int placesMinEco, int placesMinAff, int placesMinPrem, int poidsMin, int idVilleOrigine, int idVilleDestination){
+        String query = "Select * from Vol";
+        boolean isTheFirst = true;
+        if(numVol != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " numVol="+numVol;
+        }
+        if (type != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " type="+type;
+        }
+        if (duree != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " duree="+duree;
+        }
+        if (distance != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " distance="+distance;
+        }
+        if (placesMinEco != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " placesMinEco="+placesMinEco;
+        }
+        if (placesMinAff != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " placesMinAff="+placesMinAff;
+        }
+        if (placesMinPrem != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " placesMinPrem="+placesMinPrem;
+        }
+        if (poidsMin != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " poidsMin="+poidsMin;
+        }
+        if (idVilleOrigine != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " idVilleOrigine="+idVilleOrigine;
+        }
+        if (idVilleDestination != 0){
+            query += " and idVilleDestination="+idVilleDestination;
+        }
+        
+        ResultSet result;
+        ArrayList<Vol> vol = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            
+            
+            while(result.next()){
+                int numVolRes = result.getInt("numVol");
+                int typeres = result.getInt("type") +1 ;
+                int dureeRes = result.getInt("duree");
+                int distanceRes = result.getInt("distance");
+                int placesMinEcoRes = result.getInt("placesMinEco");
+                int placesMinAffRes = result.getInt("placesMinAff");
+                int placesMinPremRes = result.getInt("placesMinPrem");
+                int poidsMinRes = result.getInt("poidsMin");
+                int idVillOrigineRes = result.getInt("idVilleOrigine");
+                int idVilleDestinationRes = result.getInt("idVilleDestination");
+                Vol tmp = new Vol(numVolRes, typeres, dureeRes, distanceRes, placesMinEcoRes, placesMinAffRes, placesMinPremRes, poidsMinRes, idVillOrigineRes, idVilleDestinationRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                vol.add(tmp);
+            }
+        
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return vol;
+    }
+    
+    public ArrayList<Vol> importTableVol(){
+        return importTableVol(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
     
     /**
      * importTable -> ArrayList<AvionPassager>

@@ -13,5 +13,6 @@ public interface Avion{
     
     public int getIdAvion();
     public void setIdAvion(int idAvion);
+    public void importFromId(String id);
     
 }

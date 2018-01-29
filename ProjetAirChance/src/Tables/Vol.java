@@ -18,7 +18,7 @@ public class Vol implements TableInterface{
 
     
     private int numVol;
-    private boolean type; // false : Passager true : Fret
+    private int type; // 1 : Passager 2 : Fret
     private int duree;
     private int distance;
     private int placesMinEco;
@@ -28,9 +28,10 @@ public class Vol implements TableInterface{
     private Ville idVilleOrigine;
     private Ville idVilleDestination;
     
-    public Vol(){
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR VOL ">
+    public Vol() {
         this.numVol = 0;
-        this.type = false;
+        this.type = 0;
         this.duree = 0;
         this.placesMinEco = 0;
         this.placesMinAff = 0;
@@ -41,7 +42,7 @@ public class Vol implements TableInterface{
         this.idVilleDestination = new Ville();
     }
     
-    public Vol(int numVol, boolean type, int duree, int distance, int placesMinEco, int placesMinAff, int placesMinPrem, int poidsMin, int idVilleOrigine, int idVilleDestination){
+    public Vol(int numVol, int type, int duree, int distance, int placesMinEco, int placesMinAff, int placesMinPrem, int poidsMin, int idVilleOrigine, int idVilleDestination) {
         this.numVol = numVol;
         this.type = type;
         this.duree = duree;
@@ -51,10 +52,12 @@ public class Vol implements TableInterface{
         this.placesMinPrem = placesMinPrem;
         this.poidsMin = poidsMin;
         this.idVilleOrigine = new Ville();
-        this.idVilleOrigine.importFromId(""+idVilleOrigine);
+        this.idVilleOrigine.importFromId("" + idVilleOrigine);
         this.idVilleDestination = new Ville();
-        this.idVilleDestination.importFromId(""+idVilleDestination);
+        this.idVilleDestination.importFromId("" + idVilleDestination);
     }
+
+// </editor-fold>
     
     
     @Override
@@ -95,7 +98,7 @@ public class Vol implements TableInterface{
             
         try {
             this.numVol = result.getInt("numVol");
-            this.type = result.getInt("type") == 1;
+            this.type = result.getInt("type");
             this.duree = result.getInt("duree");
             this.distance = result.getInt("distance");
             this.placesMinEco = result.getInt("placesMinEco");
@@ -130,14 +133,14 @@ public class Vol implements TableInterface{
     /**
      * @return the type
      */
-    public boolean isType() {
+    public int getType() {
         return type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(boolean type) {
+    public void setType(int type) {
         this.type = type;
     }
 
