@@ -15,6 +15,7 @@ import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
 import Tables.Ville;
+import Tables.Vol;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -118,6 +119,7 @@ public class ProjetAirChance extends Application {
             PNC test = new PNC(23, "Dubooooosc", "Frank", "39", "rue de la Chimie", "38100", "St martin truc", 0, 1, lang);
             dalExp.exportPNC(test);
             */
+
             
             DBManager.commit();
         } catch (SQLException ex) {
