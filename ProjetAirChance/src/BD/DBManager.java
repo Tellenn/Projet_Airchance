@@ -110,7 +110,7 @@ public class DBManager {
                 stmt.close();  
             }
             //Close connection
-            dbDisconnect();
+            //dbDisconnect();
         }
         //Return CachedRowSet
         return crs;

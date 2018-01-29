@@ -6,15 +6,16 @@
 package Tables;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 
 /**
  *
  * @author Pault
  */
-public class InstanceVol {
+public class InstanceVol implements TableInterface{
 
     
-          // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
     /**
      * @return the numVol
      */
@@ -159,12 +160,44 @@ public class InstanceVol {
         this.etat = etat;
     }
 
+  
+
+// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR INSTANCEVOL ">
+    public InstanceVol() {
+        this.numInstance = 0;
+        this.numVol = new Vol();
+        this.idAvion = null;        
+        this.placesRestEco = 0;
+        this.placesRestAff = 0;
+        this.placesRestPrem = 0;
+        this.poidsRest = 0;
+        this.dateArrive = null;
+        this.dateDepart = new Date(new java.util.Date().getTime());
+        this.etat = EtatInstance.CREE;
+    }
+    
+    public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, java.sql.Date dateArrivee, java.sql.Date dateDepart, EtatInstance etat) {
+        this.numInstance = numInstance;
+        this.numVol = new Vol();
+        this.numVol.importFromId("" + numVol);
+        this.idAvion = (this.numVol.getType() == 1) ? new AvionPassager() : new AvionFret();
+        this.idAvion.importFromId("" + idAvion);
+        this.placesRestEco = placesRestEco;
+        this.placesRestAff = placesRestAff;
+        this.placesRestPrem = placesRestPrem;
+        this.dateArrive = null;
+        this.dateDepart = new Date(new java.util.Date().getTime());
+        this.etat = etat;
+    }
+
 // </editor-fold>
 
     public enum EtatInstance{
         CREE, EN_COURS, ARRIVE, ANNULE
     }
-    
+    // https://stackoverflow.com/questions/530012/how-to-convert-java-util-date-to-java-sql-date
     private int numInstance;
     private Vol numVol;
     private Avion idAvion;
@@ -176,36 +209,22 @@ public class InstanceVol {
     private java.sql.Date dateDepart;
     private EtatInstance etat;
 
-    public InstanceVol(){
-        this.numInstance = 0;
-        this.numVol = new Vol();
-        this.idAvion = new AvionPassager(); // Passager par défaut
-        this.placesRestEco = 0;
-        this.placesRestAff = 0;
-        this.placesRestPrem = 0;
-        this.poidsRest = 0;
-        java.util.Date utilDate = new java.util.Date();
-        this.dateArrive = null;
-        this.dateDepart = new Date(utilDate.getTime());
-        System.out.println("util : "+utilDate);
-        System.out.println("sql : "+dateArrive);
-        this.etat = EtatInstance.CREE;
+
+    
+      @Override
+    public void showTable() {
+        String query = "Select * from InstanceVol";
+        TableImpl.showTable(query);
     }
-    
-    public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, java.sql.Date dateArrivee, java.sql.Date dateDepart, EtatInstance etat){
-        this.numInstance = numInstance;
-        this.numVol = new Vol();
-        this.numVol.importFromId(""+numVol);
-        this.idAvion = (this.numVol.getType() == 1) ? new AvionPassager() : new AvionFret();
-        this.idAvion.importFromId(""+idAvion);
-        this.placesRestEco = placesRestEco;
-        this.placesRestAff = placesRestAff;
-        this.placesRestPrem = placesRestPrem;
-        this.dateArrive = null;
-        this.dateDepart = new Date(new java.util.Date().getTime());
-        this.etat = etat;
+
+    @Override
+    public ResultSet getResultSetFromId(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
+    @Override
+    public void importFromId(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
