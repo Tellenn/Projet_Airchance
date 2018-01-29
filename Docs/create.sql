@@ -227,3 +227,4 @@ ALTER TABLE LanguePNC ADD FOREIGN KEY (idEmploye) REFERENCES PersonnelNaviguant(
 ALTER TABLE PiloteModele ADD FOREIGN KEY (nomModele) REFERENCES Modele(nomModele);
 ALTER TABLE PiloteModele ADD FOREIGN KEY (idEmploye) REFERENCES PersonnelNaviguant(idEmploye);
 ALTER TABLE PersonnelNaviguant ADD FOREIGN KEY (idDerniereVille) REFERENCES Ville(idVille);
+;
