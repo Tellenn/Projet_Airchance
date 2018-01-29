@@ -63,6 +63,11 @@ public class AvionPassager implements Avion, TableInterface
         return this.avionPlaces;
     }
 
+    public Ville getIdDerniereVille()
+    {
+        return ville;
+    }
+
     @Override
     public void setIdAvion(int idAvion)
     {
@@ -219,6 +224,11 @@ public class AvionPassager implements Avion, TableInterface
         {
             Logger.getLogger(AvionPassager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setPlaces(ArrayList<Place> places)
+    {
+       this.avionPlaces = places;
     }
 
     @Override

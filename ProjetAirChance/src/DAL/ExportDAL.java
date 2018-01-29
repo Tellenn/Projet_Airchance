@@ -274,14 +274,14 @@ public class ExportDAL
         exportVille(villes);
     }
 
-    public void exportAvionPassager(AvionPassager a)
+    public void exportAvionPassager(AvionPassager a) throws Exception
     {
         ArrayList<AvionPassager> avions = new ArrayList<>();
         avions.add(a);
         exportAvionsPassager(avions);
     }
 
-    private void exportAvionsPassager(ArrayList<AvionPassager> avions)
+    private void exportAvionsPassager(ArrayList<AvionPassager> avions) throws Exception
     {
         int maxId;
         String query;
@@ -295,8 +295,8 @@ public class ExportDAL
             } else
             {
                 maxId = readMaxIdAvion() + 1;
-                query = "Insert into Avion Values ('" + maxId + "," + avion.getModele().getNomModele() + "',0 ,0,"
-                        + avion.getPlacesEco() + "," + avion.getPlacesAffaire() + "," + avion.getPlacesPrem() + ")";
+                query = "Insert into Avion Values (" + maxId + ",'" + avion.getModele().getNomModele() + "',0 ,0,"
+                        + avion.getPlacesEco() + "," + avion.getPlacesAffaire() + "," + avion.getPlacesPrem()+",'passager',"+avion.getIdDerniereVille().getIdVille() + ")";
             }
             try
             {
@@ -304,6 +304,7 @@ public class ExportDAL
             } catch (SQLException | ClassNotFoundException ex)
             {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                throw new Exception("erreur lors de l'export d'avionPassager");
             }
 
             //suppression des places déjà existantes (dans le cas où on modifie un avion existant)
@@ -315,31 +316,33 @@ public class ExportDAL
             } catch (SQLException | ClassNotFoundException ex)
             {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                throw new Exception("erreur lors de l'export d'avionPassager");
             }
 
             //insertion des places de l'avion
             for (Place p : avion.getPlaces())
             {
-                query = "Insert into Place Values("+p.getNumPlace()+","+maxId+","+p.getPosition()+","+p.getClasse()+")";
+                query = "Insert into Place Values("+p.getNumPlace()+","+maxId+",'"+p.getPosition()+"','"+p.getClasse()+"')";
                 try
                 {
                     DBManager.dbExecuteUpdate(query);
                 } catch (SQLException | ClassNotFoundException ex)
                 {
                     Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new Exception("erreur lors de l'export d'avionPassager");
                 }
             }
         }
     }
 
-    public void exportAvionFret(AvionFret a)
+    public void exportAvionFret(AvionFret a) throws Exception
     {
         ArrayList<AvionFret> avions = new ArrayList<>();
         avions.add(a);
         exportAvionsFret(avions);
     }
 
-    private void exportAvionsFret(ArrayList<AvionFret> avions)
+    private void exportAvionsFret(ArrayList<AvionFret> avions) throws Exception
     {
         int maxId;
         String query;
@@ -353,8 +356,8 @@ public class ExportDAL
             } else
             {
                 maxId = readMaxIdAvion() + 1;
-                query = "Insert into Avion Values ('" + maxId + "," + avion.getModele().getNomModele() + "',"+avion.getPoidsDispo()+","
-                        +avion.getVolumeDispo()+",0,0,0"+")";
+                query = "Insert into Avion Values (" + maxId + ",'" + avion.getModele().getNomModele() + "',"+avion.getPoidsDispo()+","
+                        +avion.getVolumeDispo()+",0,0,0,'fret',"+avion.getIdDerniereVille().getIdVille()+")";
             }
             try
             {
@@ -362,6 +365,7 @@ public class ExportDAL
             } catch (SQLException | ClassNotFoundException ex)
             {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                throw new Exception("erreur lors de l'export d'avionPassager");
             }
         }
     }
