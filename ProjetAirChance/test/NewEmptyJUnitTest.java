@@ -66,7 +66,8 @@ public class NewEmptyJUnitTest
     public void getAllPlaces()
     {
         DBManager.dbConnect();
-        int nbPlaces = ImportDAL.importPlaceWithParameter(0, 7, "", "", "").size();
+        ImportDAL dal = new ImportDAL();
+        int nbPlaces = dal.importPlaceWithParameter(0, 7, "", "", "").size();
         System.out.println(nbPlaces);
         assertTrue("Error wrong number of places for plane 7", nbPlaces == 150);
         try
