@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 public class ReservationPassager implements Reservations, TableInterface
 {
 
+ 
+
     // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
     /**
      * @return the numReservationP
@@ -92,6 +94,22 @@ public class ReservationPassager implements Reservations, TableInterface
     public void setIdAvion(Avion idAvion) {
         this.idAvion = idAvion;
     }
+    
+       /**
+     * @return the dateReservation
+     */
+    @Override
+    public String getDateReservation() {
+        return dateReservation;
+    }
+
+    /**
+     * @param dateReservation the dateReservation to set
+     */
+    @Override
+    public void setDateReservation(String dateReservation) {
+        this.dateReservation = dateReservation;
+    }
 
 // </editor-fold>
 
@@ -101,6 +119,7 @@ public class ReservationPassager implements Reservations, TableInterface
     private InstanceVol numInstance;
     private Place numPlace;
     private Avion idAvion;
+    private String dateReservation;
  
     // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR RESERVATIONPASSAGER ">
     public ReservationPassager() {
@@ -108,15 +127,17 @@ public class ReservationPassager implements Reservations, TableInterface
         this.prix = 0;
         this.numInstance = new InstanceVol();
         this.numPlace = new Place();
-        this.idAvion = new AvionPassager();        
+        this.idAvion = new AvionPassager();
+        this.dateReservation = "";        
     }
     
-    public ReservationPassager(int numReservation, float prix, InstanceVol numInstance, Place numPlace, AvionPassager idAvion) {
+    public ReservationPassager(int numReservation, float prix, InstanceVol numInstance, Place numPlace, AvionPassager idAvion, String dateReservation) {
         this.numReservationP = numReservation;
         this.prix = prix;
         this.numInstance = numInstance;
         this.numPlace = numPlace;
         this.idAvion = idAvion;
+        this.dateReservation = dateReservation;
     }
 
 // </editor-fold>

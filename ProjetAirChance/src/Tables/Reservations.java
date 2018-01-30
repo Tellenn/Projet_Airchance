@@ -13,7 +13,10 @@ public interface Reservations
 {
     public int getNumReservation();
     public void setNumReservation(int numReservation);
-    
+    public float getPrix();
+    public void setPrix(float prix);
+    public String getDateReservation();
+    public void setDateReservation(String dateReservation);
     
     public void importFromId(String id);
 }

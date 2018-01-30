@@ -17,20 +17,24 @@ import java.util.logging.Logger;
 public class ReservationFret implements Reservations, TableInterface
 {
 
+
+
   
     private int numReservationF;
     private InstanceVol numInstance;
     private float prix;
     private int poids;
     private int volume;
+    private String dateReservation;
 
-    public ReservationFret(int numReservation, InstanceVol vol, int poids, int volume)
+    public ReservationFret(int numReservation, InstanceVol vol, int poids, int volume, String dateReservation)
     {
         this.numReservationF = numReservation;
         this.poids = poids;
         this.volume = volume;
         this.prix = this.poids*this.volume/100;
         this.numInstance = vol;
+        this.dateReservation = dateReservation;
     }
     
     public ReservationFret(){
@@ -39,6 +43,7 @@ public class ReservationFret implements Reservations, TableInterface
         this.poids = 0;
         this.prix = 0;
         this.volume = 0;
+        this.dateReservation = "";
     }
 
    
@@ -103,6 +108,20 @@ public class ReservationFret implements Reservations, TableInterface
      */
     public void setPrix(float prix) {
         this.prix = prix;
+    }
+    
+        /**
+     * @return the dateReservation
+     */
+    public String getDateReservation() {
+        return dateReservation;
+    }
+
+    /**
+     * @param dateReservation the dateReservation to set
+     */
+    public void setDateReservation(String dateReservation) {
+        this.dateReservation = dateReservation;
     }
 
 // </editor-fold>
