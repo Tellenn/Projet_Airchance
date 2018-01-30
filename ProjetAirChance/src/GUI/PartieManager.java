@@ -9,6 +9,9 @@ import BD.DBManager;
 import DAL.ExportDAL;
 import DAL.ImportDAL;
 import Tables.InstanceVol;
+import Tables.PNC;
+import Tables.Ville;
+import Tables.Vol;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -86,7 +89,18 @@ public class PartieManager
                 AffichageArrayList.afficheInstanceVol(allInstanceVol);
                 break;
             case 2:
-                menuVols();
+                System.out.println("Date de départ ? format YYYY/MM/DD hh:mm:ss");
+                String dateDep = scan.nextLine();
+                System.out.println("Date d'arrivee ? format YYYY/MM/DD hh:mm:ss");
+                String dateArr = scan.nextLine();
+                System.out.println("Quel est l'ID de la ligne ?");
+                int volID  = scan.nextInt();
+                scan.nextLine();
+                Vol numvol = new Vol();
+                numvol.importFromId(""+volID);
+                ArrayList<PNC> pncDispo = importDAL.importPNCDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
+                AffichageArrayList.affichePNC(pncDispo);
+                
                 break;
             case 3:
                 System.out.println("Quel est l'id du vol à supprimmer ? -1 pour retour.");

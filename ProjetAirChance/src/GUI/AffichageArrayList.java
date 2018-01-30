@@ -6,6 +6,7 @@
 package GUI;
 
 import Tables.InstanceVol;
+import Tables.PNC;
 import java.util.ArrayList;
 
 /**
@@ -42,6 +43,34 @@ public class AffichageArrayList
             System.out.print(" / "+instance.getNumVol().getIdVilleDestination().getNomVille()+" / ");
             System.out.print(" / "+instance.getDateDepart()+" / ");
             System.out.print(" / "+instance.getDateArrive()+" / ");
+            System.out.println();
+        }
+    }
+    
+    public static void affichePNC(ArrayList<PNC> list)
+    {
+        /*
+        private int numInstance;
+        private Vol numVol;
+        private Avion idAvion;
+        private int placesRestEco;
+        private int placesRestPrem;
+        private int placesRestAff;
+        private int poidsRest;
+        private String dateArrive;
+        private String dateDepart;
+        private String etat;
+        */
+        
+        System.out.print("numPNC /");
+        System.out.print("/ Nom /");
+        System.out.print("/ Prenom /");
+         System.out.println();
+        for (PNC pnc : list)
+        {
+            System.out.print(pnc.getIdEmploye());
+            System.out.print(" / "+pnc.getNomEmploye()+" / ");
+            System.out.print(" / "+pnc.getPrenomEmploye()+" / ");
             System.out.println();
         }
     }
