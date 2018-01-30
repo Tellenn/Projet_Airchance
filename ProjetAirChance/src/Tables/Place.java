@@ -169,8 +169,8 @@ public class Place
         {
             this.numPlace = result.getInt("numPlace");
             this.idAvionP = result.getInt("idAvion");
-            this.position = result.getNString("position");
-            this.classe = result.getNString("classe");
+            this.position = result.getString("position");
+            this.classe = result.getString("classe");
             this.estReservee = estRes;
         } catch (SQLException ex)
         {

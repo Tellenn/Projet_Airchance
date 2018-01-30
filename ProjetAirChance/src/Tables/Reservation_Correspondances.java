@@ -18,12 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Pault
  */
-public class Reservation_Correspondances
-{
-
-
-  
-
+public class Reservation_Correspondances {
 
 // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
     public void setReservations(ArrayList<Reservations> reservations) {
@@ -33,13 +28,13 @@ public class Reservation_Correspondances
             this.setPrix(this.getPrix() + reservation.getPrix());
         }
     }
-    
+
     public void addReservations(Reservations reservation) {
 
         this.reservations.add(reservation);
         this.setPrix(this.getPrix() + reservation.getPrix());
     }
-    
+
     public void removeReservations(Reservations reservation) {
         this.reservations.remove(reservation);
         this.setPrix(this.getPrix() - reservation.getPrix());
@@ -59,19 +54,6 @@ public class Reservation_Correspondances
         this.prix = prix;
     }
 
-    /**
-     * @return the idResa
-     */
-    public int getIdResa() {
-        return idResa;
-    }
-
-    /**
-     * @param idResa the idResa to set
-     */
-    public void setIdResa(int idResa) {
-        this.idResa = idResa;
-    }
 
     /**
      * @return the reservations
@@ -93,8 +75,8 @@ public class Reservation_Correspondances
     public void setDateReservation(String dateReservation) {
         this.dateReservation = dateReservation;
     }
-    
-        /**
+
+    /**
      * @return the idClient
      */
     public Client getIdClient() {
@@ -107,97 +89,85 @@ public class Reservation_Correspondances
     public void setIdClient(Client idClient) {
         this.idClient = idClient;
     }
-    
-        /**
-     * @return the typeReservation
-     */
-    public String getTypeReservation() {
-        return typeReservation;
-    }
 
-    /**
-     * @param typeReservation the typeReservation to set
-     */
-    public void setTypeReservation(String typeReservation) {
-        this.typeReservation = typeReservation;
-    }
 
     
-
 
 // </editor-fold>
-    
     private float prix;
-    private int idResa;
     private ArrayList<Reservations> reservations;
     private String dateReservation;
     private Client idClient;
-    private String typeReservation;
 
-    public Reservation_Correspondances(int idResa, int idClient, ArrayList<Reservations> reservations, float prix, String dateReservation, String typeReservation)
-    {
-        
-        this.idResa = idResa;
+    public Reservation_Correspondances(int idResa, int idClient, ArrayList<Reservations> reservations, float prix, String dateReservation) {
+
         this.reservations = reservations;
         this.dateReservation = dateReservation;
         this.prix = prix;
         this.idClient = new Client();
-        this.idClient.importFromId(idClient);
-        this.typeReservation = typeReservation;
+        this.idClient.importFromId(""+idClient);
+
     }
-    
-    public Reservation_Correspondances(){
-        this.idResa = 0;
+
+    public Reservation_Correspondances() {
         this.reservations = new ArrayList<>();
         this.prix = 0;
         this.dateReservation = "";
         this.idClient = new Client();
-        this.typeReservation = "";
     }
-    
-    public void importFromIdClient(String id){
+
+    public void importFromIdClient(String id) {
+
+        this.idClient.importFromId(id);
+        importFromIdClientPassager(id);
+        importFromIdClientFret(id);
+    }
+
+    public void importFromIdClientPassager(String id) {
         String query;
         ResultSet result;
         SimpleDateFormat simple = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
-        
-        switch(typeReservation){
-            case "Passagers":
-                
-                query = "Select * from ReservationPassager where idClient="+id;
-        
-            try {
-                result = DBManager.dbExecuteQuery(query);
-                while(result.next()){
-                    ReservationPassager r = new ReservationPassager();
-                    
-                    java.util.Date dateReservRes = result.getDate("dateReservation");
-                    r.setDateReservation(simple.format(dateReservRes));
-                    
-                    r.importFromId(""+result.getInt("numReservationP"));
-                    this.addReservations(r);   
-                }
-            } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(Reservation_Correspondances.class.getName()).log(Level.SEVERE, null, ex);
+
+        query = "Select * from ReservationPassager where idClient=" + id;
+
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            while (result.next()) {
+                ReservationPassager r = new ReservationPassager();
+
+                java.util.Date dateReservRes = result.getDate("dateReservation");
+                r.setDateReservation(simple.format(dateReservRes));
+
+                r.importFromId("" + result.getInt("numReservationP"));
+                this.addReservations(r);
             }
-            break;
-            
-            case "Fret":
-                query = "Select * from ReservationFret where idClient="+id;
-        
-            try {
-                result = DBManager.dbExecuteQuery(query);
-                
-                while(result.next()){
-                    ReservationFret r = new ReservationFret();
-                    java.util.Date dateReservRes = result.getDate("dateReservation");
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Reservation_Correspondances.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void importFromIdClientFret(String id) {
+        String query;
+        ResultSet result;
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        query = "Select * from ReservationFret where idClient=" + id;
+
+        try {
+            result = DBManager.dbExecuteQuery(query);
+
+            while (result.next()) {
+                ReservationFret r = new ReservationFret();
+                java.util.Date dateReservRes = result.getDate("dateReservation");
+                if (dateReservRes != null){
                     r.setDateReservation(simple.format(dateReservRes));
-                    
-                    r.importFromId(result.getString("numReservationF"));
                 }
-            } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(Reservation_Correspondances.class.getName()).log(Level.SEVERE, null, ex);
+                
+
+                r.importFromId(result.getString("numReservationF"));
+                this.addReservations(r);
             }
-        
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Reservation_Correspondances.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

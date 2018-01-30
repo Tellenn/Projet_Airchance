@@ -8,6 +8,7 @@ package DAL;
 import BD.DBManager;
 import Tables.AvionFret;
 import Tables.AvionPassager;
+import Tables.Client;
 import Tables.InstanceVol;
 import Tables.Modele;
 import Tables.PNC;
@@ -651,4 +652,83 @@ public class ImportDAL {
         return placesAvion;
     }
 
+    
+    public ArrayList<Client> importTableClient(int idClient, String nomClient, String prenomClient, String numRueClient, String rueClient, int cpClient, String villeClient, int heuresCumulees, String numPasseport){
+        String query = "Select * from Client";
+        boolean isTheFirst = true;
+        if (idClient != 0) {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " idClient=" + idClient;
+        }
+        if (nomClient != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " nomClient='" + nomClient+"'";
+        }
+        if (prenomClient != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " prenomClient='" + prenomClient+"'";
+        }
+        if (numRueClient != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " numRueClient='" + numRueClient+"'";
+        }
+        if (rueClient != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " rueClient='" + rueClient+"'";
+        }
+        if (cpClient != 0) {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " cpClient=" + cpClient;
+        }
+        if (villeClient != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " villeClient='" + villeClient+"'";
+        }
+        if (heuresCumulees != 0) {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " heuresCumulees=" + heuresCumulees;
+        }
+        if (!"".equals(numPasseport)) {
+            query += isTheFirst ? " where" : " and";
+            query += " numPasseport='" + numPasseport + "'";
+        }
+
+        ResultSet result;
+        ArrayList<Client> c = new ArrayList<>();
+        try {
+            result = DBManager.dbExecuteQuery(query);
+
+            while (result.next()) {
+                int idClientRes = result.getInt("idClient");
+                String nomClientRes = result.getString("nomClient");
+                String prenomRes = result.getString("prenomClient");
+                String numRueRes = result.getString("numRueClient");
+                String rueClientRes = result.getString("rueClient");
+                int cpClientRes = result.getInt("cpClient");
+                String villeRes = result.getString("villeClient");
+                int heuresRes = result.getInt("heuresCumulees");
+                String numPassres = result.getString("numPasseport");
+                Client tmp = new Client(idClientRes, nomClientRes, prenomRes, numRueRes, rueClientRes, cpClientRes, villeRes, heuresRes, numPassres);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                c.add(tmp);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return c;
+    }
+    
+    public ArrayList<Client> importTableClient(){
+        return importTableClient(0, "", "", "", "", 0, "", 0, "");
+    }
 }

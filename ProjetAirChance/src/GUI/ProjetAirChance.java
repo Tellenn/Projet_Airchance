@@ -11,10 +11,13 @@ import DAL.ImportDAL;
 import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
+import Tables.Client;
 import Tables.InstanceVol;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.ReservationFret;
+import Tables.Reservation_Correspondances;
 import Tables.Ville;
 import Tables.Vol;
 import java.sql.SQLException;
@@ -131,14 +134,40 @@ public class ProjetAirChance extends Application {
 
            //dal.importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "2018/02/15 10:30:00", "", "");
            
+           /*
            InstanceVol i = new InstanceVol();
            i.importFromId("5");
            i.fillEmployeInstanceVol();
            i.setEtat("Annule");
            dalExp.exportInstanceVol(i);
-           
+           */
+            /*
+            Reservation_Correspondances r = new Reservation_Correspondances();
+            r.importFromIdClient("15");
+            ReservationFret rf = (ReservationFret) r.getReservations().get(1);
+            rf.setPoids(1);
+            rf.setVolume(5);
+            
+            
+            ReservationFret test = new ReservationFret();
+            test.setNumReservation(0);
+            test.setVolume(10000);
+            InstanceVol iv = new InstanceVol();
+            iv.importFromId("2");
+            test.setNumInstance(iv);
+            r.addReservations(test);
+            dalExp.exportReservationCorrespondance(r);*/
  
-           
+             /*
+            ArrayList<Client> c = dal.importTableClient(15, "", "", "", "", 0, "", 0, "");
+            c.get(0).fillReservations();
+            */
+             ArrayList<Client> c = dal.importTableClient(15, "", "", "", "", 0, "", 0, "");
+             c.get(0).setCpClient(72000);
+             dalExp.exportTableClient(c);
+             
+            
+            
             
             DBManager.commit();
             DBManager.dbDisconnect();

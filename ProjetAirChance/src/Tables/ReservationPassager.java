@@ -155,17 +155,8 @@ public class ReservationPassager implements Reservations, TableInterface
     @Override
     public void importFromId(String id) {
         ResultSet result = getResultSetFromId(id);
-        try {
-            if(result.last()){
-                int rows = result.getRow();
-                if (rows > 1) throw new Exception("La requête a renvoyé plus d'une ResaVolPlace");
-            }
-            result.beforeFirst();
-        } catch (SQLException ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+            
         
         
         try {
@@ -180,7 +171,7 @@ public class ReservationPassager implements Reservations, TableInterface
             this.numInstance.importFromId(""+result.getInt("numInstance"));
             this.numPlace.importFromId(""+result.getInt("numPlace"), ""+result.getInt("idAvion"), ""+result.getInt("numInstance"));
             this.prix = result.getFloat("prix");
-            this.idAvion.importFromId("idAvion");
+            this.idAvion.importFromId(""+result.getInt("idAvion"));
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);

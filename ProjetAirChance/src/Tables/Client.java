@@ -20,40 +20,63 @@ public class Client {
     
     // idClient, nomClient, prenomClient, numRueClient, rueClient, cpClient, villeClient, heuresCumulees, numPasseport
     
-    private String idClient;
+    private int idClient;
     private String nomClient;
     private String prenomClient;
-    private int numRueClient;
+    private String numRueClient;
     private String rueClient;
     private int cpClient;
     private String villeClient;
     private int heuresCumulees;
     private String numPasseport;
     private boolean aReduction;
-    private ArrayList<Reservation_Correspondances> reservations;
+    private Reservation_Correspondances reservations;
+
+    public Client(int idClientRes, String nomClientRes, String prenomRes, String numRueRes, String rueClientRes, int cpClientRes, String villeRes, int heuresRes, String numPassres) {
+        this.idClient = idClientRes;
+        this.nomClient = nomClientRes;
+        this.prenomClient = prenomRes;
+        this.numRueClient = numRueRes;
+        this.rueClient = rueClientRes;
+        this.cpClient = cpClientRes;
+        this.villeClient = villeRes;
+        this.heuresCumulees = heuresRes;
+        this.numPasseport = numPassres;
+        this.aReduction = false;
+        //this.reservations = new Reservation_Correspondances();
+    }
+    
+     public Client ()
+    {
+        idClient = 0;
+        nomClient = "";
+        prenomClient = "";
+        numRueClient = "";
+        rueClient = "";
+        cpClient = 0;
+        villeClient = "";
+        heuresCumulees = 0;
+        numPasseport = "";
+        aReduction = false;
+        //reservations = new Reservation_Correspondances();
+    }
 
 // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
-    public ArrayList<Reservation_Correspondances> getReservations() {
+    public Reservation_Correspondances getReservations() {
         return reservations;
     }
     
-    public void setReservations(ArrayList<Reservation_Correspondances> reservations) {
+    public void setReservations(Reservation_Correspondances reservations) {
         this.reservations = reservations;
     }
     
-    public void addReservation(Reservation_Correspondances r) {
-        this.reservations.add(r);
-    }
+
     
-    public void removeReservation(Reservation_Correspondances r) {
-        this.reservations.remove(r);
-    }
-    
-    public String getIdClient() {
+    public int getIdClient() {
         return idClient;
     }
     
-    public void setIdClient(String idClient) {
+    public void setIdClient(int idClient) {
         this.idClient = idClient;
     }
     
@@ -73,11 +96,11 @@ public class Client {
         this.prenomClient = prenomClient;
     }
     
-    public int getNumRueClient() {
+    public String getNumRueClient() {
         return numRueClient;
     }
     
-    public void setNumRueClient(int numRueClient) {
+    public void setNumRueClient(String numRueClient) {
         this.numRueClient = numRueClient;
     }
     
@@ -133,17 +156,12 @@ public class Client {
 
 // </editor-fold>
     
-    public Client ()
-    {
-        idClient = "";
-        nomClient = "";
-        prenomClient = "";
-        numRueClient = 0;
-        rueClient = "";
-        cpClient = 0;
-        villeClient = "";
-        heuresCumulees = 0;
-        numPasseport = "";
+   
+    
+    public void fillReservations(){
+        Reservation_Correspondances rc = new Reservation_Correspondances();
+        rc.importFromIdClient(""+idClient);
+        this.reservations = rc;
     }
 
  
@@ -161,10 +179,10 @@ public class Client {
             }
             else
             {
-                this.idClient = rs.getString("idClient");
+                this.idClient = rs.getInt("idClient");
                 this.nomClient = rs.getString("nomClient");
                 this.prenomClient = rs.getString("prenomClient");
-                this.numRueClient = rs.getInt("numRueClient");
+                this.numRueClient = rs.getString("numRueClient");
                 this.rueClient = rs.getString("rueClient");
                 this.cpClient = rs.getInt("cpClient");
                 this.villeClient = rs.getString("villeClient");
@@ -172,16 +190,53 @@ public class Client {
                 this.numPasseport = rs.getString("numPasseport");
 
             }
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
+        } catch (ClassNotFoundException | SQLException ex)
         {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    void importFromId(int idClient) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void importFromId(String idClient) {
+        ResultSet rs = getResultSetFromId(idClient);
+        try {
+            if(rs.last()){
+                int rows = rs.getRow();
+                if (rows > 1) throw new Exception("La requête a renvoyé plus d'un Client");
+            }
+            rs.beforeFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        try {
+            if(!rs.next()) throw new Exception("La requête n'a pas abouti avec l'idClient "+idClient);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+            
+        try {
+            this.idClient = rs.getInt("idClient");
+            this.nomClient = rs.getString("nomClient");
+            this.prenomClient = rs.getString("prenomClient");
+            this.numRueClient = rs.getString("numRueClient");
+            this.rueClient = rs.getString("rueClient");
+            this.cpClient = rs.getInt("cpClient");
+            this.villeClient = rs.getString("villeClient");
+            this.heuresCumulees = rs.getInt("heuresCumulees");
+            this.numPasseport = rs.getString("numPasseport");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private ResultSet getResultSetFromId(String idClient) {
+        String query = "Select * from Client where idClient="+idClient;
+        return TableImpl.getResultSet(query);
     }
 }
