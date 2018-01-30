@@ -5,105 +5,171 @@
  */
 package Tables;
 
-import java.sql.Date;
+import BD.DBManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
  * @author Pault
  */
-public class ReservationPassager implements Reservations
+public class ReservationPassager implements Reservations, TableInterface
 {
-    private int numReservation;
-    private InstanceVol vol;
-    private Place place;
-    private int prix;
 
-    public ReservationPassager(int numReservation, InstanceVol vol, Place place) throws Exception
-    {
-        this.numReservation = numReservation;
-        this.vol = vol;
-        if (place.getRes()== true)
-        {
-            throw new Exception("La place est déja reservée");
-        }
-        else
-        {
-            this.place = place;
-            if (place.getClasse().equals("eco"))
-            {
-                this.prix = 100;
-            }else if (place.getClasse().equals("affaire"))
-            {
-                this.prix = 500;
-            }else if (place.getClasse().equals("prem"))
-            {
-                this.prix = 1000;
-            }
-        }
+
+    private int numReservation;
+    private String dateReservation;
+    private Client idClient;
+    private ArrayList<ResaVolPlace> reservations;
+    
+    
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR RESERVATIONPASSAGER ">
+    public ReservationPassager() {
+        this.numReservation = 0;
+        this.idClient = new Client();
+        this.dateReservation = "";
+        this.reservations = new ArrayList<>();
     }
     
+    public ReservationPassager(int numReservation, Client cli, String date, ArrayList<ResaVolPlace> reserv) {
+        this.numReservation = numReservation;
+        this.idClient = cli;
+        this.dateReservation = date;
+        this.reservations = reserv;
+    }
+
+// </editor-fold>
     
 
-    public int getNumReservation()
-    {
+
+    
+// <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    @Override
+    public int getNumReservation() {
         return numReservation;
     }
-
-    public void setNumReservation(int numReservation)
-    {
+    
+    @Override
+    public void setNumReservation(int numReservation) {
         this.numReservation = numReservation;
     }
 
+       /**
+     * @return the idClient
+     */
+    public Client getIdClient() {
+        return idClient;
+    }
+
+    /**
+     * @param idClient the idClient to set
+     */
+    public void setIdClient(Client idClient) {
+        this.idClient = idClient;
+    }
+  /**
+     * @return the reservations
+     */
+    public ArrayList<ResaVolPlace> getReservations() {
+        return reservations;
+    }
+
+    /**
+     * @param reservations the reservations to set
+     */
+    public void setReservations(ArrayList<ResaVolPlace> reservations) {
+        this.reservations = reservations;
+    }
+
+    /**
+     * @return the dateReservation
+     */
+    @Override
+    public String getDateReservation() {
+        return dateReservation;
+    }
+
+    /**
+     * @param dateReservation the dateReservation to set
+     */
+    @Override
+    public void setDateReservation(String dateReservation) {
+        this.dateReservation = dateReservation;
+    }
+
+// </editor-fold>
     
-
-    public InstanceVol getVol()
-    {
-        return vol;
-    }
-
-    public void setVol(InstanceVol vol)
-    {
-        this.vol = vol;
-    }
-
-    public Place getPlace()
-    {
-        return place;
-    }
-
-    public void setPlace(Place place) throws Exception
-    {
-        if (place.getRes()== true)
-        {
-            throw new Exception("La place est déja reservée");
+    
+    public void fillResaVolPlace(){
+        String query = "Select * from ResaVolPlace where numReservationP="+this.numReservation;
+        ResultSet result;
+        
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            while(result.next()){
+                ResaVolPlace r = new ResaVolPlace(this.numReservation, result.getInt("numInstance"), result.getInt("numPlace"), result.getFloat("prix"));
+                reservations.add(r);
+            }
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
         }
-        else
-        {
-            this.place = place;
-        }
-    }    
-
-    @Override
-    public int getPrix()
-    {
-        return prix;
-    }
-
-    @Override
-    public String getDateReservation()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setDateReservation(String date)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void importFromId(String id)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet result = getResultSetFromId(id);
+        try {
+            if(result.last()){
+                int rows = result.getRow();
+                if (rows > 1) throw new Exception("La requête a renvoyé plus d'une ReservationPassager");
+            }
+            result.beforeFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        try {
+            if(!result.next()) throw new Exception("La requête n'a pas abouti avec le numReservationP "+id);
+        } catch (Exception ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+            
+        try {
+            this.numReservation = result.getInt("numReservationP");
+            this.idClient.importFromId(""+result.getInt("idClient"));
+            
+            SimpleDateFormat simple = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+            java.util.Date dateR = result.getDate("dateReservation");
+            this.dateReservation = simple.format(dateR);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
+    @Override
+    public void showTable() {
+        String query = "Select * from ReservationPassager";
+        TableImpl.showTable(query);
+    }
+
+    @Override
+    public ResultSet getResultSetFromId(String id) {
+        String query = "Select * from ReservationPassager where numReservationP="+id;
+        return TableImpl.getResultSet(query);
+    }
+
+
 }
