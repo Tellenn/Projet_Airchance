@@ -450,7 +450,7 @@ public class ExportDAL
             if (iv.getNumInstance() == 0)
             {
                 maxId = readMaxNumInstance()+ 1;
-                String arrivée = (iv.getDateArrive() != null) ? "TO_DATE('" + iv.getDateArrive() + "', 'yyyy/mm/dd hh24:mi:ss')" : "null";
+                String arrivée = (iv.getDateArrive() != "") ? "TO_DATE('" + iv.getDateArrive() + "', 'yyyy/mm/dd hh24:mi:ss')" : "null";
                 query = "Insert into InstanceVol values (" + maxId + ", " + iv.getNumVol().getNumVol() + ", " + iv.getIdAvion().getIdAvion() + ", "
                         + iv.getPlacesRestEco() + ", " + iv.getPlacesRestAff() + ", " + iv.getPlacesRestPrem() + ", " + iv.getPoidsRest() + ", "
                         + "TO_DATE('"+iv.getDateDepart()+"', 'yyyy/mm/dd hh24:mi:ss') , "+arrivée+", '"+iv.getEtat()+"')";
@@ -459,12 +459,8 @@ public class ExportDAL
             {
                 maxId = iv.getNumInstance();
 
-                String arrivée;
-                if(iv.getDateArrive() != null){
-                    arrivée = "TO_DATE('" + iv.getDateArrive() + "', 'yyyy/mm/dd hh24:mi:ss')";
-                }else{
-                    arrivée = "null";
-                }
+                String arrivée = (iv.getDateArrive() != "") ? "TO_DATE('" + iv.getDateArrive() + "', 'yyyy/mm/dd hh24:mi:ss')" : "null";
+
                 
                 query = "Update InstanceVol set numVol=" + iv.getNumVol().getNumVol() + ", idAvion=" + iv.getIdAvion().getIdAvion() + ", placesRestEco=" + iv.getPlacesRestEco() + ", "
                         + "placesRestAff=" + iv.getPlacesRestAff() + ", placesRestPrem=" + iv.getPlacesRestPrem() + ", poidsRest=" + iv.getPoidsRest() + ", dateDepart=TO_DATE('" + iv.getDateDepart() + "', 'yyyy/mm/dd hh24:mi:ss'), "

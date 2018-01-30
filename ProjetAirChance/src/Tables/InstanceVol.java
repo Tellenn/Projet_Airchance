@@ -163,10 +163,6 @@ public class InstanceVol implements TableInterface{
      */
     public void setEtat(String etat) {
         this.etat = etat;
-        System.out.println(dateDepart);
-        /*SimpleDateFormat f = new SimpleDateFormat("yyyy/mm/dd hh24:mi:ss");
-        Date d = f.parse(dateDepart);
-        System.out.println(d);*/
     }
 
   
@@ -285,12 +281,13 @@ public class InstanceVol implements TableInterface{
             this.placesRestPrem = result.getInt("placesRestPrem");
             this.poidsRest = result.getInt("poidsRest");
             
-            SimpleDateFormat simple = new SimpleDateFormat("yyyy/dd/mm' 'hh:mm:ss");
+            SimpleDateFormat simple = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
             java.util.Date dateDepartRes = result.getDate("dateDepart");
             this.dateDepart = simple.format(dateDepartRes);
             
-            java.util.Date dateArriveeRes = result.getDate("dateArrive");
-            this.dateArrive = simple.format(dateArriveeRes);
+            java.util.Date dateArriveeTmp = result.getDate("dateArrivee");
+            String dateArriveeRes = (dateArriveeTmp == null) ? "" : simple.format(result.getDate("dateArrivee"));   
+            this.dateArrive = dateArriveeRes;
   
             this.etat = result.getString("etat");
 

@@ -92,6 +92,7 @@ public class ProjetAirChance extends Application {
         
         ImportDAL dal = new ImportDAL();
         ExportDAL dalExp = new ExportDAL();
+        DBManager.dbConnect();
         
         /*ArrayList<AvionFret> avionsF = dal.importTableAvionFret();
         
@@ -128,14 +129,20 @@ public class ProjetAirChance extends Application {
             dalExp.exportVol(v);
             */
 
-           dal.importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "2018/02/15 10:30:00", "", "");
+           //dal.importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "2018/02/15 10:30:00", "", "");
            
-           /*InstanceVol i = new InstanceVol();
+           InstanceVol i = new InstanceVol();
            i.importFromId("4");
            i.setEtat("Arrive");
-           dalExp.exportInstanceVol(i);*/
+           dalExp.exportInstanceVol(i);
+           
+           i.setNumInstance(0);
+           i.setPlacesRestAff(50);
+           dalExp.exportInstanceVol(i);
+           
             
             DBManager.commit();
+            DBManager.dbDisconnect();
         } catch (SQLException ex) {
             Logger.getLogger(ProjetAirChance.class.getName()).log(Level.SEVERE, null, ex);
         }
