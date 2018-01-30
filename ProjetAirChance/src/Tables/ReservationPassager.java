@@ -25,14 +25,14 @@ public class ReservationPassager implements Reservations, TableInterface
     /**
      * @return the numReservationP
      */
-    public int getNumReservationP() {
+    public int getNumReservation() {
         return numReservationP;
     }
 
     /**
      * @param numReservationP the numReservationP to set
      */
-    public void setNumReservationP(int numReservationP) {
+    public void setNumReservation(int numReservationP) {
         this.numReservationP = numReservationP;
     }
 
@@ -124,8 +124,10 @@ public class ReservationPassager implements Reservations, TableInterface
     
     @Override
     public void showTable() {
-        String query = "Select * from ReservationPassager";
-        TableImpl.showTable(query);
+        String query1 = "Select * from ReservationPassager";
+        TableImpl.showTable(query1);
+        String query2 = "Select * from ResaVolPlace";
+        TableImpl.showTable(query2);
     }
 
 

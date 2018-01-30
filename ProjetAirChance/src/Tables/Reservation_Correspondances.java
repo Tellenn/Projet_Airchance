@@ -12,14 +12,14 @@ import java.util.ArrayList;
  *
  * @author Pault
  */
-public class Reservation
+public class Reservation_Correspondances
 {
     private int prix;
     private int idResa;
     private ArrayList<Reservations> reservations;
     private Date dateReservation;
 
-    public Reservation(int idResa, ArrayList<Reservations> reservations)
+    public Reservation_Correspondances(int idResa, ArrayList<Reservations> reservations)
     {
         
         this.idResa = idResa;

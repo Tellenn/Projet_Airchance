@@ -30,22 +30,22 @@ public class Client {
     private int heuresCumulees;
     private String numPasseport;
     private boolean aReduction;
-    private ArrayList<Reservation> reservations;
+    private ArrayList<Reservation_Correspondances> reservations;
 
 // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
-    public ArrayList<Reservation> getReservations() {
+    public ArrayList<Reservation_Correspondances> getReservations() {
         return reservations;
     }
     
-    public void setReservations(ArrayList<Reservation> reservations) {
+    public void setReservations(ArrayList<Reservation_Correspondances> reservations) {
         this.reservations = reservations;
     }
     
-    public void addReservation(Reservation r) {
+    public void addReservation(Reservation_Correspondances r) {
         this.reservations.add(r);
     }
     
-    public void removeReservation(Reservation r) {
+    public void removeReservation(Reservation_Correspondances r) {
         this.reservations.remove(r);
     }
     
