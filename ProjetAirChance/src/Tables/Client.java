@@ -32,98 +32,106 @@ public class Client {
     private boolean aReduction;
     private ArrayList<Reservation> reservations;
 
-    public ArrayList<Reservation> getReservations()
-    {
+// <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    public ArrayList<Reservation> getReservations() {
         return reservations;
     }
-
-    public void setReservations(ArrayList<Reservation> reservations)
-    {
+    
+    public void setReservations(ArrayList<Reservation> reservations) {
         this.reservations = reservations;
     }
     
-    public void addReservation(Reservation r)
-    {
+    public void addReservation(Reservation r) {
         this.reservations.add(r);
     }
     
-    public void removeReservation(Reservation r)
-    {
+    public void removeReservation(Reservation r) {
         this.reservations.remove(r);
     }
     
-
     public String getIdClient() {
         return idClient;
     }
-
+    
     public void setIdClient(String idClient) {
         this.idClient = idClient;
     }
-
+    
     public String getNomClient() {
         return nomClient;
     }
-
+    
     public void setNomClient(String nomClient) {
         this.nomClient = nomClient;
     }
-
+    
     public String getPrenomClient() {
         return prenomClient;
     }
-
+    
     public void setPrenomClient(String prenomClient) {
         this.prenomClient = prenomClient;
     }
-
+    
     public int getNumRueClient() {
         return numRueClient;
     }
-
+    
     public void setNumRueClient(int numRueClient) {
         this.numRueClient = numRueClient;
     }
-
+    
     public String getRueClient() {
         return rueClient;
     }
-
+    
     public void setRueClient(String rueClient) {
         this.rueClient = rueClient;
     }
-
+    
     public int getCpClient() {
         return cpClient;
     }
-
+    
     public void setCpClient(int cpClient) {
         this.cpClient = cpClient;
     }
-
+    
     public String getVilleClient() {
         return villeClient;
     }
-
+    
     public void setVilleClient(String villeClient) {
         this.villeClient = villeClient;
     }
-
+    
     public int getHeuresCumulees() {
         return heuresCumulees;
     }
-
+    
     public void setHeuresCumulees(int heuresCumulees) {
         this.heuresCumulees = heuresCumulees;
     }
-
+    
     public String getNumPasseport() {
         return numPasseport;
     }
-
+    
     public void setNumPasseport(String numPasseport) {
         this.numPasseport = numPasseport;
     }
+    
+       public boolean isaReduction()
+    {
+        return aReduction;
+    }
+
+    public void setaReduction(boolean aReduction)
+    {
+        this.aReduction = aReduction;
+    }
+
+// </editor-fold>
     
     public Client ()
     {
@@ -138,15 +146,7 @@ public class Client {
         numPasseport = "";
     }
 
-    public boolean isaReduction()
-    {
-        return aReduction;
-    }
-
-    public void setaReduction(boolean aReduction)
-    {
-        this.aReduction = aReduction;
-    }
+ 
     
     public void setFromNom(String nom) throws Exception
     {
