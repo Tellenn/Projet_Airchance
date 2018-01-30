@@ -9,7 +9,7 @@ package Tables;
  *
  * @author Pault
  */
-public class ResaFret implements Reservations
+public class ReservationFret implements Reservations
 {
     private int numReservation;
     private InstanceVol vol;
@@ -17,7 +17,7 @@ public class ResaFret implements Reservations
     private int poids;
     private int volume;
 
-    public ResaFret(int numReservation, InstanceVol vol, int poids, int volume)
+    public ReservationFret(int numReservation, InstanceVol vol, int poids, int volume)
     {
         this.numReservation = numReservation;
         this.vol = vol;
@@ -72,6 +72,21 @@ public class ResaFret implements Reservations
     public int getPrix()
     {
         return this.prix;
+    }
+
+    @Override
+    public String getDateReservation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setDateReservation(String date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void importFromId(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

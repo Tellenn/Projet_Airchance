@@ -11,14 +11,14 @@ import java.sql.Date;
  *
  * @author Pault
  */
-public class ResaPassager implements Reservations
+public class ReservationPassager implements Reservations
 {
     private int numReservation;
     private InstanceVol vol;
     private Place place;
     private int prix;
 
-    public ResaPassager(int numReservation, InstanceVol vol, Place place) throws Exception
+    public ReservationPassager(int numReservation, InstanceVol vol, Place place) throws Exception
     {
         this.numReservation = numReservation;
         this.vol = vol;
