@@ -13,3 +13,5 @@ Pour créer la BD et les triggers :
 - Copier le contenu du dossier BD à la racine du serveur Oracle
 - Taper la commande "start init" pour créer, peupler la base et créer les triggers
 - Taper la commande "start test" pour tester les triggers
+
+~~Rmq : lorsqu'on crée la BD avec le script init.sql, les scripts sont lancés à la suite et le serveur peut garder dans son buffer la dernière commande sql du script précédent. On peut donc avoir des erreurs qui s'affichent mais qui n'en sont pas en réalité (il s'agit seulement de commande exécuter 2 fois).~~
