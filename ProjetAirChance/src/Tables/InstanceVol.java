@@ -187,7 +187,7 @@ public class InstanceVol implements TableInterface{
         this.etat = "Cree";
     }
     
-    public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, java.sql.Date dateArrivee, java.sql.Date dateDepart, String etat) {
+    public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, String dateDepart,String dateArrivee, String etat) {
         this.numInstance = numInstance;
         this.numVol = new Vol();
         this.numVol.importFromId("" + numVol);
@@ -200,8 +200,8 @@ public class InstanceVol implements TableInterface{
         this.placesRestEco = placesRestEco;
         this.placesRestAff = placesRestAff;
         this.placesRestPrem = placesRestPrem;
-        this.dateArrive = null;
-        this.dateDepart = "";
+        this.dateArrive = dateArrivee;
+        this.dateDepart = dateDepart;
         this.etat = etat;
     }
 
@@ -209,6 +209,7 @@ public class InstanceVol implements TableInterface{
 
 
     // https://stackoverflow.com/questions/530012/how-to-convert-java-util-date-to-java-sql-date
+    // https://stackoverflow.com/questions/907170/java-getminutes-and-gethours
     private int numInstance;
     private Vol numVol;
     private Avion idAvion;
@@ -283,13 +284,14 @@ public class InstanceVol implements TableInterface{
             this.placesRestAff = result.getInt("placesRestAff");
             this.placesRestPrem = result.getInt("placesRestPrem");
             this.poidsRest = result.getInt("poidsRest");
-            String dateDepart = result.getTimestamp("dateDepart").toString();
-            String[] parts = dateDepart.split(".");
-            this.dateDepart = parts[0];
-            String dateArrivee = result.getTimestamp("dateArrivee").toString();
-            parts = dateArrivee.split(".");
-            this.dateArrive = parts[0];
-            //this.dateArrive = result.getTimestamp("dateArrivee");       
+            
+            SimpleDateFormat simple = new SimpleDateFormat("yyyy/dd/mm' 'hh:mm:ss");
+            java.util.Date dateDepartRes = result.getDate("dateDepart");
+            this.dateDepart = simple.format(dateDepartRes);
+            
+            java.util.Date dateArriveeRes = result.getDate("dateArrive");
+            this.dateArrive = simple.format(dateArriveeRes);
+  
             this.etat = result.getString("etat");
 
 

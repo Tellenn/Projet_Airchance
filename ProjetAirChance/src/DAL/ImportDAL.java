@@ -17,6 +17,7 @@ import Tables.Ville;
 import Tables.Vol;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -383,7 +384,7 @@ public class ImportDAL {
         return importTableVol(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
-    public ArrayList<InstanceVol> importTableInstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsRest, java.sql.Date dateDepart, java.sql.Date dateArrivee, String etat) {
+    public ArrayList<InstanceVol> importTableInstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsRest, String dateDepart, String dateArrivee, String etat) {
         String query = "Select * from InstanceVol";
         boolean isTheFirst = true;
         if (numInstance != 0) {
@@ -421,15 +422,16 @@ public class ImportDAL {
             isTheFirst = false;
             query += " poidsRest=" + poidsRest;
         }
-        if (dateDepart != null) {
+        if (dateDepart != "") {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
             query += " dateDepart=TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
         }
-        if (dateArrivee != null) {
+        if (dateArrivee != "") {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " dateArrivee=TO_DATE('" + dateArrivee + "', 'yyyy/mm/dd hh24:mi:ss')";
+            query += (dateArrivee == "null") ? " dateArrivee is null" : " dateArrivee=TO_DATE('" + dateArrivee + "', 'yyyy/mm/dd hh24:mi:ss')";
+
         }
         if (!"".equals(etat)) {
             query += isTheFirst ? " where" : " and";
@@ -438,6 +440,7 @@ public class ImportDAL {
 
         ResultSet result;
         ArrayList<InstanceVol> iv = new ArrayList<>();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
         try {
             result = DBManager.dbExecuteQuery(query);
 
@@ -449,8 +452,10 @@ public class ImportDAL {
                 int placesRestAffRes = result.getInt("placesRestAff");
                 int placesRestPremRes = result.getInt("placesRestPrem");
                 int poidsRestRes = result.getInt("poidsRest");
-                java.sql.Date dateDepartRes = result.getDate("dateDepart");
-                java.sql.Date dateArriveeRes = result.getDate("dateArrivee");
+                String dateDepartRes = simpleDate.format(result.getDate("dateDepart"));
+                java.util.Date dateArriveeTmp = result.getDate("dateArrivee");
+
+                String dateArriveeRes = (dateArriveeTmp == null) ? "" : simpleDate.format(result.getDate("dateArrivee"));
                 String etatRes = result.getString("etat");
                 InstanceVol tmp = new InstanceVol(numInstanceRes, numVolRes, idAvionRes, placesRestEcoRes, placesRestAffRes, placesRestPremRes, poidsRestRes, dateDepartRes, dateArriveeRes, etatRes);
                 //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
@@ -466,7 +471,7 @@ public class ImportDAL {
     }
     
     public ArrayList<InstanceVol> importTableInstanceVol(){
-        return importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, null, null, "");
+        return importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "", "", "");
     }
 
     /**
