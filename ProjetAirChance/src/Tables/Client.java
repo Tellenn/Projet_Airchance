@@ -5,7 +5,12 @@
  */
 package Tables;
 
+import BD.DBManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -143,5 +148,36 @@ public class Client {
         this.aReduction = aReduction;
     }
     
-        
+    public void setFromNom(String nom) throws Exception
+    {
+        String query = "SELECT * from Client Where nomClient ='"+nom+"'";
+        try
+        {
+            ResultSet rs = DBManager.dbExecuteQuery(query);
+            rs.last();
+            if(rs.getRow()!=1)
+            {
+                throw new Exception("La requête a renvoyée plus d'un résultat !!");
+            }
+            else
+            {
+                this.idClient = rs.getString("idClient");
+                this.nomClient = rs.getString("nomClient");
+                this.prenomClient = rs.getString("prenomClient");
+                this.numRueClient = rs.getInt("numRueClient");
+                this.rueClient = rs.getString("rueClient");
+                this.cpClient = rs.getInt("cpClient");
+                this.villeClient = rs.getString("villeClient");
+                this.heuresCumulees = rs.getInt("heuresCumulees");
+                this.numPasseport = rs.getString("numPasseport");
+
+            }
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
