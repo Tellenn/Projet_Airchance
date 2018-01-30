@@ -132,6 +132,7 @@ public class ExportDAL
             if (pnt.getIdEmploye() == 0)
             {
                 maxId = readMaxIdPN() + 1;
+                //IF not contrainte
                 query = "Insert into PersonnelNaviguant values (" + maxId + ", '" + pnt.getNomEmploye() + "', '" + pnt.getPrenomEmploye() + "', '"
                         + pnt.getNumRueEmploye() + "', '" + pnt.getRueEmploye() + "', '" + pnt.getCpEmploye() + "', '" + pnt.getVilleEmploye() + "', " + pnt.getHeuresVol() + ", 'PNT', " + pnt.getIdDerniereVille().getIdVille() + ")";
             } else
