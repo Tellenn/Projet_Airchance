@@ -1,0 +1,2 @@
+INSERT INTO Vol VALUES (66, 0, 480, 5835, 150, 3, 50, null, 1, 9);
+INSERT INTO InstanceVol VALUES (1, 66, 20, 0, 0, 0, null, TO_DATE('2017/12/22 10:00:00', 'yyyy/mm/dd hh24:mi:ss'), TO_DATE('2018/01/28 20:55:00', 'yyyy/mm/dd hh24:mi:ss'), 'Arrive');
