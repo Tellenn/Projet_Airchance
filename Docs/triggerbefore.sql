@@ -1,6 +1,5 @@
 
 /*On vérifie que la distance a effectue soit cohérente avec le rayon possible de l'avion*/
-/* JEU DE TEST A FAIRE, COMPILE */
 create or replace trigger coheDistRayon
 before insert or update on InstanceVol
 for each row
@@ -26,7 +25,6 @@ end;
 /
 
 /* On compte les places reservée sur un InstanceVol pour eviter les doublons*/
-/* JEU DE TEST A FAIRE, COMPILE */
 create or replace trigger coheReservPlace
 after insert or update on resaVolPlace
 declare
@@ -48,7 +46,6 @@ end;
 
 
 /* Verifier qu'une date ai été mise si l'état d'un vol est arrivé*/
-/* JEU DE TEST A FAIRE, COMPILE */
 create or replace trigger coheEtatArrive
 after update on instanceVol
 declare
@@ -65,7 +62,6 @@ end;
 /
 
 /* Vérifier pour un vol que la ville d'arrive doit être differente que la ville de départ*/
-/* JEU DE TEST A FAIRE, COMPILE */
 create or replace trigger coheVillesVol
 before insert or update on Vol
 for each row
@@ -158,7 +154,7 @@ DECLARE
 BEGIN
 	SELECT SUM(heuresModele) INTO totalHeures
 	FROM PiloteModele
-	WHERE idEmploye = :new.idEmploye AND typePN = 'PNT';
+	WHERE idEmploye = :new.idEmploye;
 
 	IF((:new.heuresVol > totalHeures) OR (:new.heuresVol < totalHeures)) THEN
 		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit etre egal à la somme des heuresModele de PiloteModele');

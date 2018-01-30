@@ -1,13 +1,9 @@
 /*Update les heures employé par rapport au nouveau vol*/
-/* MODIFIER LA TABLE OBSERVEE POUR INSTANCEVOL ET FAIRE UN LOOP*/
-		/*
-*/
 create or replace trigger updateHeureEmploye
 before update on InstanceVol
 for each row
 declare
 	dureeVol integer;
-	oldDuree integer;
 	modele varchar2(50);
 begin
 	if(:new.etat = 'Arrive') then
@@ -20,105 +16,50 @@ begin
 		from Avion
 		where idAvion = :new.idAvion;
 
-		For employe in (
-			select idEmploye
-			from EmployeInstanceVol natural join PersonnelNaviguant
-			where numInstance = :new.numInstance and typePN = 'PNT')
-		LOOP
-			select heuresModele into oldDuree
-			from PiloteModele
-			where idEmploye = employe.idEmploye and nomModele = modele;
+		update PiloteModele
+		set heuresModele = heuresModele + dureeVol
+		where idEmploye in (
+		select idEmploye
+		from EmployeInstanceVol natural join PersonnelNaviguant
+		where numInstance = :new.numInstance and typePN = 'PNT') and nomModele = modele;
 
-			update PiloteModele
-			set heuresModele = oldDuree+dureeVol
-			where idEmploye = employe.idEmploye and nomModele = modele;
-		END LOOP;
-
-
-		--Update l'employe
-		For employe in (
+	--Update l'employe
+		update PersonnelNaviguant
+		set heuresVol = heuresVol + dureeVol
+		where idEmploye in (
 			select idEmploye
 			from EmployeInstanceVol
-			where numInstance = :new.numInstance)
-		LOOP
-			select heuresVol into oldDuree
-			from PersonnelNaviguant
-			where idEmploye = employe.idEmploye;
+			where numInstance = :new.numInstance);
 
-			update PersonnelNaviguant
-			set heuresVol = oldDuree+dureeVol
-			where idEmploye = employe.idEmploye;
-		END LOOP;
-	end if;
-end;
-/
-
----------------
---			 --
--- EST BUGGE --
---			 --
----------------
-create or replace trigger updateHeureClient
-before update on InstanceVol
-for each row
-declare
-	dureeVol integer;
-	oldDuree integer;
-begin
-	if(:new.etat = 'Arrive') then
-		select duree into dureeVol
-		from vol
-		where numVol = :new.numVol;
-		--Update les clients
-		--Sur les vol passager uniquement
-		For client in (
+		--Update les clients Sur les vol passager uniquement
+		update Client
+		set heuresCumulees = heuresCumulees +dureeVol
+		where idClient in (
 			select idClient
-			from reservationPassager
-			where numReservationP in (
-				select numReservationP
-				from ResaVolPlace
-				where numInstance = :new.numInstance))
-		LOOP
-			select heuresCumulees into oldDuree
-			from client
-			where idClient = client.idClient;
-
-			update Client
-			set heuresCumulees = oldDuree+dureeVol
-			where idClient = client.idClient;
-		END LOOP;
+			from reservationPassager natural join ResaVolPlace
+			where numInstance = :new.numInstance);
 	end if;
 end;
 /
-/*
-select heuresCumulees as oldDuree
-			from client
-			where idClient =
-*/
-
 /*Mise a jour des position avion et PN*/
-/* JEU DE TEST A FAIRE, COMPILE */
-create or replace trigger nouvellePosition
+create or replace trigger updatePosition
 before update on InstanceVol
 for each row
 declare
 	idVilleArrive integer;
 begin
-	if(:new.etat = 'arrive') then
+	if(:new.etat = 'Arrive') then
 		select idVilleDestination into idVilleArrive
 		from Vol
 		where numVol = :new.numVol;
-		
-		For employe in (
+
+		update PersonnelNaviguant
+		set idDerniereVille = idVilleArrive
+		where idEmploye in (
 			select idEmploye
 			from EmployeInstanceVol
-			where numInstance = :new.numInstance)
-		LOOP
-			update PersonnelNaviguant
-			set idDerniereVille = idVilleArrive
-			where idEmploye = employe.idEmploye;
-		END LOOP;
-		
+			where numInstance = :new.numInstance);
+
 		update Avion
 		set idDerniereVille = idVilleArrive
 		where idAvion = :new.idAvion;
@@ -191,7 +132,7 @@ DECLARE
 	villePN INTEGER;
 BEGIN
 	SELECT idVilleOrigine INTO villeVol
-	FROM Vol
+	FROM Vol 
 	NATURAL JOIN InstanceVol
 	WHERE numInstance = :new.numInstance;
 
