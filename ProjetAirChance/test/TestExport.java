@@ -72,7 +72,6 @@ public class TestExport
     @Test
     public void getAllPlaces()
     {
-        DBManager.dbConnect();
         ImportDAL dal = new ImportDAL();
         int nbPlaces = dal.importPlaceWithParameter(0, 7, "", "", "").size();
         System.out.println(nbPlaces);
