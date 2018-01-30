@@ -21,114 +21,121 @@ import java.util.logging.Logger;
 public class ReservationPassager implements Reservations, TableInterface
 {
 
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    /**
+     * @return the numReservationP
+     */
+    public int getNumReservationP() {
+        return numReservationP;
+    }
 
-    private int numReservation;
-    private String dateReservation;
-    private Client idClient;
-    private ArrayList<ResaVolPlace> reservations;
-    
-    
+    /**
+     * @param numReservationP the numReservationP to set
+     */
+    public void setNumReservationP(int numReservationP) {
+        this.numReservationP = numReservationP;
+    }
+
+
+    /**
+     * @return the prix
+     */
+    public float getPrix() {
+        return prix;
+    }
+
+    /**
+     * @param prix the prix to set
+     */
+    public void setPrix(float prix) {
+        this.prix = prix;
+    }
+
+    /**
+     * @return the numInstance
+     */
+    public InstanceVol getNumInstance() {
+        return numInstance;
+    }
+
+    /**
+     * @param numInstance the numInstance to set
+     */
+    public void setNumInstance(InstanceVol numInstance) {
+        this.numInstance = numInstance;
+    }
+
+    /**
+     * @return the numPlace
+     */
+    public Place getNumPlace() {
+        return numPlace;
+    }
+
+    /**
+     * @param numPlace the numPlace to set
+     */
+    public void setNumPlace(Place numPlace) {
+        this.numPlace = numPlace;
+    }
+
+    /**
+     * @return the idAvion
+     */
+    public Avion getIdAvion() {
+        return idAvion;
+    }
+
+    /**
+     * @param idAvion the idAvion to set
+     */
+    public void setIdAvion(Avion idAvion) {
+        this.idAvion = idAvion;
+    }
+
+// </editor-fold>
+
+
+    private int numReservationP;
+    private float prix;
+    private InstanceVol numInstance;
+    private Place numPlace;
+    private Avion idAvion;
+ 
     // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR RESERVATIONPASSAGER ">
     public ReservationPassager() {
-        this.numReservation = 0;
-        this.idClient = new Client();
-        this.dateReservation = "";
-        this.reservations = new ArrayList<>();
+        this.numReservationP = 0;
+        this.prix = 0;
+        this.numInstance = new InstanceVol();
+        this.numPlace = new Place();
+        this.idAvion = new AvionPassager();        
     }
     
-    public ReservationPassager(int numReservation, Client cli, String date, ArrayList<ResaVolPlace> reserv) {
-        this.numReservation = numReservation;
-        this.idClient = cli;
-        this.dateReservation = date;
-        this.reservations = reserv;
-    }
-
-// </editor-fold>
-    
-
-
-    
-// <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
-    @Override
-    public int getNumReservation() {
-        return numReservation;
-    }
-    
-    @Override
-    public void setNumReservation(int numReservation) {
-        this.numReservation = numReservation;
-    }
-
-       /**
-     * @return the idClient
-     */
-    public Client getIdClient() {
-        return idClient;
-    }
-
-    /**
-     * @param idClient the idClient to set
-     */
-    public void setIdClient(Client idClient) {
-        this.idClient = idClient;
-    }
-  /**
-     * @return the reservations
-     */
-    public ArrayList<ResaVolPlace> getReservations() {
-        return reservations;
-    }
-
-    /**
-     * @param reservations the reservations to set
-     */
-    public void setReservations(ArrayList<ResaVolPlace> reservations) {
-        this.reservations = reservations;
-    }
-
-    /**
-     * @return the dateReservation
-     */
-    @Override
-    public String getDateReservation() {
-        return dateReservation;
-    }
-
-    /**
-     * @param dateReservation the dateReservation to set
-     */
-    @Override
-    public void setDateReservation(String dateReservation) {
-        this.dateReservation = dateReservation;
+    public ReservationPassager(int numReservation, float prix, InstanceVol numInstance, Place numPlace, AvionPassager idAvion) {
+        this.numReservationP = numReservation;
+        this.prix = prix;
+        this.numInstance = numInstance;
+        this.numPlace = numPlace;
+        this.idAvion = idAvion;
     }
 
 // </editor-fold>
     
     
-    public void fillResaVolPlace(){
-        String query = "Select * from ResaVolPlace where numReservationP="+this.numReservation;
-        ResultSet result;
-        
-        try {
-            result = DBManager.dbExecuteQuery(query);
-            while(result.next()){
-                ResaVolPlace r = new ResaVolPlace(this.numReservation, result.getInt("numInstance"), result.getInt("numPlace"), result.getFloat("prix"));
-                reservations.add(r);
-            }
-            
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    @Override
+    public void showTable() {
+        String query = "Select * from ReservationPassager";
+        TableImpl.showTable(query);
     }
 
+
     @Override
-    public void importFromId(String id)
-    {
+    public void importFromId(String id) {
         ResultSet result = getResultSetFromId(id);
         try {
             if(result.last()){
                 int rows = result.getRow();
-                if (rows > 1) throw new Exception("La requête a renvoyé plus d'une ReservationPassager");
+                if (rows > 1) throw new Exception("La requête a renvoyé plus d'une ResaVolPlace");
             }
             result.beforeFirst();
         } catch (SQLException ex) {
@@ -143,33 +150,29 @@ public class ReservationPassager implements Reservations, TableInterface
         } catch (Exception ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+                
             
         try {
-            this.numReservation = result.getInt("numReservationP");
-            this.idClient.importFromId(""+result.getInt("idClient"));
-            
-            SimpleDateFormat simple = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
-            java.util.Date dateR = result.getDate("dateReservation");
-            this.dateReservation = simple.format(dateR);
+            this.numReservationP = result.getInt("numReservationP");
+            this.numInstance.importFromId(""+result.getInt("numInstance"));
+            this.numPlace.importFromId(""+result.getInt("numPlace"), ""+result.getInt("idAvion"), ""+result.getInt("numInstance"));
+            this.prix = result.getFloat("prix");
+            this.idAvion.importFromId("idAvion");
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ReservationPassager.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    public void showTable() {
-        String query = "Select * from ReservationPassager";
-        TableImpl.showTable(query);
+        
     }
 
     @Override
     public ResultSet getResultSetFromId(String id) {
-        String query = "Select * from ReservationPassager where numReservationP="+id;
+        String query = "Select * from ResaVolPlace where numReservationP="+id;
         return TableImpl.getResultSet(query);
     }
+
 
 
 }

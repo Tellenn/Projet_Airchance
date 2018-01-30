@@ -11,8 +11,8 @@ package Tables;
  */
 public class ReservationFret implements Reservations
 {
-    private int numReservation;
-    private InstanceVol vol;
+    private int numReservationF;
+    private InstanceVol numInstance;
     private int prix;
     private int poids;
     private int volume;
@@ -26,12 +26,12 @@ public class ReservationFret implements Reservations
         this.prix = this.poids*this.volume/100;
     }
 
-    public int getNumReservation()
+    public int getNumReservationP()
     {
         return numReservation;
     }
 
-    public void setNumReservation(int numReservation)
+    public void setNumReservationP(int numReservation)
     {
         this.numReservation = numReservation;
     }

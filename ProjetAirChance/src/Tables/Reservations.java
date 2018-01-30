@@ -11,11 +11,9 @@ package Tables;
  */
 public interface Reservations
 {
-    public int getNumReservation();
-    public void setNumReservation(int numReservation);
+    public int getNumReservationP();
+    public void setNumReservationP(int numReservation);
     
-    public String getDateReservation();
-    public void setDateReservation(String date);
     
     public void importFromId(String id);
 }
