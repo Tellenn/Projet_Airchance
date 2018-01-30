@@ -175,7 +175,7 @@ end;
 -- Si on affecte un PN à un vol qui part d'une ville où il ne se trouve pas
 -- OK
 CREATE OR REPLACE TRIGGER t_1
-AFTER INSERT OR UPDATE ON EmployeInstanceVol
+AFTER INSERT ON EmployeInstanceVol
 FOR EACH ROW
 DECLARE
 	villeVol INTEGER;
@@ -296,18 +296,18 @@ BEGIN
 END;
 /
 -- PN.heuresVol = SUM(PiloteModele.heuresModele) pour un même pilote
--- CREATE OR REPLACE TRIGGER t_7
--- AFTER INSERT OR UPDATE ON PersonnelNaviguant
--- FOR EACH ROW
--- DECLARE
--- 	totalHeures INTEGER;
--- BEGIN
--- 	SELECT SUM(heuresModele) INTO totalHeures
--- 	FROM PiloteModele
--- 	WHERE idEmploye = :new.idEmploye;
+CREATE OR REPLACE TRIGGER t_7
+AFTER INSERT OR UPDATE ON PersonnelNaviguant
+FOR EACH ROW
+DECLARE
+	totalHeures INTEGER;
+BEGIN
+	SELECT SUM(heuresModele) INTO totalHeures
+	FROM PiloteModele
+	WHERE idEmploye = :new.idEmploye;
 
--- 	IF((:new.heuresVol > totalHeures) OR (:new.heuresVol < totalHeures)) THEN
--- 		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit être égal à la somme des heuresModele de PiloteModele');
--- 	END IF;
--- END;
--- /
+	IF((:new.heuresVol > totalHeures) OR (:new.heuresVol < totalHeures)) THEN
+		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit etre egal à la somme des heuresModele de PiloteModele');
+	END IF;
+END;
+/
