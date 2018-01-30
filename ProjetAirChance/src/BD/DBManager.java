@@ -96,7 +96,6 @@ public class DBManager
         try
         {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
             System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
@@ -127,7 +126,6 @@ public class DBManager
                 stmt.close();
             }
             //Close connection
-            //dbDisconnect();
         }
         //Return CachedRowSet
         return crs;
@@ -147,7 +145,7 @@ public class DBManager
         try
         {
             //Connect to DBManager (Establish Oracle Connection)
-            dbConnect();
+            
             System.out.println("dbExecuteUpdate : " + sqlStmt);
             //Create Statement
             stmt = conn.createStatement();
@@ -190,6 +188,11 @@ public class DBManager
     public static void changeAutocommit(boolean level) throws SQLException
     {
         conn.setAutoCommit(level);
+    }
+    
+    public static void rollBack() throws SQLException
+    {
+        conn.rollback();
     }
 
 }
