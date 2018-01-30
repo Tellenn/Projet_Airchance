@@ -74,7 +74,7 @@ end;
 
 
 -- Si on affecte un avion à un vol qui part d'une ville où il ne se trouve pas
-CREATE OR REPLACE TRIGGER t_2
+CREATE OR REPLACE TRIGGER coheVilleDepartAvion
 AFTER INSERT OR UPDATE ON InstanceVol
 FOR EACH ROW
 DECLARE
@@ -97,7 +97,7 @@ END;
 
 
 -- Verifier qu'une instance de vol de propose pas plus de places que l'avion ne peut en contenir
-CREATE OR REPLACE TRIGGER t_3
+CREATE OR REPLACE TRIGGER coheNbPlacesInstance
 AFTER INSERT OR UPDATE ON InstanceVol
 FOR EACH ROW
 DECLARE
@@ -117,7 +117,7 @@ END;
 /
 
 -- Vérifier que l'avion dispose assez de place pour effectuer ce vol
-CREATE OR REPLACE TRIGGER t_4
+CREATE OR REPLACE TRIGGER coheNbPlacesAvion
 AFTER INSERT OR UPDATE ON InstanceVol
 FOR EACH ROW
 DECLARE
@@ -145,7 +145,7 @@ END;
 /
 
 -- PN.heuresVol = SUM(PiloteModele.heuresModele) pour un même pilote
-CREATE OR REPLACE TRIGGER t_7
+CREATE OR REPLACE TRIGGER coheHeuresVolPN
 AFTER INSERT OR UPDATE ON PersonnelNaviguant
 FOR EACH ROW
 DECLARE
@@ -153,10 +153,10 @@ DECLARE
 BEGIN
 	SELECT SUM(heuresModele) INTO totalHeures
 	FROM PiloteModele
-	WHERE idEmploye = :new.idEmploye;
+	WHERE idEmploye = :new.idEmploye AND typePN = 'PNT';
 
 	IF((:new.heuresVol > totalHeures) OR (:new.heuresVol < totalHeures)) THEN
-		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit être égal à la somme des heuresModele de PiloteModele');
+		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit etre egal à la somme des heuresModele de PiloteModele');
 	END IF;
 END;
 /
