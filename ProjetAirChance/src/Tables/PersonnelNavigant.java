@@ -35,4 +35,6 @@ public interface PersonnelNavigant {
     public int getHeuresVol();
     public void setHeuresVol(int heuresVol);
     
+    public void importFromId(String id);
+    
 }

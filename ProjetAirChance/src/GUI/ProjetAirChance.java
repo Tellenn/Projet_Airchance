@@ -132,13 +132,12 @@ public class ProjetAirChance extends Application {
            //dal.importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "2018/02/15 10:30:00", "", "");
            
            InstanceVol i = new InstanceVol();
-           i.importFromId("4");
-           i.setEtat("Arrive");
+           i.importFromId("5");
+           i.fillEmployeInstanceVol();
+           i.setEtat("Annule");
            dalExp.exportInstanceVol(i);
            
-           i.setNumInstance(0);
-           i.setPlacesRestAff(50);
-           dalExp.exportInstanceVol(i);
+ 
            
             
             DBManager.commit();

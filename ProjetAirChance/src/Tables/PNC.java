@@ -31,7 +31,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
     private Ville idDerniereVille;
     private ArrayList<Langue> langues;
     
-    public PNC(){
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR PNC ">
+    public PNC() {
         this.idEmploye = 0;
         this.nomEmploye = "";
         this.prenomEmploye = "";
@@ -44,7 +45,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.langues = new ArrayList<>();
     }
     
-    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue){
+    public PNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille, ArrayList<String> langue) {
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -54,17 +55,15 @@ public class PNC implements PersonnelNavigant, TableInterface{
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
         this.idDerniereVille = new Ville();
-        this.idDerniereVille.importFromId(""+idDerniereVille);
+        this.idDerniereVille.importFromId("" + idDerniereVille);
         this.langues = new ArrayList<>();
-        
-        for(int i = 0; i < langue.size(); i++){
-            Langue tmp = new Langue();
-            tmp.importFromId(langue.get(i));
-            this.langues.add(tmp);
-        }
+
     }
 
+// </editor-fold>
+
     
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
     /**
      * @return the idEmploye
      */
@@ -192,7 +191,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
     public void setHeuresVol(int heuresVol) {
         this.heuresVol = heuresVol;
     }
-    
+
     /**
      * @return the idDerniereVille
      */
@@ -206,7 +205,7 @@ public class PNC implements PersonnelNavigant, TableInterface{
     public void setIdDerniereVille(Ville idDerniereVille) {
         this.idDerniereVille = idDerniereVille;
     }
-    
+
     /**
      * @return the langues
      */
@@ -220,7 +219,29 @@ public class PNC implements PersonnelNavigant, TableInterface{
     public void setLangues(ArrayList<Langue> langues) {
         this.langues = langues;
     }
+
+// </editor-fold>
     
+    
+    public void fillLanguePNC(){
+        String queryLangue = "Select * from LanguePNC where idEmploye="+this.idEmploye;
+        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
+        ArrayList<String> langueString = new ArrayList<>();
+        
+        try {
+            while(langueRes.next()){
+                langueString.add(langueRes.getString("nomLangue"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i = 0; i < langueString.size(); i++){
+            Langue tmp = new Langue();
+            tmp.importFromId(langueString.get(i));
+            this.langues.add(tmp);
+        }
+    }
     
     @Override
     public void showTable() {
@@ -274,23 +295,6 @@ public class PNC implements PersonnelNavigant, TableInterface{
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        String queryLangue = "Select * from LanguePNC where idEmploye="+id;
-        ResultSet langueRes = TableImpl.getResultSet(queryLangue);
-        ArrayList<String> langueString = new ArrayList<>();
-        
-        try {
-            while(langueRes.next()){
-                langueString.add(langueRes.getString("nomLangue"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PNC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        for(int i = 0; i < langueString.size(); i++){
-            Langue tmp = new Langue();
-            tmp.importFromId(langueString.get(i));
-            this.langues.add(tmp);
-        }
         
     }
 }

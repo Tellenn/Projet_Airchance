@@ -5,6 +5,7 @@
  */
 package Tables;
 
+import BD.DBManager;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,19 +21,7 @@ import java.util.logging.Logger;
  */
 public class InstanceVol implements TableInterface{
 
-    /**
-     * @return the personnel
-     */
-    public ArrayList<PersonnelNavigant> getPersonnel() {
-        return personnel;
-    }
-
-    /**
-     * @param personnel the personnel to set
-     */
-    public void setPersonnel(ArrayList<PersonnelNavigant> personnel) {
-        this.personnel = personnel;
-    }
+ 
 
     
     // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
@@ -179,6 +168,20 @@ public class InstanceVol implements TableInterface{
     public void setEtat(String etat) {
         this.etat = etat;
     }
+    
+       /**
+     * @return the personnel
+     */
+    public ArrayList<PersonnelNavigant> getPersonnel() {
+        return personnel;
+    }
+
+    /**
+     * @param personnel the personnel to set
+     */
+    public void setPersonnel(ArrayList<PersonnelNavigant> personnel) {
+        this.personnel = personnel;
+    }
 
   
 
@@ -196,6 +199,7 @@ public class InstanceVol implements TableInterface{
         this.dateArrive = null;
         this.dateDepart = "";
         this.etat = "Cree";
+        this.personnel = new ArrayList<>();
     }
     
     public InstanceVol(int numInstance, int numVol, int idAvion, int placesRestEco, int placesRestAff, int placesRestPrem, int poidsrest, String dateDepart,String dateArrivee, String etat) {
@@ -214,6 +218,7 @@ public class InstanceVol implements TableInterface{
         this.dateArrive = dateArrivee;
         this.dateDepart = dateDepart;
         this.etat = etat;
+        this.personnel = new ArrayList<>();
     }
 
 // </editor-fold>
@@ -234,6 +239,40 @@ public class InstanceVol implements TableInterface{
     private ArrayList<PersonnelNavigant> personnel;
 
 
+    public void fillEmployeInstanceVol(){
+        String query = "Select * from EmployeInstanceVol where numInstance="+this.numInstance;
+        ResultSet result;
+        
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            while(result.next()){
+                PersonnelNavigant p = ("PNC".equals(readTypePN(result.getInt("idEmploye")))) ? new PNC() : new PNT();
+                p.importFromId(""+result.getInt("idEmploye"));
+                personnel.add(p);
+            }
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private String readTypePN(int idEmploye){
+        String query = "Select * from PersonnelNaviguant where idEmploye="+idEmploye;
+        ResultSet result;
+        String retour = "";
+        
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            if(result.next()){
+                retour = result.getString("typePN");
+            }
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(InstanceVol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return retour;
+    }
     
     private String readTypeAvion(int idAvion) throws Exception{
         try {

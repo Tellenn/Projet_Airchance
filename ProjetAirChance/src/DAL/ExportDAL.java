@@ -14,6 +14,7 @@ import Tables.Langue;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.PersonnelNavigant;
 import Tables.Place;
 import Tables.Ville;
 import Tables.Vol;
@@ -472,12 +473,29 @@ public class ExportDAL
             {
 
                 DBManager.dbExecuteUpdate(query);
+                String queryEiv;
+                String queryDeleteEmployeInstanceVol = "Delete from EmployeInstanceVol where numInstance=" + maxId;
+                DBManager.dbExecuteUpdate(queryDeleteEmployeInstanceVol);
+
+                for (PersonnelNavigant pn : iv.getPersonnel())
+                {
+                    queryEiv = "Insert into EmployeInstanceVol values (" + maxId+ ", " + pn.getIdEmploye() + ")";
+                    try
+                    {
+                        DBManager.dbExecuteUpdate(queryEiv);
+                    } catch (SQLException | ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 
 
             } catch (SQLException | ClassNotFoundException ex)
             {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            
         }
     }
     
