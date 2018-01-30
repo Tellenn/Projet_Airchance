@@ -11,6 +11,7 @@ package Tables;
  */
 public interface Reservations
 {
+    public int getPrix();
     public int getNumReservation();
     public void setNumReservation(int numReservation);
     
