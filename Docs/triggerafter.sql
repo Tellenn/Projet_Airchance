@@ -1,54 +1,67 @@
 /*Update les heures employé par rapport au nouveau vol*/
-/* MODIFIER LA TABLE OBSERVEE POUR INSTANCEVOL ET FAIRE UN LOOP*/
 create or replace trigger updateHeureEmploye
-before insert on EmployeInstanceVol
+before update on InstanceVol
 for each row
 declare
-	heurevol number;
-	oldhours number;
-	avion number;
-	oldhoursavion number;
-	typeE VARCHAR2(10);
+	dureeVol integer;
+	oldDuree integer;
+	modele varchar2(50);
 begin
+	if(:new.etat = 'Arrive') then
+		select duree into dureeVol
+		from vol
+		where numVol = :new.numVol;
+		--Update les clients
+		--Sur les vol passager uniquement
+		For client in (
+			select idClient
+			from ResaVolPlace natural join reservationPassager
+			where numInstance = :new.numInstance)
+		LOOP
+			select heuresCumulees into oldDuree
+			from client
+			where idClient = client.idClient;
 
+			update Client
+			set heuresCumulees = oldDuree+dureeVol
+			where idClient = client.idClient;
+		END LOOP;
 
-	select typePN into typeE
-	from PersonnelNaviguant
-	where idEmploye = :new.idEmploye;
+		--Update l'employe
+		For employe in (
+			select idEmploye
+			from EmployeInstanceVol
+			where numInstance = :new.numInstance)
+		LOOP
+			select heuresVol into oldDuree
+			from PersonnelNaviguant
+			where idEmploye = employe.idEmploye;
 
-	
-	select duree into heurevol
-	from vol natural join instanceVol
-	where numInstance = :new.numInstance;
-	
-	select heuresVol into oldhours
-	from PersonnelNaviguant
-	where idEmploye = :new.idEmploye;
-	
-	update PersonnelNaviguant
-	set heuresVol = heurevol+oldhours
-	where idEmploye = :new.idEmploye;
+			update PersonnelNaviguant
+			set heuresVol = oldDuree+dureeVol
+			where idEmploye = employe.idEmploye;
+		END LOOP;
 
-	IF(typeE = 'PNT') THEN
-	
-		select idAvion into avion
-		from InstanceVol
-		where numInstance = :new.numInstance;
+		--Update les heures sur modèle des PNT associés
+		select nomModele into modele
+		from Avion
+		where idAvion = :new.idAvion;
 
-		select heuresModele into oldhoursavion
-		from PiloteModele
-		where nomModele = (
-			select nomModele
-			from Avion
-			where idAvion = avion) and idEmploye=:new.idEmploye;
-			
-		update PiloteModele
-		set heuresModele = oldhoursavion+heurevol
-		where nomModele = (
-			select nomModele
-			from Avion
-			where idAvion = avion);
-	END IF;
+		For employe in (
+			select idEmploye
+			from EmployeInstanceVol natural join PersonnelNaviguant
+			where numInstance = :new.numInstance and typePN = 'PNT')
+		LOOP
+			select heuresModele into oldDuree
+			from PiloteModele
+			where idEmploye = employe.idEmploye and nomModele = modele;
+
+			update PiloteModele
+			set heuresModele = oldDuree+dureeVol
+			where idEmploye = employe.idEmploye and nomModele = modele;
+		END LOOP;
+
+	end if;
 end;
 /
 	
