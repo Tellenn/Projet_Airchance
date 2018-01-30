@@ -7,6 +7,7 @@ package GUI;
 
 import Tables.InstanceVol;
 import Tables.PNC;
+import Tables.PNT;
 import java.util.ArrayList;
 
 /**
@@ -74,5 +75,20 @@ public class AffichageArrayList
             System.out.println();
         }
     }
-    
+    public static void affichePNT(ArrayList<PNT> list)
+    {
+        
+        
+        System.out.print("numPNC /");
+        System.out.print("/ Nom /");
+        System.out.print("/ Prenom /");
+         System.out.println();
+        for (PNT pnc : list)
+        {
+            System.out.print(pnc.getIdEmploye());
+            System.out.print(" / "+pnc.getNomEmploye()+" / ");
+            System.out.print(" / "+pnc.getPrenomEmploye()+" / ");
+            System.out.println();
+        }
+    }
 }

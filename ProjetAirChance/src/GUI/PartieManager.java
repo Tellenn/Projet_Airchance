@@ -10,8 +10,11 @@ import DAL.ExportDAL;
 import DAL.ImportDAL;
 import Tables.InstanceVol;
 import Tables.PNC;
+import Tables.PNT;
+import Tables.PersonnelNavigant;
 import Tables.Ville;
 import Tables.Vol;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -32,12 +35,12 @@ public class PartieManager
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws SQLException
     {
         mainMenu();
     }
 
-    public static void mainMenu()
+    public static void mainMenu() throws SQLException
     {
         scan = new Scanner(System.in);
         importDAL = new ImportDAL();
@@ -70,7 +73,7 @@ public class PartieManager
         }
     }
 
-    private static void menuInstanceVol()
+    private static void menuInstanceVol() throws SQLException
     {
         System.out.println();
         System.out.println("Que voulez vous faire ?");
@@ -96,10 +99,47 @@ public class PartieManager
                 System.out.println("Quel est l'ID de la ligne ?");
                 int volID  = scan.nextInt();
                 scan.nextLine();
+                
+                System.out.println("Quel est l'ID de l'avion a utiliser ?");
+                int avionID  = scan.nextInt();
+                scan.nextLine();
+                
+                InstanceVol volInstance = new InstanceVol(0,volID,avionID,0,0,0,0,dateDep,dateArr,"Cree");
+                
                 Vol numvol = new Vol();
                 numvol.importFromId(""+volID);
+                
+                ArrayList<PersonnelNavigant> pnChoix = new ArrayList();
+                System.out.println("Voici les PNC dispo.");
                 ArrayList<PNC> pncDispo = importDAL.importPNCDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
                 AffichageArrayList.affichePNC(pncDispo);
+                System.out.println("Lesquels voulez vous prendre? mettre des virgules entre chaque id");
+                String pnc = scan.nextLine();
+                String[] s = pnc.split(",");
+                for(int i=0;i<s.length;i++)
+                {
+                    PNC temp = new PNC();
+                    temp.importFromId(s[i]);
+                    pnChoix.add(temp);
+                }
+                
+                System.out.println("Voici les PNT dispo.");
+                ArrayList<PNT> pntDispo = importDAL.importPNTDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
+                AffichageArrayList.affichePNT(pntDispo);
+                System.out.println("Lesquels voulez vous prendre? mettre des virgules entre chaque id");
+                String pnt = scan.nextLine();
+                s = pnt.split(",");
+                for(int i=0;i<s.length;i++)
+                {
+                    PNT temp = new PNT();
+                    temp.importFromId(s[i]);
+                    pnChoix.add(temp);
+                }
+                
+                volInstance.setPersonnel(pnChoix);
+                
+                exportDAL.exportInstanceVol(volInstance);
+                manager.commit();
                 
                 break;
             case 3:
