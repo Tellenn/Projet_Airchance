@@ -8,6 +8,7 @@ package GUI;
 import BD.DBManager;
 import DAL.ExportDAL;
 import DAL.ImportDAL;
+import Tables.Avion;
 import Tables.InstanceVol;
 import Tables.PNC;
 import Tables.PNT;
@@ -100,14 +101,26 @@ public class PartieManager
                 int volID  = scan.nextInt();
                 scan.nextLine();
                 
+                Vol numvol = new Vol();
+                numvol.importFromId(""+volID);
+                
+                System.out.println("Voici les avions disponible");
+                int type = numvol.getType();
+                String typ;
+                if (type == 1)
+                {
+                    typ = "passager";
+                }else
+                {
+                    typ = "fret";
+                }
+                ArrayList<Avion> avionDispo = importDAL.importAvionDispo(typ,dateDep,dateArr,numvol.getIdVilleOrigine());
+                AffichageArrayList.afficheAvion(avionDispo);
                 System.out.println("Quel est l'ID de l'avion a utiliser ?");
                 int avionID  = scan.nextInt();
                 scan.nextLine();
                 
                 InstanceVol volInstance = new InstanceVol(0,volID,avionID,0,0,0,0,dateDep,dateArr,"Cree");
-                
-                Vol numvol = new Vol();
-                numvol.importFromId(""+volID);
                 
                 ArrayList<PersonnelNavigant> pnChoix = new ArrayList();
                 System.out.println("Voici les PNC dispo.");
@@ -137,10 +150,23 @@ public class PartieManager
                 }
                 
                 volInstance.setPersonnel(pnChoix);
-                
                 exportDAL.exportInstanceVol(volInstance);
-                manager.commit();
-                
+                boolean continu = true;
+                while(continu)
+                {
+                    System.out.println("Voulez vous valider ? (y ou n)");
+                    String rep = scan.nextLine();
+                    if (rep.equals("y"))
+                    {   
+                        manager.commit();
+                        continu = false;
+                    }
+                    else if (rep.equals("n"))
+                    {
+                        manager.rollBack();
+                        continu = false;
+                    }
+                }
                 break;
             case 3:
                 System.out.println("Quel est l'id du vol à supprimmer ? -1 pour retour.");
@@ -162,10 +188,26 @@ public class PartieManager
                         }
                     }
                 }
+                continu = true;
+                while(continu)
+                {
+                    System.out.println("Voulez vous valider ? (y ou n)");
+                    String rep = scan.nextLine();
+                    if (rep.equals("y"))
+                    {   
+                        manager.commit();
+                        continu = false;
+                    }
+                    else if (rep.equals("n"))
+                    {
+                        manager.rollBack();
+                        continu = false;
+                    }
+                }
                 break;
             case 4:
-                menuPN();
-                break;
+                //TODO//
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             case 5:
                 mainMenu();
                 break;

@@ -96,7 +96,7 @@ public class DBManager
         try
         {
             //Connect to DBManager (Establish Oracle Connection)
-            System.out.println("Select statement: " + queryStmt + "\n");
+            //System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
             stmt = conn.createStatement();
@@ -146,7 +146,7 @@ public class DBManager
         {
             //Connect to DBManager (Establish Oracle Connection)
             
-            System.out.println("dbExecuteUpdate : " + sqlStmt);
+            //System.out.println("dbExecuteUpdate : " + sqlStmt);
             //Create Statement
             stmt = conn.createStatement();
             //Run executeUpdate operation with given sql statement

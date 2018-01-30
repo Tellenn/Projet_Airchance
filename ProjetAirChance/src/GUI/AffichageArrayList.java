@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Tables.Avion;
 import Tables.InstanceVol;
 import Tables.PNC;
 import Tables.PNT;
@@ -77,8 +78,6 @@ public class AffichageArrayList
     }
     public static void affichePNT(ArrayList<PNT> list)
     {
-        
-        
         System.out.print("numPNC /");
         System.out.print("/ Nom /");
         System.out.print("/ Prenom /");
@@ -88,6 +87,18 @@ public class AffichageArrayList
             System.out.print(pnc.getIdEmploye());
             System.out.print(" / "+pnc.getNomEmploye()+" / ");
             System.out.print(" / "+pnc.getPrenomEmploye()+" / ");
+            System.out.println();
+        }
+    }
+    public static void afficheAvion(ArrayList<Avion> list)
+    {
+        System.out.print("idAvion /");
+        System.out.print("/ NomModele /");
+         System.out.println();
+        for (Avion avion : list)
+        {
+            System.out.print(avion.getIdAvion());
+            System.out.print(" / "+avion.getModele().getNomModele()+" / ");
             System.out.println();
         }
     }

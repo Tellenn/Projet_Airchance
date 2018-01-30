@@ -6,6 +6,7 @@
 package DAL;
 
 import BD.DBManager;
+import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Client;
@@ -37,6 +38,29 @@ public class ImportDAL {
      */
     public ArrayList<AvionFret> importTableAvionFret() {
         return importTableAvionFret(0, null, 0, 0, 0);
+    }
+    
+    public ArrayList<Avion> importAvionDispo(String type,String dateDepart,String dateArrivee,Ville vDep)
+    {
+        ArrayList<Avion> avionDispo = new ArrayList<>();
+        if (type.equals("passager"))
+        {
+            ArrayList<AvionPassager> a = importTableAvionPassager(0,null,0,0,0,vDep);
+            for(AvionPassager avP : a)
+            {
+                avionDispo.add(avP);
+            }
+        }
+        else if (type.equals("fret"))
+        {
+            ArrayList<AvionFret> a = importTableAvionFret(0,null,0,0,vDep.getIdVille());
+            for(AvionFret avF : a)
+            {
+                avionDispo.add(avF);
+            }
+        }
+        
+        return avionDispo;
     }
 
     /**
