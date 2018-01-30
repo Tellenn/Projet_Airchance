@@ -3730,7 +3730,7 @@ INSERT INTO InstanceVol VALUES (1, 8, 20, 0, 0, 0, null, TO_DATE('2017/12/22 10:
 INSERT INTO InstanceVol VALUES (2, 15, 21, 0, 0, 2, null, TO_DATE('2017/12/28 10:00:00', 'yyyy/mm/dd hh24:mi:ss'), TO_DATE('2018/01/28 20:55:00', 'yyyy/mm/dd hh24:mi:ss'), 'Arrive');
 INSERT INTO InstanceVol VALUES (3, 1, 18, 0, 0, 4, null, TO_DATE('2018/01/28 15:00:00', 'yyyy/mm/dd hh24:mi:ss'), TO_DATE('2018/01/28 23:00:00', 'yyyy/mm/dd hh24:mi:ss'), 'Arrive');
 INSERT INTO InstanceVol VALUES (4, 4, 25, 0, 0, 16, null, TO_DATE('2018/02/15 10:30:00', 'yyyy/mm/dd hh24:mi:ss'), null, 'Cree');
-INSERT INTO InstanceVol VALUES (5, 3, 23, 0, 0, 16, null, TO_DATE('2018/03/04 13:00:00', 'yyyy/mm/dd hh24:mi:ss'), null, 'Cree');
+INSERT INTO InstanceVol VALUES (5, 3, 23, 0, 0, 14, null, TO_DATE('2018/03/04 13:00:00', 'yyyy/mm/dd hh24:mi:ss'), null, 'Cree');
 INSERT INTO InstanceVol VALUES (6, 17, 3, null, null, null, 60000, TO_DATE('2018/03/15 09:00:00', 'yyyy/mm/dd hh24:mi:ss'), null, 'Annule');
 INSERT INTO InstanceVol VALUES (7, 20, 2, null, null, null, 20000, TO_DATE('2018/04/02 15:15:00', 'yyyy/mm/dd hh24:mi:ss'), null, 'Cree');
 

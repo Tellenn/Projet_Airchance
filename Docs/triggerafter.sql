@@ -118,7 +118,7 @@ end;
 
 
 -- Maj place après réservation passager
-CREATE OR REPLACE TRIGGER t_5
+CREATE OR REPLACE TRIGGER updateNbPlacesInstance
 AFTER INSERT OR UPDATE ON ResaVolPlace
 FOR EACH ROW
 DECLARE
@@ -143,7 +143,7 @@ END;
 /
 
 -- Maj poids après réservation fret
-CREATE OR REPLACE TRIGGER t_6
+CREATE OR REPLACE TRIGGER updatePoidsInstance
 AFTER INSERT OR UPDATE ON ReservationFret
 FOR EACH ROW
 BEGIN
@@ -152,7 +152,7 @@ END;
 /
 
 -- Si on affecte un PN à un vol qui part d'une ville où il ne se trouve pas
-CREATE OR REPLACE TRIGGER t_1
+CREATE OR REPLACE TRIGGER coheVilleDepartPN
 AFTER INSERT ON EmployeInstanceVol
 FOR EACH ROW
 DECLARE

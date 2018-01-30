@@ -173,8 +173,7 @@ end;
 /** Partie de Quentin*/
 
 -- Si on affecte un PN à un vol qui part d'une ville où il ne se trouve pas
--- OK
-CREATE OR REPLACE TRIGGER t_1
+CREATE OR REPLACE TRIGGER coheVilleDepartPN
 AFTER INSERT ON EmployeInstanceVol
 FOR EACH ROW
 DECLARE
@@ -197,7 +196,7 @@ END;
 /
 
 -- Si on affecte un avion à un vol qui part d'une ville où il ne se trouve pas
-CREATE OR REPLACE TRIGGER t_2
+CREATE OR REPLACE TRIGGER coheVilleDepartAvion
 AFTER INSERT OR UPDATE ON InstanceVol
 FOR EACH ROW
 DECLARE
@@ -218,7 +217,7 @@ BEGIN
 END;
 /
 -- Verifier qu'une instance de vol de propose pas plus de places que l'avion ne peut en contenir
-CREATE OR REPLACE TRIGGER t_3
+CREATE OR REPLACE TRIGGER coheNbPlacesInstance
 AFTER INSERT OR UPDATE ON InstanceVol
 FOR EACH ROW
 DECLARE
@@ -237,7 +236,7 @@ BEGIN
 END;
 /
 -- Vérifier que l'avion dispose assez de place pour effectuer ce vol
-CREATE OR REPLACE TRIGGER t_4
+CREATE OR REPLACE TRIGGER coheNbPlacesAvion
 AFTER INSERT OR UPDATE ON InstanceVol
 FOR EACH ROW
 DECLARE
@@ -264,7 +263,7 @@ BEGIN
 END;
 /
 -- Maj place après réservation passager
-CREATE OR REPLACE TRIGGER t_5
+CREATE OR REPLACE TRIGGER updateNbPlacesInstance
 AFTER INSERT OR UPDATE ON ResaVolPlace
 FOR EACH ROW
 DECLARE
@@ -288,7 +287,7 @@ BEGIN
 END;
 /
 -- Maj poids après réservation fret
-CREATE OR REPLACE TRIGGER t_6
+CREATE OR REPLACE TRIGGER updatePoidsInstance
 AFTER INSERT OR UPDATE ON ReservationFret
 FOR EACH ROW
 BEGIN
@@ -296,7 +295,7 @@ BEGIN
 END;
 /
 -- PN.heuresVol = SUM(PiloteModele.heuresModele) pour un même pilote
-CREATE OR REPLACE TRIGGER t_7
+CREATE OR REPLACE TRIGGER coheHeuresVolPN
 AFTER INSERT OR UPDATE ON PersonnelNaviguant
 FOR EACH ROW
 DECLARE
@@ -304,7 +303,7 @@ DECLARE
 BEGIN
 	SELECT SUM(heuresModele) INTO totalHeures
 	FROM PiloteModele
-	WHERE idEmploye = :new.idEmploye;
+	WHERE idEmploye = :new.idEmploye AND typePN = 'PNT';
 
 	IF((:new.heuresVol > totalHeures) OR (:new.heuresVol < totalHeures)) THEN
 		RAISE_APPLICATION_ERROR(-20005, 'heuresVol de PN doit etre egal à la somme des heuresModele de PiloteModele');
