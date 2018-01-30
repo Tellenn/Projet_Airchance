@@ -98,6 +98,68 @@ public class ImportDAL {
     public ArrayList<PNC> importTablePNC() {
         return importTablePNC(0, "", "", "", "", "", "", 0, null);
     }
+    
+    public ArrayList<PNC> importPNCDispo(String dateDepart,String dateArrivee,Ville vDep)
+    {
+        ArrayList<PNC> res = new ArrayList();
+        /*String query = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol natural join Vol"
+                + " where numInstance in (select numInstance from InstanceVol where dateArrivee = (select min(SYSDATE - dateArrivee) from InstanceVol)) and "
+                + "(dateArrivee+duree/2) <= '"+dateDepart+"' and idEmploye=(Select idEmploye from EmployeInstanceVol natural join InstanceVol "
+                + "natural join PersonnelNaviguant where typePN='PNC' and idDerniereVille = '"+vDep.getIdVille()+"')";
+        */
+        String query = "Select idEmploye from PersonnelNaviguant"
+                + " where typePN='PNC' and idDerniereVille = "+vDep.getIdVille()+"";
+        try
+        {
+            ResultSet result = DBManager.dbExecuteQuery(query);
+            
+            while (result.next()) {
+                int idEmployeRes = result.getInt("idEmploye");
+                PNC tmp = new PNC();
+                tmp.importFromId("" + idEmployeRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                res.add(tmp);
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
+    }
+    
+    public ArrayList<PNT> importPNTDispo(String dateDepart,String dateArrivee,Ville vDep)
+    {
+        ArrayList<PNT> res = new ArrayList();
+        /*String query = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol natural join Vol"
+                + " where numInstance in (select numInstance from InstanceVol where dateArrivee = (select min(SYSDATE - dateArrivee) from InstanceVol)) and "
+                + "(dateArrivee+duree/2) <= '"+dateDepart+"' and idEmploye=(Select idEmploye from EmployeInstanceVol natural join InstanceVol "
+                + "natural join PersonnelNaviguant where typePN='PNC' and idDerniereVille = '"+vDep.getIdVille()+"')";
+        */
+        String query = "Select idEmploye from PersonnelNaviguant"
+                + " where typePN='PNT' and idDerniereVille = "+vDep.getIdVille()+"";
+        try
+        {
+            ResultSet result = DBManager.dbExecuteQuery(query);
+            
+            while (result.next()) {
+                int idEmployeRes = result.getInt("idEmploye");
+                PNT tmp = new PNT();
+                tmp.importFromId("" + idEmployeRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                res.add(tmp);
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
+    }
 
     public ArrayList<PNC> importTablePNC(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, Ville idDerniereVille) {
         String query = "Select * from PersonnelNaviguant where typePN='PNC'";

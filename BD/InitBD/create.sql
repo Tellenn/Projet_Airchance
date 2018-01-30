@@ -35,7 +35,7 @@ CREATE TABLE Client(
 	heuresCumulees  NUMBER	 (10,0)	,
 	numPasseport    VARCHAR2 (25)	,
 	CONSTRAINT Client_Pk PRIMARY KEY (idClient),
-	CONSTRAINT ck_Client_heuresCumulees CHECK (heuresCumulees > 0)
+	CONSTRAINT ck_Client_heuresCumulees CHECK (heuresCumulees >= 0)
 );
 
 ------------------------------------------------------------
@@ -139,7 +139,7 @@ CREATE TABLE PersonnelNaviguant(
 	typePN			VARCHAR2 (10) ,
 	idDerniereVille	NUMBER(10,0)  ,
 	CONSTRAINT PNT_Pk PRIMARY KEY (idEmploye),
-	CONSTRAINT ck_PN_heuresVol CHECK (heuresVol > 0)
+	CONSTRAINT ck_PN_heuresVol CHECK (heuresVol >= 0)
 );
 
 ------------------------------------------------------------
