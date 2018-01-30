@@ -18,14 +18,17 @@ import Tables.PersonnelNavigant;
 import Tables.Place;
 import Tables.Ville;
 import Tables.Vol;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -497,6 +500,75 @@ public class ExportDAL
             
             
         }
+    }
+    
+    public void deleteInstanceVol(InstanceVol iv) throws Exception
+    {
+        ImportDAL impDAL = new ImportDAL();
+        if (iv.getEtat().equals("Arrive")||iv.getEtat().equals("En cours de vol")||iv.getEtat().equals("Annule"))
+        {
+            throw new Exception("Le vol est déjà terminé");
+        }
+        else 
+        {
+            String query;
+        
+            // suppression de EmployeInstanceVol
+            query = "DELETE FROM EmployeInstanceVol WHERE numInstance ="+iv.getNumInstance();
+            try
+            {
+                DBManager.dbExecuteUpdate(query);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            // on récupère le prochain vol sur la même ligne
+            DateFormat format = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss", Locale.ENGLISH);
+            ArrayList<InstanceVol> autresVols = impDAL.importTableInstanceVol(0,iv.getNumVol().getNumVol(),0,0,0,0,0,"","","");
+            int newNumInstance = 0;
+            for(InstanceVol autreVol: autresVols)
+            {
+                if(autreVol.getNumInstance()!=iv.getNumInstance())
+                {
+                    if(format.parse(autreVol.getDateDepart()).after(format.parse(iv.getDateDepart())))
+                    {
+                        newNumInstance = autreVol.getNumInstance();
+                    }
+                }
+            }
+            
+            // on regarde si c'est du fret(2) ou du passager (1)
+            
+            if(iv.getNumVol().getType()==2)
+            {
+                if(newNumInstance == 0)
+                {
+                    query = "Delete FROM ReservationFret where numInstance = "+iv.getNumInstance();
+                }else
+                {
+                    query = "UPDATE ReservationFret SET numInstance=" + newNumInstance + " WHERE numInstance="+iv.getNumInstance();
+                }
+                
+                try
+                {
+                    DBManager.dbExecuteUpdate(query);
+                } catch (SQLException ex)
+                {
+                    Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            query = "UPDATE InstanceVol SET etat='" + "Annule" + "' WHERE numInstance="+iv.getNumInstance();
+        }
+        
     }
     
     public void exportInstanceVol(InstanceVol iv){
