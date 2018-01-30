@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +19,20 @@ import java.util.logging.Logger;
  * @author Pault
  */
 public class InstanceVol implements TableInterface{
+
+    /**
+     * @return the personnel
+     */
+    public ArrayList<PersonnelNavigant> getPersonnel() {
+        return personnel;
+    }
+
+    /**
+     * @param personnel the personnel to set
+     */
+    public void setPersonnel(ArrayList<PersonnelNavigant> personnel) {
+        this.personnel = personnel;
+    }
 
     
     // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
@@ -216,6 +231,7 @@ public class InstanceVol implements TableInterface{
     private String dateArrive;
     private String dateDepart;
     private String etat;
+    private ArrayList<PersonnelNavigant> personnel;
 
 
     
