@@ -41,7 +41,7 @@ begin
 	where mistake > 1;
 	
 	if nberror > 0 then
-		raise_application_error(-20004,'Deux meme placesne peuvent pas');
+		raise_application_error(-20004,'Deux meme places ne peuvent pas etre attribuee');
 	end if;
 end;
 /
@@ -50,11 +50,16 @@ end;
 /* Verifier qu'une date ai été mise si l'état d'un vol est arrivé*/
 /* JEU DE TEST A FAIRE, COMPILE */
 create or replace trigger coheEtatArrive
-before update on instanceVol
-for each row
+after update on instanceVol
+declare
+	nberror integer;
 begin
-	if(:new.etat = 'arrive' and :new.dateArrivee = null) then
-		raise_application_error(-20005,'Si avion arrivé, entrez l heure d arrivée');
+	select count(numInstance) into nberror
+	from InstanceVol
+	where etat = 'Arrive' and dateArrivee is null;
+
+	if(nberror > 0)then
+		raise_application_error(-20011,'Un avion doit avoir une dateArrivee si il est arrive');
 	end if;
 end;
 /

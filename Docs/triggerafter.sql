@@ -1,4 +1,7 @@
 /*Update les heures employé par rapport au nouveau vol*/
+/* MODIFIER LA TABLE OBSERVEE POUR INSTANCEVOL ET FAIRE UN LOOP*/
+		/*
+*/
 create or replace trigger updateHeureEmploye
 before update on InstanceVol
 for each row
@@ -11,36 +14,6 @@ begin
 		select duree into dureeVol
 		from vol
 		where numVol = :new.numVol;
-		--Update les clients
-		--Sur les vol passager uniquement
-		For client in (
-			select idClient
-			from ResaVolPlace natural join reservationPassager
-			where numInstance = :new.numInstance)
-		LOOP
-			select heuresCumulees into oldDuree
-			from client
-			where idClient = client.idClient;
-
-			update Client
-			set heuresCumulees = oldDuree+dureeVol
-			where idClient = client.idClient;
-		END LOOP;
-
-		--Update l'employe
-		For employe in (
-			select idEmploye
-			from EmployeInstanceVol
-			where numInstance = :new.numInstance)
-		LOOP
-			select heuresVol into oldDuree
-			from PersonnelNaviguant
-			where idEmploye = employe.idEmploye;
-
-			update PersonnelNaviguant
-			set heuresVol = oldDuree+dureeVol
-			where idEmploye = employe.idEmploye;
-		END LOOP;
 
 		--Update les heures sur modèle des PNT associés
 		select nomModele into modele
@@ -61,10 +34,68 @@ begin
 			where idEmploye = employe.idEmploye and nomModele = modele;
 		END LOOP;
 
+
+		--Update l'employe
+		For employe in (
+			select idEmploye
+			from EmployeInstanceVol
+			where numInstance = :new.numInstance)
+		LOOP
+			select heuresVol into oldDuree
+			from PersonnelNaviguant
+			where idEmploye = employe.idEmploye;
+
+			update PersonnelNaviguant
+			set heuresVol = oldDuree+dureeVol
+			where idEmploye = employe.idEmploye;
+		END LOOP;
 	end if;
 end;
 /
-	
+
+---------------
+--			 --
+-- EST BUGGE --
+--			 --
+---------------
+create or replace trigger updateHeureClient
+before update on InstanceVol
+for each row
+declare
+	dureeVol integer;
+	oldDuree integer;
+begin
+	if(:new.etat = 'Arrive') then
+		select duree into dureeVol
+		from vol
+		where numVol = :new.numVol;
+		--Update les clients
+		--Sur les vol passager uniquement
+		For client in (
+			select idClient
+			from reservationPassager
+			where numReservationP in (
+				select numReservationP
+				from ResaVolPlace
+				where numInstance = :new.numInstance))
+		LOOP
+			select heuresCumulees into oldDuree
+			from client
+			where idClient = client.idClient;
+
+			update Client
+			set heuresCumulees = oldDuree+dureeVol
+			where idClient = client.idClient;
+		END LOOP;
+	end if;
+end;
+/
+/*
+select heuresCumulees as oldDuree
+			from client
+			where idClient =
+*/
+
 /*Mise a jour des position avion et PN*/
 /* JEU DE TEST A FAIRE, COMPILE */
 create or replace trigger nouvellePosition

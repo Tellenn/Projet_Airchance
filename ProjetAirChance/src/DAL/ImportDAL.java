@@ -498,7 +498,7 @@ public class ImportDAL {
      * @return ArrayList<AvionPassager> correspondant aux parametres passés
      */
     public ArrayList<AvionPassager> importTableAvionPassager(int idAvion, Modele nomModele, int placePrem, int placeAff, int placeEco, Ville idDerniereVille) {
-        String query = "Select * from Avion where typeAvion='passager'";
+        String query = "Select * from Avion where typeAvion='passagers'";
         if (idAvion != 0) {
             query += " and idAvion=" + idAvion;
         }
@@ -529,9 +529,9 @@ public class ImportDAL {
             while (result.next()) {
                 int idAvionRes = result.getInt("idAvion");
                 String nomModeleRes = result.getString("nomModele");
-                int placePremRes = result.getInt("placePrem");
-                int placeAffRes = result.getInt("placeAff");
-                int placeEcoRes = result.getInt("placeEco");
+                int placePremRes = result.getInt("placesPrem");
+                int placeAffRes = result.getInt("placesAffaire");
+                int placeEcoRes = result.getInt("placesEco");
                 int idVilleRes = result.getInt("idDerniereVille");
                 AvionPassager tmp = new AvionPassager(idAvionRes, nomModeleRes, placePremRes, placeAffRes, placeEcoRes, idVilleRes);
                 avionP.add(tmp);
