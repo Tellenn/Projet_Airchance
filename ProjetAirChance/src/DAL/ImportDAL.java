@@ -498,7 +498,7 @@ public class ImportDAL {
         }
         if (!"".equals(etat)) {
             query += isTheFirst ? " where" : " and";
-            query += " idVilleDestination='" + etat + "'";
+            query += " etat='" + etat + "'";
         }
 
         ResultSet result;
