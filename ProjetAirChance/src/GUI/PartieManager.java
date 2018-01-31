@@ -214,9 +214,25 @@ public class PartieManager
         }
     }
 
-    private static void menuVols()
+    private static void menuVols() throws SQLException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println();
+        System.out.println("Que voulez vous faire ?");
+        System.out.println("1- Afficher tous les Vols");
+        System.out.println("2- Retour au menu principal");
+        int choix = scan.nextInt();
+        scan.nextLine();
+
+        ArrayList<Vol> allVol = importDAL.importTableVol();
+        switch (choix)
+        {
+            case 1:
+                AffichageArrayList.afficheVol(allVol);
+                break;
+            case 2:
+                mainMenu();
+                break;
+        }
     }
 
     private static void menuAvions()

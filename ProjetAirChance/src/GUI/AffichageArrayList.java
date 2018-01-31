@@ -9,6 +9,7 @@ import Tables.Avion;
 import Tables.InstanceVol;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.Vol;
 import java.util.ArrayList;
 
 /**
@@ -99,6 +100,29 @@ public class AffichageArrayList
         {
             System.out.print(avion.getIdAvion());
             System.out.print(" / "+avion.getModele().getNomModele()+" / ");
+            System.out.println();
+        }
+    }
+    public static void afficheVol(ArrayList<Vol> list)
+    {
+                
+        System.out.print("numVol /");
+        System.out.print("/ VilleDep /");
+        System.out.print("/ VilleArr /");
+        System.out.print("/ Type /");
+         System.out.println();
+        for (Vol vol : list)
+        {
+            System.out.print(vol.getNumVol());
+            System.out.print(" / "+vol.getIdVilleOrigine().getNomVille()+" / ");
+            System.out.print(" / "+vol.getIdVilleDestination().getNomVille()+" / ");
+            if (vol.getType()==1)
+            {
+                System.out.print(" / "+"passager"+" / ");
+            }else
+            {
+                System.out.print(" / "+"fret"+" / ");
+            }
             System.out.println();
         }
     }
