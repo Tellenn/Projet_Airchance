@@ -500,9 +500,7 @@ public class ExportDAL {
                     
                     
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
             }
 
