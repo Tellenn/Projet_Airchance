@@ -50,7 +50,7 @@ public class ImportDAL {
     {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
         ArrayList<Avion> avionDispo = new ArrayList<>();
-        if (type.equals("passager"))
+        if (type.equals("passagers"))
         {
             ArrayList<AvionPassager> a = importTableAvionPassager(0,null,0,0,0,vDep);
             
@@ -174,6 +174,7 @@ public class ImportDAL {
         
         try
         {
+            System.out.println(req);
             ResultSet result = DBManager.dbExecuteQuery(req);
             
             while (result.next()) {

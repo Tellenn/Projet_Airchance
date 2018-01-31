@@ -375,7 +375,7 @@ public class ExportDAL {
             } else {
                 maxId = readMaxIdAvion() + 1;
                 query = "Insert into Avion Values (" + maxId + ",'" + avion.getModele().getNomModele() + "',0 ,0,"
-                        + avion.getPlacesEco() + "," + avion.getPlacesAffaire() + "," + avion.getPlacesPrem() + ",'passager'," + avion.getIdDerniereVille().getIdVille() + ")";
+                        + avion.getPlacesEco() + "," + avion.getPlacesAffaire() + "," + avion.getPlacesPrem() + ",'passagers'," + avion.getIdDerniereVille().getIdVille() + ")";
             }
             try {
                 DBManager.dbExecuteUpdate(query);
