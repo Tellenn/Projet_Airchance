@@ -9,6 +9,9 @@ import Tables.Avion;
 import Tables.InstanceVol;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.ReservationPassager;
+import Tables.Reservation_Correspondances;
+import Tables.Reservations;
 
 import Tables.Vol;
 
@@ -126,7 +129,7 @@ public class AffichageArrayList
         System.out.print("/ VilleDep /");
         System.out.print("/ VilleArr /");
         System.out.print("/ Type /");
-         System.out.println();
+        System.out.println();
         for (Vol vol : list)
         {
             System.out.print(vol.getNumVol());
@@ -141,6 +144,40 @@ public class AffichageArrayList
             }
             System.out.println();
         }
+    }
+
+    static void afficheReservations(Reservation_Correspondances reservations) {
+        System.out.print("idClient /");
+        System.out.print("/ prixTotal /");
+        System.out.print("/ dateReservation /");
+        System.out.println();
+        System.out.print(reservations.getIdClient().getIdClient());
+        System.out.print(" / "+reservations.getPrix()+" / ");
+        System.out.println(" / "+reservations.getDateReservation());
+        
+        System.out.println("RESERVATIONS");
+
+        for(Reservations res : reservations.getReservations()){
+            if(res instanceof ReservationPassager){
+                System.out.print("numReservation /");
+                System.out.print(" / prix /");
+                System.out.print(" / dateReservation /");
+                System.out.print(" / numInstance /");
+                System.out.print(" / place / ");
+                System.out.println(" / Avion / ");
+                
+                System.out.print(res.getNumReservation());
+                System.out.print(" / "+res.getPrix()+" / ");
+                System.out.print(" / "+res.getDateReservation()+" / ");
+                System.out.println(" / "+res.getNumInstance().getNumInstance()+" / ");
+                System.out.println(" / "+((ReservationPassager)res).getNumPlace().getNumPlace()+" / ");
+                System.out.println(" / "+((ReservationPassager)res).getIdAvion().getIdAvion()+" / ");
+            }
+            
+            
+        }
+
+    
     }
 
 }

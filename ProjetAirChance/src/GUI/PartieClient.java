@@ -19,15 +19,26 @@ import java.util.logging.Logger;
 public class PartieClient
 {
 
+    
+    private static Scanner scan;
+    private static ImportDAL importDAL;
+    private static ExportDAL exportDAL;
+    private static DBManager manager;
+    private static Client client;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args)
     {
-        Scanner scan = new Scanner(System.in);
-        ImportDAL importDal = new ImportDAL();
-        ExportDAL exportDal = new ExportDAL();
-        DBManager manager = new DBManager();
+        mainMenu();
+        
+    }
+
+    private static void mainMenu() {
+        scan = new Scanner(System.in);
+        manager = new DBManager();
+        importDAL = new ImportDAL();
+        exportDAL = new ExportDAL();
         
         
         boolean conn = true;
@@ -41,12 +52,14 @@ public class PartieClient
 
             manager.dbConnect();
 
-            Client client = new Client();
+            client = new Client();
             try
             {
                 conn = true;
                 client.setFromNom(login);
+                client.fillReservations();
                 System.out.println("Vous etes connecté.");
+                menuPrincipal();
                 
             } catch (Exception ex)
             {
@@ -55,7 +68,42 @@ public class PartieClient
             }
         
         } while(conn == false);
+    }
+
+    private static void menuPrincipal() {
+
+        int choix = -1;
+
         
+        while(choix != 4){
+            switch(choix){
+                case 1:
+                    AffichageArrayList.afficheReservations(client.getReservations());
+                    choix = -1;
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                case 3:
+                    break;
+                    
+                case 4:
+                    return;
+                    
+                default:
+                    System.out.println("Menu Principal");
+                    System.out.println("1- Afficher les réservations");
+                    System.out.println("2- Ajouter une réservation");
+                    System.out.println("3- Supprimer une réservation");
+                    System.out.println("4- Modifier une réservation");
+                    System.out.println("4- Quitter");
+                    choix = scan.nextInt();
+                    scan.nextLine();
+            }
+        }
+        
+
     }
     
 }
