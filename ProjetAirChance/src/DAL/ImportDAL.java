@@ -88,8 +88,11 @@ public class ImportDAL {
                 }
                 ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,false);
                 for (InstanceVol inst : v2 ){
-                    
-                    if(simpleDate.parse(inst.getDateArrive()).before(simpleDate.parse(dateDepart)))
+                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd' 'hh:mm:ss");
+                    Date tmp = simpleDate.parse(inst.getDateDepart());
+                    LocalDateTime date = LocalDateTime.of(tmp.getMonth(),tmp.getYear(),tmp.getDay(),tmp.getHours(),tmp.getMinutes(),tmp.getSeconds());
+                                        //TROUVER SOLUTION
+                    if(simpleDate.parse(date.plusMinutes(inst.getNumVol().getDuree()).toString()).before(simpleDate.parse(dateDepart)))//
                         avionOk = false;
                 }
                 if(avionOk)
