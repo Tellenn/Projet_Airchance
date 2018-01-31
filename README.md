@@ -18,4 +18,6 @@ _Remarque : lorsqu'on crée la BD avec le script init.sql, les scripts sont lanc
 
 
 ## Partie Application
-Les fichiers principaux sont GUI/PartieManager et GUI/PartieClient qui correspondent aux interfaces utilisateurs de la partie client et manager. La partie client est commencée mais non terminée. Les scénarios présentés dans le compte rendu n°2 sont implementés dans des fichiers JUnit dans Tests Packages/
+Les fichiers principaux sont GUI/PartieManager et GUI/PartieClient qui correspondent aux interfaces utilisateurs de la partie client et manager. La partie client est commencée mais non terminée. Les scénarios présentés dans le compte rendu n°2 sont implementés dans des fichiers JUnit dans Tests Packages/ les tests ont été effectués avec le debugger pour ralentir les transactions et observer la concurrence.
+
+Tout le projet a été developpé sous Netbeans, il peut donc avoir des problèmes lors d'une utilisation sous un autre IDE.
