@@ -5,7 +5,9 @@
  */
 
 import BD.DBManager;
+import DAL.ExportDAL;
 import DAL.ImportDAL;
+import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Modele;
@@ -13,6 +15,7 @@ import Tables.Ville;
 import Tables.Vol;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -132,6 +135,26 @@ public class TestImport
         {
             Logger.getLogger(TestExport.class.getName()).log(Level.SEVERE, null, ex);
             assertFalse("Error while trying to import an AvionPassager", true);
+        }
+    }
+    
+    @Test
+    public void testAvionDispo() throws Exception
+    {//   public AvionPassager(int idAvion, String nomModele, int placesEco, int placesAffaire, int placesPrem, int idVille) {
+
+        Ville ville = new Ville();
+        ville.importFromId("3");
+        
+        AvionPassager vionvion = new AvionPassager(0,"Falcon8X",5000,5000,5000,ville.getIdVille());
+        
+        ExportDAL exp = new ExportDAL();
+        exp.exportAvionPassager(vionvion);
+        
+        ImportDAL imp = new ImportDAL();
+        ArrayList<Avion> avions = imp.importAvionDispo("passager", "2018/02/25 10:00:00", "2018/02/25 10:00:00", ville);
+        
+        if(avions.size() <= 0){
+            assertFalse("error",true);
         }
     }
 }

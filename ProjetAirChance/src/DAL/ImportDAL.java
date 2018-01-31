@@ -52,29 +52,30 @@ public class ImportDAL {
         ArrayList<Avion> avionDispo = new ArrayList<>();
         if (type.equals("passagers"))
         {
-            ArrayList<AvionPassager> a = importTableAvionPassager(0,null,0,0,0,vDep);
-            
-            for(AvionPassager avP : a)
+            ArrayList<Avion> res = new ArrayList<>();
+
+            String req = "(Select idAvion from Avion where idDerniereVille ="+vDep.getIdVille()+")"
+                    +"minus"
+                    + "(select idAvion from Avion natural join InstanceVol where dateDepart > TO_DATE('" + dateArrivee + "', 'yyyy/mm/dd hh24:mi:ss'))";
+
+            try
             {
-                boolean avionOk = true;
-                ArrayList<InstanceVol> v = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,true);
-                for (InstanceVol inst : v){
-                    if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
-                        avionOk = false;
+                ResultSet result = DBManager.dbExecuteQuery(req);
+
+                while (result.next()) {
+                    int idAvion = result.getInt("idAvion");
+                    Avion tmp = new AvionPassager();
+                    tmp.importFromId("" + idAvion);
+                    res.add(tmp);
                 }
-                ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,false);
-                for (InstanceVol inst : v2 ){
-                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd' 'hh:mm:ss");
-                    Date tmp = simpleDate.parse(inst.getDateDepart());
-                    LocalDateTime date = LocalDateTime.of(tmp.getMonth(),tmp.getYear(),tmp.getDay(),tmp.getHours(),tmp.getMinutes(),tmp.getSeconds());
-                                        //TROUVER SOLUTION
-                    if(simpleDate.parse(date.plusMinutes(inst.getNumVol().getDuree()).toString()).before(simpleDate.parse(dateDepart)))//
-                        avionOk = false;
-                }
-                
-                if(avionOk)
-                    avionDispo.add(avP);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
             }
+            return res;
         }
         else if (type.equals("fret"))
         {   //public ArrayList<AvionFret> importTableAvionFret(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, int idDerniereVille)
