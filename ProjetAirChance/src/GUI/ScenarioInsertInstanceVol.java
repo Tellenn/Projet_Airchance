@@ -50,7 +50,7 @@ public class ScenarioInsertInstanceVol
         String dateDep = "2018/02/10 12:00:00";
         System.out.println("Date d'arrivee 2018/02/10 21:00:00");
         String dateArr = "2018/02/10 21:00:00";
-        System.out.println("Le volID est 1 (vol paris-new york)");
+        System.out.println("Le volID est 1 (vol paris-new york,passager)");
         int volID = 1;
 
         Vol numvol = new Vol();
