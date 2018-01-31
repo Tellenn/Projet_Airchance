@@ -98,7 +98,7 @@ public class Vol implements TableInterface{
             
         try {
             this.numVol = result.getInt("numVol");
-            this.type = result.getInt("type");
+            this.type = result.getInt("type") +1;
             this.duree = result.getInt("duree");
             this.distance = result.getInt("distance");
             this.placesMinEco = result.getInt("placesMinEco");

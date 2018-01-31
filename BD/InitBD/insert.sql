@@ -3681,6 +3681,7 @@ INSERT INTO PersonnelNaviguant VALUES (17, 'Jodoin', 'Anne', '46', 'boulevard de
 INSERT INTO PersonnelNaviguant VALUES (18, 'Lauzier', 'Thierry', '14', 'cours Jean Jaures', '33100', 'BORDEAUX', 655, 'PNC', 14);
 INSERT INTO PersonnelNaviguant VALUES (19, 'Proulx', 'Josephine', '43', 'avenue Voltaire', '06520', 'MAGAGNOSC', 0, 'PNC', 1);
 INSERT INTO PersonnelNaviguant VALUES (20, 'Briard', 'Jules', '11', 'rue Reine Elisabeth', '48000', 'MENDE', 0, 'PNC', 1);
+INSERT INTO PersonnelNaviguant VALUES (21, 'Ketchum', 'Ash', '28', 'Dans la caravane', '65778', 'Johto', 0, 'PNT', 1);
 
 -- Vols
 -- (passagers) Paris => New York
