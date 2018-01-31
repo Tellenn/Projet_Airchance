@@ -8,13 +8,20 @@ package GUI;
 import BD.DBManager;
 import DAL.ExportDAL;
 import DAL.ImportDAL;
+import Tables.Avion;
+import Tables.AvionPassager;
 import Tables.Client;
 import Tables.InstanceVol;
+
 import Tables.Reservation_Correspondances;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import Tables.Place;
+import Tables.ReservationPassager;
+import Tables.Reservation_Correspondances;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,15 +36,24 @@ public class PartieClient
     private static ImportDAL importDAL;
     private static ExportDAL exportDAL;
     private static DBManager manager;
-    
+
+    private static Client client;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException
     {
-        Client client = new Client();
-        connexionClient(client);
-        menuClient(client);
+        mainMenu();
+        
+    }
+
+    private static void mainMenu() {
+        scan = new Scanner(System.in);
+        manager = new DBManager();
+        importDAL = new ImportDAL();
+        exportDAL = new ExportDAL();
+
         
     }
     
@@ -57,12 +73,16 @@ public class PartieClient
 
             manager.dbConnect();
 
-            //Client client = new Client();
+            client = new Client();
             try
             {
                 conn = true;
                 client.setFromNom(login);
+                client.fillReservations();
                 System.out.println("Vous etes connecté.");
+
+                menuPrincipal();
+                
             } catch (Exception ex)
             {
                 System.out.println("Nous n'avons pas pu vous authentifier veuillez vous reconnecter.");
@@ -71,59 +91,80 @@ public class PartieClient
         
         } while(conn == false);
     }
-    
-    private static void menuClient(Client client) throws SQLException{
-        
-        System.out.println();
-        System.out.println("Que voulez vous faire ?");
-        System.out.println("1- Afficher tous les instancesVols");
-        System.out.println("2- Créer une réservation");
-        System.out.println("3- Annuler une réservation");
-        System.out.println("4- Afficher mes réservations");
-        
-        int choix = scan.nextInt();
-        scan.nextLine();
 
-        ArrayList<InstanceVol> allInstanceVol = importDAL.importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "", "", "Cree");
-        switch (choix)
-        {
-            case 1:
-                AffichageArrayList.afficheInstanceVol(allInstanceVol);
-                break;
-            case 2:
-                nouvelleResa(client);
-                break;
-            case 3:
-                
-                break;
-            case 4:
-                
-                break;
+    private static void menuPrincipal() {
+
+        int choix = -1;
+
+        
+        while(choix != 4){
+            switch(choix){
+                case 1:
+                    AffichageArrayList.afficheReservations(client.getReservations());
+                    choix = -1;
+                    break;
+                    
+                case 2:
+                    
+                    Reservation_Correspondances rc = new Reservation_Correspondances();
+                    rc.importFromIdClient(""+client.getIdClient());
+                    
+                    System.out.println("Ajouter une réservation");
+                    System.out.println("Quel type de réservation voulez-vous ? 'Passager'/'Fret'");
+                    String typeRes = scan.nextLine();
+                    if (typeRes.equals("Passager")){
+                        
+                        ReservationPassager rp = new ReservationPassager();
+                        System.out.println("Choississez l'instanceVol : ");
+                        AffichageArrayList.afficheInstanceVol(importDAL.importTableInstanceVol());
+                        System.out.println("Numéro de l'instance : ");
+                        int numInstance = scan.nextInt();
+                        scan.nextLine();
+                        
+                        System.out.println("Choississez la place :");
+                        AffichageArrayList.affichePlace(importDAL.importPlaceWithParameter(0, 0, "", "", ""+numInstance));
+                        System.out.println("Numéro de la place : ");
+                        int numPlace = scan.nextInt();
+                        scan.nextLine();
+                        
+                        InstanceVol iv = importDAL.importTableInstanceVol(numInstance, 0, 0, 0, 0, 0, 0, "", "", "").get(0);
+                        Place p = importDAL.importPlaceWithParameter(numPlace, iv.getIdAvion().getIdAvion(), "", "", "").get(0);
+                        AvionPassager a = new AvionPassager();
+                        a.importFromId(""+p.getIdAvionP());
+                        
+                        rp.setNumInstance(iv);
+                        rp.setNumPlace(p);
+                        rp.setDateReservation("2018/02/01 10:30:00");
+                        rp.setIdAvion(a);
+                        
+                        rc.addReservations(rp);
+                        exportDAL.exportReservationCorrespondance(rc);
+                                
+                        
+                    }
+                    choix = -1;
+                    break;
+                    
+                case 3:
+                    break;
+                    
+                case 4:
+                    return;
+                    
+                default:
+                    System.out.println("Menu Principal");
+                    System.out.println("1- Afficher les réservations");
+                    System.out.println("2- Ajouter une réservation");
+                    System.out.println("3- Supprimer une réservation");
+                    System.out.println("4- Modifier une réservation");
+                    System.out.println("4- Quitter");
+                    choix = scan.nextInt();
+                    scan.nextLine();
+            }
         }
-    }
-    
-    private static void nouvelleResa(Client client) throws SQLException{
         
-        System.out.println();
-        System.out.println("Que voulez vous faire ?");
-        System.out.println("1- Nouvelle réservation passager");
-        System.out.println("2- Nouvelle réservation fret");
-        System.out.println("3- Retour au menu principal");
-        
-        int choix = scan.nextInt();
-        scan.nextLine();
 
-        switch (choix)
-        {
-            case 1:
 
-                break;
-            case 2:
-                break;
-            case 3:
-                menuClient(client);
-                break;
-        }
     }
     
 }

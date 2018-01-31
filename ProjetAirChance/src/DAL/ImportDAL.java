@@ -6,6 +6,7 @@
 package DAL;
 
 import BD.DBManager;
+import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
 import Tables.Client;
@@ -13,13 +14,19 @@ import Tables.InstanceVol;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.PersonnelNavigant;
 import Tables.Place;
 import Tables.Ville;
 import Tables.Vol;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +44,64 @@ public class ImportDAL {
      */
     public ArrayList<AvionFret> importTableAvionFret() {
         return importTableAvionFret(0, null, 0, 0, 0);
+    }
+    
+    public ArrayList<Avion> importAvionDispo(String type,String dateDepart,String dateArrivee,Ville vDep) throws ParseException
+    {
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        ArrayList<Avion> avionDispo = new ArrayList<>();
+        if (type.equals("passager"))
+        {
+            ArrayList<AvionPassager> a = importTableAvionPassager(0,null,0,0,0,vDep);
+            
+            for(AvionPassager avP : a)
+            {
+                boolean avionOk = true;
+                ArrayList<InstanceVol> v = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,true);
+                for (InstanceVol inst : v){
+                    if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
+                        avionOk = false;
+                }
+                ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,false);
+                for (InstanceVol inst : v2 ){
+                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd' 'hh:mm:ss");
+                    Date tmp = simpleDate.parse(inst.getDateDepart());
+                    LocalDateTime date = LocalDateTime.of(tmp.getMonth(),tmp.getYear(),tmp.getDay(),tmp.getHours(),tmp.getMinutes(),tmp.getSeconds());
+                                        //TROUVER SOLUTION
+                    if(simpleDate.parse(date.plusMinutes(inst.getNumVol().getDuree()).toString()).before(simpleDate.parse(dateDepart)))//
+                        avionOk = false;
+                }
+                
+                if(avionOk)
+                    avionDispo.add(avP);
+            }
+        }
+        else if (type.equals("fret"))
+        {   //public ArrayList<AvionFret> importTableAvionFret(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, int idDerniereVille)
+            ArrayList<AvionFret> a = importTableAvionFret(0,null,0,0,vDep.getIdVille());
+            for(AvionFret avF : a)
+            {
+                boolean avionOk = true;
+                ArrayList<InstanceVol> v = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,true);
+                for (InstanceVol inst : v){
+                    if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
+                        avionOk = false;
+                }
+                ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,false);
+                for (InstanceVol inst : v2 ){
+                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd' 'hh:mm:ss");
+                    Date tmp = simpleDate.parse(inst.getDateDepart());
+                    LocalDateTime date = LocalDateTime.of(tmp.getMonth(),tmp.getYear(),tmp.getDay(),tmp.getHours(),tmp.getMinutes(),tmp.getSeconds());
+                                        //TROUVER SOLUTION
+                    if(simpleDate.parse(date.plusMinutes(inst.getNumVol().getDuree()).toString()).before(simpleDate.parse(dateDepart)))//
+                        avionOk = false;
+                }
+                if(avionOk)
+                    avionDispo.add(avF);
+            }
+        }
+        
+        return avionDispo;
     }
 
     /**
@@ -99,25 +164,22 @@ public class ImportDAL {
         return importTablePNC(0, "", "", "", "", "", "", 0, null);
     }
     
-    public ArrayList<PNC> importPNCDispo(String dateDepart,String dateArrivee,Ville vDep)
+    public ArrayList<PNC> importPNCDispo(String dateDepart,String dateArrivee,Ville vDep) throws ParseException
     {
-        ArrayList<PNC> res = new ArrayList();
-        /*String query = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol natural join Vol"
-                + " where numInstance in (select numInstance from InstanceVol where dateArrivee = (select min(SYSDATE - dateArrivee) from InstanceVol)) and "
-                + "(dateArrivee+duree/2) <= '"+dateDepart+"' and idEmploye=(Select idEmploye from EmployeInstanceVol natural join InstanceVol "
-                + "natural join PersonnelNaviguant where typePN='PNC' and idDerniereVille = '"+vDep.getIdVille()+"')";
-        */
-        String query = "Select idEmploye from PersonnelNaviguant"
-                + " where typePN='PNC' and idDerniereVille = "+vDep.getIdVille()+"";
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        ArrayList<PNC> res = new ArrayList<>();
+        
+        String req = "(select idemploye from personnelNaviguant where idDerniereVille ="+vDep.getIdVille()+
+                " and typePN='PNC') MINUS (select idemploye from personnelNaviguant Natural join EmployeInstanceVol natural join InstanceVol where dateDepart> to_date(SYSDATE, 'yyyy/mm/dd hh24:mi:ss') and typePN='PNC' and etat!='Arrive')";
+        
         try
         {
-            ResultSet result = DBManager.dbExecuteQuery(query);
+            ResultSet result = DBManager.dbExecuteQuery(req);
             
             while (result.next()) {
                 int idEmployeRes = result.getInt("idEmploye");
                 PNC tmp = new PNC();
                 tmp.importFromId("" + idEmployeRes);
-                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 res.add(tmp);
             }
         } catch (SQLException ex)
@@ -132,23 +194,19 @@ public class ImportDAL {
     
     public ArrayList<PNT> importPNTDispo(String dateDepart,String dateArrivee,Ville vDep)
     {
-        ArrayList<PNT> res = new ArrayList();
-        /*String query = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol natural join Vol"
-                + " where numInstance in (select numInstance from InstanceVol where dateArrivee = (select min(SYSDATE - dateArrivee) from InstanceVol)) and "
-                + "(dateArrivee+duree/2) <= '"+dateDepart+"' and idEmploye=(Select idEmploye from EmployeInstanceVol natural join InstanceVol "
-                + "natural join PersonnelNaviguant where typePN='PNC' and idDerniereVille = '"+vDep.getIdVille()+"')";
-        */
-        String query = "Select idEmploye from PersonnelNaviguant"
-                + " where typePN='PNT' and idDerniereVille = "+vDep.getIdVille()+"";
+        ArrayList<PNT> res = new ArrayList<>();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        String req = "(select idemploye from personnelNaviguant where idDerniereVille ="+vDep.getIdVille()+
+                " and typePN='PNT') MINUS (select idemploye from personnelNaviguant Natural join EmployeInstanceVol natural join InstanceVol where dateDepart> to_date(SYSDATE, 'yyyy/mm/dd hh24:mi:ss') and typePN='PNT' and etat!='Arrive')";
+        
         try
         {
-            ResultSet result = DBManager.dbExecuteQuery(query);
+            ResultSet result = DBManager.dbExecuteQuery(req);
             
             while (result.next()) {
                 int idEmployeRes = result.getInt("idEmploye");
                 PNT tmp = new PNT();
                 tmp.importFromId("" + idEmployeRes);
-                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 res.add(tmp);
             }
         } catch (SQLException ex)
@@ -217,6 +275,7 @@ public class ImportDAL {
 
         return pnc;
     }
+ 
 
     public ArrayList<PNT> importTablePNT() {
         return importTablePNT(0, "", "", "", "", "", "", 0, 0);
@@ -278,6 +337,42 @@ public class ImportDAL {
         }
 
         return pnt;
+    }
+    
+    public PersonnelNavigant importTablePN(int idEmploye){
+        String query = "Select * from PersonnelNaviguant where idEmploye="+idEmploye;
+        PersonnelNavigant retour = null;
+        ResultSet result;
+        try {
+            result = DBManager.dbExecuteQuery(query);
+
+            while (result.next()) {
+                int idEmployeRes = result.getInt("idEmploye");
+                String nomEmployeRes = result.getString("nomEmploye");
+                String prenomEmployeRes = result.getString("prenomEmploye");
+                String numRueEmployeRes = result.getString("numRueEmploye");
+                String rueEmployeRes = result.getString("rueEmploye");
+                String cpEmployeRes = result.getString("cpEmploye");
+                String villeEmployeRes = result.getString("villeEmploye");
+                int heuresVolRes = result.getInt("heuresVol");
+                int idDerniereVilleRes = result.getInt("idDerniereVille");
+                if(result.getString("typePN").equals("PNT")){
+                    retour = new PNT(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
+                    ((PNT)retour).fillPiloteModele();
+                }
+                else{
+                    retour = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
+                    ((PNC)retour).fillLanguePNC();
+                }
+
+                
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return retour;
     }
 
     public ArrayList<Modele> importTableModele(String nomModele, int nbPilotes, int rayonAction) {
@@ -468,22 +563,22 @@ public class ImportDAL {
         if (placesRestEco != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " placesRestEco=" + placesRestEco;
+            query += " placesRestEco>" + placesRestEco;
         }
         if (placesRestAff != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " placesRestAff=" + placesRestAff;
+            query += " placesRestAff>" + placesRestAff;
         }
         if (placesRestPrem != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " placesRestPrem=" + placesRestPrem;
+            query += " placesRestPrem>" + placesRestPrem;
         }
         if (poidsRest != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " poidsRest=" + poidsRest;
+            query += " poidsRest>" + poidsRest;
         }
         if (dateDepart != "") {
             query += isTheFirst ? " where" : " and";
@@ -501,6 +596,66 @@ public class ImportDAL {
             query += " etat='" + etat + "'";
         }
 
+        ResultSet result;
+        ArrayList<InstanceVol> iv = new ArrayList<>();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        try {
+            result = DBManager.dbExecuteQuery(query);
+
+            while (result.next()) {
+                int numInstanceRes = result.getInt("numInstance");
+                int numVolRes = result.getInt("numVol");
+                int idAvionRes = result.getInt("idAvion");
+                int placesRestEcoRes = result.getInt("placesRestEco");
+                int placesRestAffRes = result.getInt("placesRestAff");
+                int placesRestPremRes = result.getInt("placesRestPrem");
+                int poidsRestRes = result.getInt("poidsRest");
+                String dateDepartRes = simpleDate.format(result.getDate("dateDepart"));
+                java.util.Date dateArriveeTmp = result.getDate("dateArrivee");
+
+                String dateArriveeRes = (dateArriveeTmp == null) ? "" : simpleDate.format(result.getDate("dateArrivee"));
+                String etatRes = result.getString("etat");
+                InstanceVol tmp = new InstanceVol(numInstanceRes, numVolRes, idAvionRes, placesRestEcoRes, placesRestAffRes, placesRestPremRes, poidsRestRes, dateDepartRes, dateArriveeRes, etatRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                iv.add(tmp);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return iv;
+
+    }
+    
+    public ArrayList<InstanceVol> importTableInstanceVolByDate(int idAvion,String dateDepart, String dateArrivee, boolean sup) {
+        String query = "Select * from InstanceVol";
+        boolean isTheFirst = true;
+        if (idAvion != 0) {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " idAvion=" + idAvion;
+        }
+        if (dateDepart != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            if(sup){
+                query += " dateDepart>TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }else{
+                query += " dateDepart<TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }
+            
+        }
+        if (dateArrivee != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            if(sup){
+                query += " dateDepart>TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }else{
+                query += " dateDepart<TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }
+        }
+        query += "and etat!='Annule'";
         ResultSet result;
         ArrayList<InstanceVol> iv = new ArrayList<>();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
@@ -610,17 +765,37 @@ public class ImportDAL {
     }
 
     public ArrayList<Place> importPlaceWithParameter(int numPlace, int idAvion, String position, String classe, String numInstance) {
-        String query = "Select * from Place where idAvion=" + idAvion;
+        String query = "Select * from Place";
+        boolean isTheFirst = true;
         if (numPlace != 0) {
-            query += " and numPlace=" + numPlace;
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " numPlace=" + numPlace;
         }
         if (!position.equals("")) {
-            query += " and position='" + position + "'";
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " position='" + position + "'";
         }
 
-        if (!classe.equals("")) {
-            query += " and classe<=" + classe;
+
+        if(idAvion != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " idAvion="+idAvion;
         }
+        if (!classe.equals("")) {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " classe<=" + classe;
+
+        }
+        /*
+        if(!numInstance.equals("")){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " numInstance="+numInstance;
+        }*/
         ArrayList<Place> placeTot = importTablePlace(query);
 
         if (!numInstance.equals("")) {
