@@ -588,7 +588,7 @@ public class ExportDAL {
                         prix = prix * coeff;
                     }
                     
-                    query = "Insert into ResaVolPlace values ("+r.getNumReservation()+", "+((ReservationPassager) r).getNumInstance().getNumInstance()+", "+((ReservationPassager) r).getNumPlace().getNumPlace()+", "+((ReservationPassager) r).getIdAvion().getIdAvion()+", "+prix+")";
+                    query = "Insert into ResaVolPlace values ("+maxId+", "+((ReservationPassager) r).getNumInstance().getNumInstance()+", "+((ReservationPassager) r).getNumPlace().getNumPlace()+", "+((ReservationPassager) r).getIdAvion().getIdAvion()+", "+prix+")";
 
 
 

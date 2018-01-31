@@ -692,6 +692,40 @@ public class ImportDAL {
         return importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "", "", "");
     }
 
+    public ArrayList<InstanceVol> importTableInstanceVolPassager() {
+        String query = "Select * from InstanceVol where poidsRest is null";
+        ResultSet result;
+        ArrayList<InstanceVol> iv = new ArrayList<>();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        
+        try {
+            result = DBManager.dbExecuteQuery(query);
+            while(result.next()){
+                int numInstanceRes = result.getInt("numInstance");
+                int numVolRes = result.getInt("numVol");
+                int idAvionRes = result.getInt("idAvion");
+                int placesRestEcoRes = result.getInt("placesRestEco");
+                int placesRestAffRes = result.getInt("placesRestAff");
+                int placesRestPremRes = result.getInt("placesRestPrem");
+                int poidsRestRes = result.getInt("poidsRest");
+                String dateDepartRes = simpleDate.format(result.getDate("dateDepart"));
+                java.util.Date dateArriveeTmp = result.getDate("dateArrivee");
+
+                String dateArriveeRes = (dateArriveeTmp == null) ? "" : simpleDate.format(result.getDate("dateArrivee"));
+                String etatRes = result.getString("etat");
+                InstanceVol tmp = new InstanceVol(numInstanceRes, numVolRes, idAvionRes, placesRestEcoRes, placesRestAffRes, placesRestPremRes, poidsRestRes, dateDepartRes, dateArriveeRes, etatRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                iv.add(tmp);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return iv;
+        
+    }
     /**
      * importTable -> ArrayList<AvionPassager>
      * récupère dans l'ArrayList les AvionPassagers
@@ -968,4 +1002,6 @@ public class ImportDAL {
     public ArrayList<Client> importTableClient(){
         return importTableClient(0, "", "", "", "", 0, "", 0, "");
     }
+
+    
 }
