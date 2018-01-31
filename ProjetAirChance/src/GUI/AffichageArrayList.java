@@ -156,8 +156,8 @@ public class AffichageArrayList
                 System.out.print(res.getNumReservation());
                 System.out.print(" / "+res.getPrix()+" / ");
                 System.out.print(" / "+res.getDateReservation()+" / ");
-                System.out.println(" / "+res.getNumInstance().getNumInstance()+" / ");
-                System.out.println(" / "+((ReservationPassager)res).getNumPlace().getNumPlace()+" / ");
+                System.out.print(" / "+res.getNumInstance().getNumInstance()+" / ");
+                System.out.print(" / "+((ReservationPassager)res).getNumPlace().getNumPlace()+" / ");
                 System.out.println(" / "+((ReservationPassager)res).getIdAvion().getIdAvion()+" / ");
             }
             
