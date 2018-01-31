@@ -304,7 +304,7 @@ public class ExportDAL {
     public void exportVille(ArrayList<Ville> villes) {
         int maxId;
         String query;
-
+        
         for (Ville ville : villes) {
             if ((maxId = ville.getIdVille()) != 0) {
                 query = "Update Ville set nomVille='" + ville.getNomVille() + "', paysVille='" + ville.getPaysVille() + "' Where idVille=" + maxId;
