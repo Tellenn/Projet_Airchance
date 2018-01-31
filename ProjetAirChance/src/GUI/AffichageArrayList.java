@@ -9,6 +9,8 @@ import Tables.Avion;
 import Tables.InstanceVol;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.Place;
+import Tables.ReservationFret;
 import Tables.ReservationPassager;
 import Tables.Reservation_Correspondances;
 import Tables.Reservations;
@@ -159,25 +161,62 @@ public class AffichageArrayList
 
         for(Reservations res : reservations.getReservations()){
             if(res instanceof ReservationPassager){
-                System.out.print("numReservation /");
+                System.out.print("Type");
+                System.out.print(" / numReservation /");
                 System.out.print(" / prix /");
                 System.out.print(" / dateReservation /");
                 System.out.print(" / numInstance /");
                 System.out.print(" / place / ");
                 System.out.println(" / Avion / ");
                 
-                System.out.print(res.getNumReservation());
+                System.out.print("PASSAGER");
+                System.out.print(" / "+res.getNumReservation()+" / ");
                 System.out.print(" / "+res.getPrix()+" / ");
                 System.out.print(" / "+res.getDateReservation()+" / ");
                 System.out.print(" / "+res.getNumInstance().getNumInstance()+" / ");
                 System.out.print(" / "+((ReservationPassager)res).getNumPlace().getNumPlace()+" / ");
                 System.out.println(" / "+((ReservationPassager)res).getIdAvion().getIdAvion()+" / ");
+            }else{
+                System.out.print("Type");
+                System.out.print(" / numReservation /");
+                System.out.print(" / prix /");
+                System.out.print(" / dateReservation /");
+                System.out.print(" / numInstance /");
+                System.out.print(" / poids / ");
+                System.out.println(" / volume / ");
+                
+                System.out.print("FRET");
+                System.out.print(" / "+res.getNumReservation()+" / ");
+                System.out.print(" / "+res.getPrix()+" / ");
+                System.out.print(" / "+res.getDateReservation()+" / ");
+                System.out.print(" / "+res.getNumInstance().getNumInstance()+" / ");
+                System.out.print(" / "+((ReservationFret)res).getPoids()+" / ");
+                System.out.println(" / "+((ReservationFret)res).getVolume()+" / ");
             }
             
             
         }
 
     
+    }
+
+    static void affichePlace(ArrayList<Place> importPlaceWithParameter) {
+        System.out.print("numPlace /");
+        System.out.print("/ idAvion /");
+        System.out.print("/ position /");
+        System.out.print("/ classe /");
+        System.out.println();
+        for (Place place : importPlaceWithParameter)
+        {
+            if(!place.getRes()){
+                System.out.print(place.getNumPlace());
+                System.out.print(" / "+place.getIdAvionP()+" / ");
+                System.out.print(" / "+place.getPosition()+" / ");
+                System.out.print(" / "+place.getClasse()+" / ");
+                System.out.println();
+            }
+            
+        }
     }
 
 }

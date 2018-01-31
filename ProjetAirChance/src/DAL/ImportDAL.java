@@ -760,18 +760,36 @@ public class ImportDAL {
     }
 
     public ArrayList<Place> importPlaceWithParameter(int numPlace, int idAvion, String position, String classe, String numInstance) {
-        String query = "Select * from Place where idAvion=" + idAvion;
+        String query = "Select * from Place";
+        boolean isTheFirst = true;
         if (numPlace != 0) {
-            query += " and numPlace=" + numPlace;
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " numPlace=" + numPlace;
         }
         if (!position.equals("")) {
-            query += " and position='" + position + "'";
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " position='" + position + "'";
         }
 
 
+        if(idAvion != 0){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " idAvion="+idAvion;
+        }
         if (!classe.equals("")) {
-            query += " and classe<=" + classe;
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " classe<=" + classe;
 
+        }
+        
+        if(!numInstance.equals("")){
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " numInstance="+numInstance;
         }
         ArrayList<Place> placeTot = importTablePlace(query);
 

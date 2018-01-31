@@ -8,7 +8,13 @@ package GUI;
 import BD.DBManager;
 import DAL.ExportDAL;
 import DAL.ImportDAL;
+import Tables.Avion;
+import Tables.AvionPassager;
 import Tables.Client;
+import Tables.InstanceVol;
+import Tables.Place;
+import Tables.ReservationPassager;
+import Tables.Reservation_Correspondances;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,6 +89,44 @@ public class PartieClient
                     break;
                     
                 case 2:
+                    
+                    Reservation_Correspondances rc = new Reservation_Correspondances();
+                    rc.importFromIdClient(""+client.getIdClient());
+                    
+                    System.out.println("Ajouter une réservation");
+                    System.out.println("Quel type de réservation voulez-vous ? 'Passager'/'Fret'");
+                    String typeRes = scan.nextLine();
+                    if (typeRes.equals("Passager")){
+                        
+                        ReservationPassager rp = new ReservationPassager();
+                        System.out.println("Choississez l'instanceVol : ");
+                        AffichageArrayList.afficheInstanceVol(importDAL.importTableInstanceVol());
+                        System.out.println("Numéro de l'instance : ");
+                        int numInstance = scan.nextInt();
+                        scan.nextLine();
+                        
+                        System.out.println("Choississez la place :");
+                        AffichageArrayList.affichePlace(importDAL.importPlaceWithParameter(0, 0, "", "", ""+numInstance));
+                        System.out.println("Numéro de la place : ");
+                        int numPlace = scan.nextInt();
+                        scan.nextLine();
+                        
+                        InstanceVol iv = importDAL.importTableInstanceVol(numInstance, 0, 0, 0, 0, 0, 0, "", "", "").get(0);
+                        Place p = importDAL.importPlaceWithParameter(numPlace, iv.getIdAvion().getIdAvion(), "", "", "").get(0);
+                        AvionPassager a = new AvionPassager();
+                        a.importFromId(""+p.getIdAvionP());
+                        
+                        rp.setNumInstance(iv);
+                        rp.setNumPlace(p);
+                        rp.setDateReservation("2018/02/01 10:30:00");
+                        rp.setIdAvion(a);
+                        
+                        rc.addReservations(rp);
+                        exportDAL.exportReservationCorrespondance(rc);
+                                
+                        
+                    }
+                    choix = -1;
                     break;
                     
                 case 3:
