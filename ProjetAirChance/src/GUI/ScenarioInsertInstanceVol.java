@@ -45,6 +45,7 @@ public class ScenarioInsertInstanceVol
         manager = new DBManager();
         manager.dbConnect();
         manager.changeAutocommit(false);
+        manager.dbChangeIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
         System.out.println("Date de départ 2018/01/10 00:00:00");
         String dateDep = "2018/02/10 12:00:00";
@@ -66,7 +67,7 @@ public class ScenarioInsertInstanceVol
         {
             typ = "fret";
         }
-        ArrayList<Avion> avionDispo;
+        ArrayList<Avion> avionDispo = null;
         try
         {
             avionDispo = importDAL.importAvionDispo(typ, dateDep, dateArr, numvol.getIdVilleOrigine());
@@ -77,8 +78,7 @@ public class ScenarioInsertInstanceVol
         }
 
         System.out.println("Quel est l'ID de l'avion a utiliser ?");
-        int avionID = scan.nextInt();
-        scan.nextLine();
+        int avionID = avionDispo.get(0).getIdAvion();
 
         InstanceVol volInstance = new InstanceVol(0, volID, avionID, 0, 0, 0, 0, dateDep, dateArr, "Cree");
 
