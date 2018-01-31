@@ -166,6 +166,7 @@ public class ProjetAirChance extends Application {
              c.get(0).setCpClient(72000);
              dalExp.exportTableClient(c);
              
+             
             
             
             

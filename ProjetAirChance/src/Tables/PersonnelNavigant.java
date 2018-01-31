@@ -35,6 +35,9 @@ public interface PersonnelNavigant {
     public int getHeuresVol();
     public void setHeuresVol(int heuresVol);
     
+    public Ville getIdDerniereVille();
+    public void setIdDerniereVille(Ville idDerniereVille);
+    
     public void importFromId(String id);
     
 }

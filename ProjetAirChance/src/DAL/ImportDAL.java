@@ -14,6 +14,7 @@ import Tables.InstanceVol;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.PersonnelNavigant;
 import Tables.Place;
 import Tables.Ville;
 import Tables.Vol;
@@ -302,6 +303,42 @@ public class ImportDAL {
         }
 
         return pnt;
+    }
+    
+    public PersonnelNavigant importTablePN(int idEmploye){
+        String query = "Select * from PersonnelNaviguant where idEmploye="+idEmploye;
+        PersonnelNavigant retour = null;
+        ResultSet result;
+        try {
+            result = DBManager.dbExecuteQuery(query);
+
+            while (result.next()) {
+                int idEmployeRes = result.getInt("idEmploye");
+                String nomEmployeRes = result.getString("nomEmploye");
+                String prenomEmployeRes = result.getString("prenomEmploye");
+                String numRueEmployeRes = result.getString("numRueEmploye");
+                String rueEmployeRes = result.getString("rueEmploye");
+                String cpEmployeRes = result.getString("cpEmploye");
+                String villeEmployeRes = result.getString("villeEmploye");
+                int heuresVolRes = result.getInt("heuresVol");
+                int idDerniereVilleRes = result.getInt("idDerniereVille");
+                if(result.getString("typePN").equals("PNT")){
+                    retour = new PNT(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
+                    ((PNT)retour).fillPiloteModele();
+                }
+                else{
+                    retour = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueEmployeRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerniereVilleRes);
+                    ((PNC)retour).fillLanguePNC();
+                }
+
+                
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return retour;
     }
 
     public ArrayList<Modele> importTableModele(String nomModele, int nbPilotes, int rayonAction) {

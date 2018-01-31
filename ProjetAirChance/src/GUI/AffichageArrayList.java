@@ -9,6 +9,7 @@ import Tables.Avion;
 import Tables.InstanceVol;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.PersonnelNavigant;
 import java.util.ArrayList;
 
 /**
@@ -78,7 +79,7 @@ public class AffichageArrayList
     }
     public static void affichePNT(ArrayList<PNT> list)
     {
-        System.out.print("numPNC /");
+        System.out.print("numPNT /");
         System.out.print("/ Nom /");
         System.out.print("/ Prenom /");
          System.out.println();
@@ -102,4 +103,6 @@ public class AffichageArrayList
             System.out.println();
         }
     }
+
+
 }

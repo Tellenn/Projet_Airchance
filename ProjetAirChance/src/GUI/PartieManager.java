@@ -104,7 +104,7 @@ public class PartieManager
                 Vol numvol = new Vol();
                 numvol.importFromId(""+volID);
                 
-                System.out.println("Voici les avions disponible");
+                System.out.println("Voici les avions disponibles");
                 int type = numvol.getType();
                 String typ;
                 if (type == 1)
@@ -226,7 +226,211 @@ public class PartieManager
 
     private static void menuPN()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        int choix = -1;
+        boolean continu = true;
+
+
+        while(choix != 5){
+            switch(choix){
+            case 1 :
+// <editor-fold defaultstate="collapsed" desc=" Afficher PN ">
+                    System.out.println("Reading PersonnelNaviguant...");
+                    ArrayList<PNT> pnt = importDAL.importTablePNT();
+                    ArrayList<PNC> pnc = importDAL.importTablePNC();
+                    AffichageArrayList.affichePNT(pnt);
+                    AffichageArrayList.affichePNC(pnc);
+                    choix = -1;
+                    break;
+
+// </editor-fold>
+                
+            case 2:
+// <editor-fold defaultstate="collapsed" desc=" Ajouter PN ">
+                    System.out.println("Ajout d'un PN");
+                    System.out.println("Nom du PN :");
+                    scan.nextLine();
+                    String nomPN = scan.nextLine();
+                    
+                    System.out.println("Prénom du PN :");
+                    String prenomPN = scan.nextLine();
+                    
+                    System.out.println("ADRESSE");
+                    System.out.println(" | numéro de rue : ");
+                    String numRuePN = scan.nextLine();
+                    System.out.println(" | nom de rue : ");
+                    String ruePN = scan.nextLine();
+                    System.out.println(" | code Postal : ");
+                    String cpPN = scan.nextLine();
+                    System.out.println(" | Ville : ");
+                    String villePN = scan.nextLine();
+                    String typePN;
+                    do {
+                        System.out.println("Type du PN : 'PNT' / 'PNC' ");
+                        typePN = scan.nextLine();
+                        
+                    } while (!typePN.equals("PNT") && !typePN.equals("PNC"));
+                    
+                    if (typePN.equals("PNT")) {
+                        
+                        PNT mypnt = new PNT(0, nomPN, prenomPN, numRuePN, ruePN, cpPN, villePN, 0, 1);
+                        exportDAL.exportPNT(mypnt);
+                    } else {
+                        PNC mypnc = new PNC(0, nomPN, prenomPN, numRuePN, ruePN, cpPN, villePN, 0, 1);
+                        exportDAL.exportPNC(mypnc);
+                    }
+                    
+                    continu = true;
+                    while (continu) {
+                        System.out.println("Voulez vous valider ? (y ou n)");
+                        String rep = scan.nextLine();
+                        if (rep.equals("y")) {                            
+                            try {
+                                manager.commit();
+                                continu = false;
+                            } catch (SQLException ex) {
+                                Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (rep.equals("n")) {
+                            try {
+                                manager.rollBack();
+                                continu = false;
+                            } catch (SQLException ex) {
+                                Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                    choix = -1;
+                    
+                    break;
+
+// </editor-fold>
+
+                
+            case 3:
+                
+                    // <editor-fold defaultstate="collapsed" desc=" Modifier PN ">
+                    System.out.println("Modifier un PN");
+                    System.out.println("Id du PN à modifier : ");
+                    int idPN = scan.nextInt();
+                    scan.nextLine();
+                    PersonnelNavigant pn = importDAL.importTablePN(idPN);
+
+                    System.out.println("Modifier nom ? y/n");
+                    String modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Nom à modifier : ");
+                        String nom = scan.nextLine();
+                        pn.setNomEmploye(nom);
+                    }
+
+                    System.out.println("Modifier prénom ? ");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Prénom à modifier : ");
+                        String prénom = scan.nextLine();
+                        pn.setPrenomEmploye(prénom);
+                    }
+
+                    System.out.println("Modifier numéro de rue ? y/n");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Numéro de rue : ");
+                        String num = scan.nextLine();
+                        pn.setNumRueEmploye(num);
+                    }
+
+                    System.out.println("Modifier nom rue ? y/n");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Nom de la rue à modifier : ");
+                        String rue = scan.nextLine();
+                        pn.setRueEmploye(rue);
+                    }
+
+                    System.out.println("Modifier code postal ? y/n");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Code Postal : ");
+                        String cp = scan.nextLine();
+                        pn.setCpEmploye(cp);
+                    }
+
+                    System.out.println("Modifier ville de résidence ? y/n");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Ville : ");
+                        String num = scan.nextLine();
+                        pn.setVilleEmploye(num);
+                    }
+
+                    System.out.println("Modifier heures Vol ? y/n");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("Heures vol : ");
+                        int num = scan.nextInt();
+                        pn.setHeuresVol(num);
+                        scan.nextLine();
+                    }
+
+                    System.out.println("Modifier id Dernière Ville ? y/n");
+                    modif = scan.nextLine();
+                    if (modif.equals("y")) {
+                        System.out.println("id Dernière Ville : ");
+                        String num = scan.nextLine();
+                        Ville tmp = new Ville();
+                        tmp.importFromId(num);
+                        pn.setIdDerniereVille(tmp);
+                    }
+
+                    if (pn instanceof PNT) {
+                        exportDAL.exportPNT((PNT) pn);
+                    } else {
+                        exportDAL.exportPNC((PNC) pn);
+                    }
+
+                    continu = true;
+                    while (continu) {
+                        System.out.println("Voulez vous valider ? (y ou n)");
+                        String rep = scan.nextLine();
+                        if (rep.equals("y")) {
+                            try {
+                                manager.commit();
+                                continu = false;
+                            } catch (SQLException ex) {
+                                Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (rep.equals("n")) {
+                            try {
+                                manager.rollBack();
+                                continu = false;
+                            } catch (SQLException ex) {
+                                Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+
+                    choix = -1;
+                    break;
+
+// </editor-fold>
+                
+            case 4 :
+                return;
+                
+                
+            default:
+                System.out.println();
+                System.out.println("Que voulez vous faire ?");
+                System.out.println("1- Afficher tous les Personnels Naviguants");
+                System.out.println("2- Ajouter un Personnel Naviguant");
+                System.out.println("3- Modifier un Personnel Naviguant");
+                System.out.println("4- Retour au menu principal");
+                choix = scan.nextInt();
+                scan.nextLine();
+            }
+        }
+        
     }
 
 }
