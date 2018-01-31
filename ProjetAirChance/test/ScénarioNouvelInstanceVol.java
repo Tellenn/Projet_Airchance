@@ -33,10 +33,10 @@ import static org.junit.Assert.*;
  *
  * @author Pault
  */
-public class Scénario1
+public class ScénarioNouvelInstanceVol
 {
     
-    public Scénario1()
+    public ScénarioNouvelInstanceVol()
     {
     }
     

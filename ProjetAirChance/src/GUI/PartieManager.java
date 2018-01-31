@@ -29,8 +29,7 @@ import java.util.logging.Logger;
  *
  * @author Pault
  */
-public class PartieManager
-{
+public class PartieManager {
 
     private static Scanner scan;
     private static ImportDAL importDAL;
@@ -40,13 +39,11 @@ public class PartieManager
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException
-    {
+    public static void main(String[] args) throws SQLException {
         mainMenu();
     }
 
-    public static void mainMenu() throws SQLException
-    {
+    public static void mainMenu() throws SQLException {
         scan = new Scanner(System.in);
         importDAL = new ImportDAL();
         exportDAL = new ExportDAL();
@@ -54,129 +51,129 @@ public class PartieManager
         manager.dbConnect();
         manager.changeAutocommit(false);
 
-        System.out.println("Que voulez vous faire ?");
-        System.out.println("1- Gérer tous les InstanceVols prévus");
-        System.out.println("2- Gérer tous les Vols");
-        System.out.println("3- Gérer tous les Avions");
-        System.out.println("4- Gérer tous les Personnels naviguant");
-        int choix = scan.nextInt();
-        scan.nextLine();
+        int choix = -1;
 
-        switch (choix)
-        {
-            case 1:
-                menuInstanceVol();
-                break;
-            case 2:
-                menuVols();
-                break;
-            case 3:
-                menuAvions();
-                break;
-            case 4:
-                menuPN();
-                break;
+        while (choix != 5) {
+            switch (choix) {
+                case 1:
+                    menuInstanceVol();
+                    choix = -1;
+                    break;
+                case 2:
+                    menuVols();
+                    choix = -1;
+                    break;
+                case 3:
+                    menuAvions();
+                    choix = -1;
+                    break;
+                case 4:
+                    menuPN();
+                    choix = -1;
+                    break;
+                case 5:
+                    manager.dbDisconnect();
+                    return;
+
+                default:
+                    System.out.println("Que voulez vous faire ?");
+                    System.out.println("1- Gérer tous les InstanceVols prévus");
+                    System.out.println("2- Gérer tous les Vols");
+                    System.out.println("3- Gérer tous les Avions");
+                    System.out.println("4- Gérer tous les Personnels naviguant");
+                    System.out.println("5- Quitter");
+                    choix = scan.nextInt();
+                    scan.nextLine();
+                    break;
+            }
         }
+
     }
 
-    private static void menuInstanceVol() throws SQLException
-    {
-        System.out.println();
-        System.out.println("Que voulez vous faire ?");
-        System.out.println("1- Afficher tous les instancesVols");
-        System.out.println("2- Ajouter un instanceVol");
-        System.out.println("3- Supprimer un InstanceVol");
-        System.out.println("4- Modifier un InstanceVol");
-        System.out.println("5- Confirmer la terminaison d'un InstanceVol");
-        System.out.println("6- Retour au menu principal");
-        int choix = scan.nextInt();
-        scan.nextLine();
+    private static void menuInstanceVol() throws SQLException {
         
-        try
-        {
+
+        try {
             manager.dbChangeIsolation(Connection.TRANSACTION_SERIALIZABLE);
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         ArrayList<InstanceVol> allInstanceVol = importDAL.importTableInstanceVol();
+
+        int choix = -1;
         
-        
-        switch (choix)
-        {
+        while(choix != 6){
+            
+        }
+        switch (choix) {
             case 1:
                 AffichageArrayList.afficheInstanceVol(allInstanceVol);
+                
+                choix = -1;
                 //à modifier
-                manager.dbDisconnect();
+                //manager.dbDisconnect();
                 break;
             case 2:
+                // <editor-fold defaultstate="collapsed" desc=" Ajouter InstanceVol ">
                 System.out.println("Date de départ ? format YYYY/MM/DD hh:mm:ss");
                 String dateDep = scan.nextLine();
                 System.out.println("Date d'arrivee ? format YYYY/MM/DD hh:mm:ss");
                 String dateArr = scan.nextLine();
                 System.out.println("Quel est l'ID du vol ?");
-                int volID  = scan.nextInt();
+                int volID = scan.nextInt();
                 scan.nextLine();
                 
                 Vol numvol = new Vol();
-                numvol.importFromId(""+volID);
+                numvol.importFromId("" + volID);
                 
                 System.out.println("Voici les avions disponibles");
                 int type = numvol.getType();
                 String typ;
-                if (type == 1)
-                {
+                if (type == 1) {
                     typ = "passager";
-                }else
-                {
+                } else {
                     typ = "fret";
                 }
                 ArrayList<Avion> avionDispo;
-                try
-                {
-                    avionDispo = importDAL.importAvionDispo(typ,dateDep,dateArr,numvol.getIdVilleOrigine());
+                try {
+                    avionDispo = importDAL.importAvionDispo(typ, dateDep, dateArr, numvol.getIdVilleOrigine());
                     AffichageArrayList.afficheAvion(avionDispo);
-                } catch (ParseException ex)
-                {
+                } catch (ParseException ex) {
                     Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
                 System.out.println("Quel est l'ID de l'avion a utiliser ?");
-                int avionID  = scan.nextInt();
+                int avionID = scan.nextInt();
                 scan.nextLine();
                 
-                InstanceVol volInstance = new InstanceVol(0,volID,avionID,0,0,0,0,dateDep,dateArr,"Cree");
+                InstanceVol volInstance = new InstanceVol(0, volID, avionID, 0, 0, 0, 0, dateDep, dateArr, "Cree");
                 
                 ArrayList<PersonnelNavigant> pnChoix = new ArrayList();
                 System.out.println("Voici les PNC dispo.");
                 ArrayList<PNC> pncDispo;
-                try
-                {
-                    pncDispo = importDAL.importPNCDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
+                try {
+                    pncDispo = importDAL.importPNCDispo(dateDep, dateArr, numvol.getIdVilleOrigine());
                     AffichageArrayList.affichePNC(pncDispo);
-                } catch (ParseException ex)
-                {
+                } catch (ParseException ex) {
                     Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
                 System.out.println("Lesquels voulez vous prendre? mettre des virgules entre chaque id");
                 String pnc = scan.nextLine();
                 String[] s = pnc.split(",");
-                for(int i=0;i<s.length;i++)
-                {
+                for (int i = 0; i < s.length; i++) {
                     PNC temp = new PNC();
                     temp.importFromId(s[i]);
                     pnChoix.add(temp);
                 }
                 
                 System.out.println("Voici les PNT dispo.");
-                ArrayList<PNT> pntDispo = importDAL.importPNTDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
+                ArrayList<PNT> pntDispo = importDAL.importPNTDispo(dateDep, dateArr, numvol.getIdVilleOrigine());
                 AffichageArrayList.affichePNT(pntDispo);
                 System.out.println("Lesquels voulez vous prendre? mettre des virgules entre chaque id");
                 String pnt = scan.nextLine();
                 s = pnt.split(",");
-                for(int i=0;i<s.length;i++)
-                {
+                for (int i = 0; i < s.length; i++) {
                     PNT temp = new PNT();
                     temp.importFromId(s[i]);
                     pnChoix.add(temp);
@@ -185,131 +182,135 @@ public class PartieManager
                 volInstance.setPersonnel(pnChoix);
                 exportDAL.exportInstanceVol(volInstance);
                 boolean continu = true;
-                while(continu)
-                {
+                while (continu) {
                     System.out.println("Voulez vous valider ? (y ou n)");
                     String rep = scan.nextLine();
-                    if (rep.equals("y"))
-                    {   
+                    if (rep.equals("y")) {
                         manager.commit();
                         continu = false;
-                    }
-                    else if (rep.equals("n"))
-                    {
+                    } else if (rep.equals("n")) {
                         manager.rollBack();
                         continu = false;
                     }
                 }
+
+// </editor-fold>
+                
+                choix = -1;
                 //à modifier
-                manager.dbDisconnect();
+                //manager.dbDisconnect();
                 break;
             case 3:
+                // <editor-fold defaultstate="collapsed" desc=" Supprimer InstanceVol ">
                 System.out.println("Quel est l'id de l'instanceVol à supprimmer ? -1 pour retour.");
                 choix = scan.nextInt();
                 scan.nextLine();
-                if (choix != -1)
-                {
-                    for(InstanceVol vol:allInstanceVol)
-                    {
-                        if(vol.getNumInstance()==choix)
-                        {
-                            try
-                            {
+                if (choix != -1) {
+                    for (InstanceVol vol : allInstanceVol) {
+                        if (vol.getNumInstance() == choix) {
+                            try {
                                 exportDAL.deleteInstanceVol(vol);
-                            } catch (Exception ex)
-                            {
+                            } catch (Exception ex) {
                                 Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }
                 }
                 continu = true;
-                while(continu)
-                {
+                while (continu) {
                     System.out.println("Voulez vous valider ? (y ou n)");
                     String rep = scan.nextLine();
-                    if (rep.equals("y"))
-                    {   
+                    if (rep.equals("y")) {
                         manager.commit();
                         continu = false;
-                    }
-                    else if (rep.equals("n"))
-                    {
+                    } else if (rep.equals("n")) {
                         manager.rollBack();
                         continu = false;
                     }
                 }
+
+// </editor-fold>
+                
+                choix = -1;
                 //à modifier
-                manager.dbDisconnect();
+                //manager.dbDisconnect();
                 break;
             case 4:
                 //à modifier
                 manager.dbDisconnect();
                 //TODO//
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                
+
             case 5:
+              
+                // <editor-fold defaultstate="collapsed" desc=" Confirmation InstanceVol ">
                 System.out.println("Quel est l'ID de l'instanceVol a terminer ?");
-                int ivID  = scan.nextInt();
+                int ivID = scan.nextInt();
                 scan.nextLine();
                 InstanceVol temp = new InstanceVol();
-                temp.importFromId(""+ivID);
-                if (!temp.getEtat().equals("Cree") || !temp.getEtat().equals("En cours de Vol"))
-                {
+                temp.importFromId("" + ivID);
+                if (!temp.getEtat().equals("Cree") || !temp.getEtat().equals("En cours de Vol")) {
                     System.out.println("Erreur le vol est déja annulé ou arrivé");
-                }else
-                {
+                } else {
                     temp.setEtat("Arrive");
                     String date = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss").format(new Date());
                     temp.setDateArrive(date);
                     exportDAL.exportInstanceVol(temp);
                 }
                 continu = true;
-                while(continu)
-                {
+                while (continu) {
                     System.out.println("Voulez vous valider ? (y ou n)");
                     String rep = scan.nextLine();
-                    if (rep.equals("y"))
-                    {   
+                    if (rep.equals("y")) {
                         manager.commit();
                         continu = false;
-                    }
-                    else if (rep.equals("n"))
-                    {
+                    } else if (rep.equals("n")) {
                         manager.rollBack();
                         continu = false;
                     }
                 }
+
+// </editor-fold>
+                
+                choix = -1;
                 //à modifier
-                manager.dbDisconnect();
-                break;    
+                //manager.dbDisconnect();
+                break;
             case 6:
-                mainMenu();
+                return;
+                
+            default:
+                System.out.println();
+                System.out.println("Que voulez vous faire ?");
+                System.out.println("1- Afficher tous les instancesVols");
+                System.out.println("2- Ajouter un instanceVol");
+                System.out.println("3- Supprimer un InstanceVol");
+                System.out.println("4- Modifier un InstanceVol");
+                System.out.println("5- Confirmer la terminaison d'un InstanceVol");
+                System.out.println("6- Retour au menu principal");
+                choix = scan.nextInt();
+                scan.nextLine();
                 break;
         }
     }
 
-    private static void menuVols() throws SQLException
-    {
+    private static void menuVols() throws SQLException {
         System.out.println();
         System.out.println("Que voulez vous faire ?");
         System.out.println("1- Afficher tous les Vols");
         System.out.println("2- Retour au menu principal");
         int choix = scan.nextInt();
         scan.nextLine();
-        
+
         manager.changeAutocommit(false);
-        try
-        {
+        try {
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         ArrayList<Vol> allVol = importDAL.importTableVol();
-        switch (choix)
-        {
+        switch (choix) {
             case 1:
                 AffichageArrayList.afficheVol(allVol);
                 //à modifier
@@ -321,21 +322,18 @@ public class PartieManager
         }
     }
 
-    private static void menuAvions()
-    {
+    private static void menuAvions() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private static void menuPN()
-    {
+    private static void menuPN() {
 
         int choix = -1;
         boolean continu = true;
 
-
-        while(choix != 5){
-            switch(choix){
-            case 1 :
+        while (choix != 5) {
+            switch (choix) {
+                case 1:
 // <editor-fold defaultstate="collapsed" desc=" Afficher PN ">
                     System.out.println("Reading PersonnelNaviguant...");
                     ArrayList<PNT> pnt = importDAL.importTablePNT();
@@ -346,17 +344,16 @@ public class PartieManager
                     break;
 
 // </editor-fold>
-                
-            case 2:
+                case 2:
 // <editor-fold defaultstate="collapsed" desc=" Ajouter PN ">
                     System.out.println("Ajout d'un PN");
                     System.out.println("Nom du PN :");
                     scan.nextLine();
                     String nomPN = scan.nextLine();
-                    
+
                     System.out.println("Prénom du PN :");
                     String prenomPN = scan.nextLine();
-                    
+
                     System.out.println("ADRESSE");
                     System.out.println(" | numéro de rue : ");
                     String numRuePN = scan.nextLine();
@@ -370,23 +367,23 @@ public class PartieManager
                     do {
                         System.out.println("Type du PN : 'PNT' / 'PNC' ");
                         typePN = scan.nextLine();
-                        
+
                     } while (!typePN.equals("PNT") && !typePN.equals("PNC"));
-                    
+
                     if (typePN.equals("PNT")) {
-                        
+
                         PNT mypnt = new PNT(0, nomPN, prenomPN, numRuePN, ruePN, cpPN, villePN, 0, 1);
                         exportDAL.exportPNT(mypnt);
                     } else {
                         PNC mypnc = new PNC(0, nomPN, prenomPN, numRuePN, ruePN, cpPN, villePN, 0, 1);
                         exportDAL.exportPNC(mypnc);
                     }
-                    
+
                     continu = true;
                     while (continu) {
                         System.out.println("Voulez vous valider ? (y ou n)");
                         String rep = scan.nextLine();
-                        if (rep.equals("y")) {                            
+                        if (rep.equals("y")) {
                             try {
                                 manager.commit();
                                 continu = false;
@@ -403,14 +400,12 @@ public class PartieManager
                         }
                     }
                     choix = -1;
-                    
+
                     break;
 
 // </editor-fold>
+                case 3:
 
-                
-            case 3:
-                
                     // <editor-fold defaultstate="collapsed" desc=" Modifier PN ">
                     System.out.println("Modifier un PN");
                     System.out.println("Id du PN à modifier : ");
@@ -516,23 +511,21 @@ public class PartieManager
                     break;
 
 // </editor-fold>
-                
-            case 4 :
-                return;
-                
-                
-            default:
-                System.out.println();
-                System.out.println("Que voulez vous faire ?");
-                System.out.println("1- Afficher tous les Personnels Naviguants");
-                System.out.println("2- Ajouter un Personnel Naviguant");
-                System.out.println("3- Modifier un Personnel Naviguant");
-                System.out.println("4- Retour au menu principal");
-                choix = scan.nextInt();
-                scan.nextLine();
+                case 4:
+                    return;
+
+                default:
+                    System.out.println();
+                    System.out.println("Que voulez vous faire ?");
+                    System.out.println("1- Afficher tous les Personnels Naviguants");
+                    System.out.println("2- Ajouter un Personnel Naviguant");
+                    System.out.println("3- Modifier un Personnel Naviguant");
+                    System.out.println("4- Retour au menu principal");
+                    choix = scan.nextInt();
+                    scan.nextLine();
             }
         }
-        
+
     }
 
 }
