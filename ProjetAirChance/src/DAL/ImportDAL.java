@@ -43,11 +43,12 @@ public class ImportDAL {
     
     public ArrayList<Avion> importAvionDispo(String type,String dateDepart,String dateArrivee,Ville vDep) throws ParseException
     {
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
         ArrayList<Avion> avionDispo = new ArrayList<>();
         if (type.equals("passager"))
         {
             ArrayList<AvionPassager> a = importTableAvionPassager(0,null,0,0,0,vDep);
-            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+            
             for(AvionPassager avP : a)
             {
                 boolean avionOk = true;
@@ -71,7 +72,20 @@ public class ImportDAL {
             ArrayList<AvionFret> a = importTableAvionFret(0,null,0,0,vDep.getIdVille());
             for(AvionFret avF : a)
             {
-                avionDispo.add(avF);
+                boolean avionOk = true;
+                ArrayList<InstanceVol> v = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,true);
+                for (InstanceVol inst : v){
+                    if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
+                        avionOk = false;
+                }
+                ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,false);
+                for (InstanceVol inst : v2 ){
+                    
+                    if(simpleDate.parse(inst.getDateArrive()).before(simpleDate.parse(dateDepart)))
+                        avionOk = false;
+                }
+                if(avionOk)
+                    avionDispo.add(avF);
             }
         }
         
@@ -138,35 +152,34 @@ public class ImportDAL {
         return importTablePNC(0, "", "", "", "", "", "", 0, null);
     }
     
-    public ArrayList<PNC> importPNCDispo(String dateDepart,String dateArrivee,Ville vDep)
+    public ArrayList<PNC> importPNCDispo(String dateDepart,String dateArrivee,Ville vDep) throws ParseException
     {
-        ArrayList<PNC> res = new ArrayList();
-        /*String query = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol natural join Vol"
-                + " where numInstance in (select numInstance from InstanceVol where dateArrivee = (select min(SYSDATE - dateArrivee) from InstanceVol)) and "
-                + "(dateArrivee+duree/2) <= '"+dateDepart+"' and idEmploye=(Select idEmploye from EmployeInstanceVol natural join InstanceVol "
-                + "natural join PersonnelNaviguant where typePN='PNC' and idDerniereVille = '"+vDep.getIdVille()+"')";
-        */
-        String query = "Select idEmploye from PersonnelNaviguant"
-                + " where typePN='PNC' and idDerniereVille = "+vDep.getIdVille()+"";
-        try
-        {
-            ResultSet result = DBManager.dbExecuteQuery(query);
-            
-            while (result.next()) {
-                int idEmployeRes = result.getInt("idEmploye");
-                PNC tmp = new PNC();
-                tmp.importFromId("" + idEmployeRes);
-                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
-                res.add(tmp);
+        
+        /*
+        Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN = 'PNC' and 
+        *//*
+        ArrayList<PNC> personneDispo = new ArrayList<>();
+        ArrayList<PNC> res = this.importTablePNC(0, null, null, null, null, null, null, 0, vDep);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        this.import
+        for(PNC personne : res){
+            boolean personneOk = true;
+            // A modifier pour vérifier que le PNC est bien dans le vol
+            ArrayList<InstanceVol> v = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,true);
+            for (InstanceVol inst : v){
+                if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
+                    personneOk = false;
             }
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return res;
+            ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,false);
+            for (InstanceVol inst : v2 ){
+
+                if(simpleDate.parse(inst.getDateArrive()).before(simpleDate.parse(dateDepart)))
+                    personneOk = false;
+            }
+            if(personneOk)
+                personneDispo.add(personne);
+        }*/
+        return null;
     }
     
     public ArrayList<PNT> importPNTDispo(String dateDepart,String dateArrivee,Ville vDep)
@@ -256,6 +269,7 @@ public class ImportDAL {
 
         return pnc;
     }
+ 
 
     public ArrayList<PNT> importTablePNT() {
         return importTablePNT(0, "", "", "", "", "", "", 0, 0);
@@ -599,7 +613,7 @@ public class ImportDAL {
                 query += " dateDepart<TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
             }
         }
-
+        query += " etat<>'Annule'";
         ResultSet result;
         ArrayList<InstanceVol> iv = new ArrayList<>();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
