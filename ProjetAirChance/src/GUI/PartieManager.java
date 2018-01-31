@@ -16,6 +16,7 @@ import Tables.PersonnelNavigant;
 import Tables.Ville;
 import Tables.Vol;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -114,8 +115,16 @@ public class PartieManager
                 {
                     typ = "fret";
                 }
-                ArrayList<Avion> avionDispo = importDAL.importAvionDispo(typ,dateDep,dateArr,numvol.getIdVilleOrigine());
-                AffichageArrayList.afficheAvion(avionDispo);
+                ArrayList<Avion> avionDispo;
+                try
+                {
+                    avionDispo = importDAL.importAvionDispo(typ,dateDep,dateArr,numvol.getIdVilleOrigine());
+                    AffichageArrayList.afficheAvion(avionDispo);
+                } catch (ParseException ex)
+                {
+                    Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 System.out.println("Quel est l'ID de l'avion a utiliser ?");
                 int avionID  = scan.nextInt();
                 scan.nextLine();
