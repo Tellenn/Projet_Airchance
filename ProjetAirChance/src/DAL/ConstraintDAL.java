@@ -5,10 +5,23 @@
  */
 package DAL;
 
+import Tables.Client;
+
 /**
  *
  * @author perrink
  */
 public class ConstraintDAL {
+    
+    public boolean reduction(int idClient){
+        Client c = new Client();
+        c.importFromId(""+idClient);
+        if(c.getHeuresCumulees() > 500){
+            c.setHeuresCumulees(c.getHeuresCumulees()-500);
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 }

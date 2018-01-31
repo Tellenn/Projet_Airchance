@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import DAL.ConstraintDAL;
 
 /**
  *
@@ -575,8 +576,14 @@ public class ExportDAL {
                     
                     exportReservationPassager(rc, (ReservationPassager) r, maxId);
                     
+                    ConstraintDAL c = new ConstraintDAL();
+                    float prix = r.getPrix();
+                    float coeff = 0.95f;
+                    if(c.reduction(rc.getIdClient().getIdClient())==true){
+                        prix = prix * coeff;
+                    }
                     
-                    query = "Insert into ResaVolPlace values ("+r.getNumReservation()+", "+((ReservationPassager) r).getNumInstance().getNumInstance()+", "+((ReservationPassager) r).getNumPlace().getNumPlace()+", "+((ReservationPassager) r).getIdAvion().getIdAvion()+", "+r.getPrix()+")";
+                    query = "Insert into ResaVolPlace values ("+r.getNumReservation()+", "+((ReservationPassager) r).getNumInstance().getNumInstance()+", "+((ReservationPassager) r).getNumPlace().getNumPlace()+", "+((ReservationPassager) r).getIdAvion().getIdAvion()+", "+prix+")";
                     DBManager.dbExecuteUpdate(query);
                 } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);

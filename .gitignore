@@ -1,9 +1,8 @@
 /ProjetAirChance/nbproject/private/
 /ProjetAirChance/build/
-<<<<<<< HEAD
+
 ProjetAirChance/BD.properties
-=======
->>>>>>> AndréasBranche
+
 /ProjetAirChance/dist/
 BD.properties
 
@@ -11,6 +10,12 @@ ProjetAirChance/nbproject/jfx-impl_backup_1.xml
 
 ProjetAirChance/nbproject/jfx-impl_backup.xml
 
-ProjetAirChance/nbproject/UPDATED.TXT
-*.xml
+ProjetAirChance/nbproject/UPDATED.TXT=
+
+ProjetAirChance/nbproject/jfx-impl_backup_2.xml
+
 ProjetAirChance/nbproject/jfx-impl.xml
+
+ProjetAirChance/nbproject/jfx-impl.xml
+
+ProjetAirChance/nbproject/UPDATED.TXT
