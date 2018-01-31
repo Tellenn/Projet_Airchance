@@ -16,156 +16,177 @@ import java.util.logging.Logger;
  *
  * @author Pault
  */
-public class Place {
+public class Place
+{
 
-    
     //Place(numPlace, #idAvionP, position, classe)
-
-    
     private int numPlace;
     private int idAvionP;
     private String position;
     private String classe;
     private boolean estReservee;
-    
-     public Place() 
+
+    public Place()
     {
     }
 
-    public Place(int numPlace, String position, String classe, boolean estReservee) {
+    public Place(int numPlace, String position, String classe, boolean estReservee)
+    {
         this.numPlace = numPlace;
         this.position = position;
         this.classe = classe;
         this.estReservee = estReservee;
     }
-    
-    public Place(int numPlace,int idAvionP, String position, String classe, boolean estReservee) {
+
+    public Place(int numPlace, int idAvionP, String position, String classe, boolean estReservee)
+    {
         this.numPlace = numPlace;
         this.position = position;
         this.idAvionP = idAvionP;
         this.classe = classe;
         this.estReservee = estReservee;
     }
-    
-    
 
-    public int getNumPlace() {
+    public int getNumPlace()
+    {
         return numPlace;
     }
 
-    public void setNumPlace(int numPlace) {
+    public void setNumPlace(int numPlace)
+    {
         this.numPlace = numPlace;
     }
 
-    public int getIdAvionP() {
+    public int getIdAvionP()
+    {
         return idAvionP;
     }
 
-    public void setIdAvionP(int idAvionP) {
+    public void setIdAvionP(int idAvionP)
+    {
         this.idAvionP = idAvionP;
     }
 
-    public String getPosition() {
+    public String getPosition()
+    {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(String position)
+    {
         this.position = position;
     }
 
-    public String getClasse() {
+    public String getClasse()
+    {
         return classe;
     }
 
-    public void setClasse(String classe) {
+    public void setClasse(String classe)
+    {
         this.classe = classe;
     }
-    
-    public void setRes(boolean res) {
+
+    public void setRes(boolean res)
+    {
         this.estReservee = res;
     }
     
-    public ResultSet getResultSetFromId(String numPlace,String avionId,String numInstance) {
+    public boolean getRes( )
+    {
+        return this.estReservee;
+    }
+
+    public ResultSet getResultSetFromId(String numPlace, String avionId, String numInstance)
+    {
         String query = "";
         if (numInstance.equals(""))
         {
             query = "Select * from Place where numPlace=" + numPlace + "and idAvion=" + avionId;
-        }else
+        } else
         {
             query = "Select * from Place natural join ResaVolPlace where numPlace=" + numPlace + "and idAvion=" + avionId + "and numInstance=" + numInstance;
         }
-       
+
         return TableImpl.getResultSet(query);
     }
-    
-    
-    public void importFromId(String numPlace,String avionId,String numInstance) {
-        ResultSet result = getResultSetFromId(numPlace,avionId,"");
+
+    public void importFromId(String numPlace, String avionId, String numInstance)
+    {
+        ResultSet result = getResultSetFromId(numPlace, avionId, "");
         ResultSet resultPlaceRes = null;
-        if(!numInstance.equals(""))
+        if (!numInstance.equals(""))
         {
-            resultPlaceRes = getResultSetFromId(numPlace,avionId,numInstance);
+            resultPlaceRes = getResultSetFromId(numPlace, avionId, numInstance);
         }
         boolean estRes = false;
-        try {
-            if (result.last()) {
+        try
+        {
+            if (result.last())
+            {
                 int rows = result.getRow();
-                if (rows > 1) {
+                if (rows > 1)
+                {
                     throw new Exception("La requête a renvoyé plus d'une Place");
                 }
             }
             result.beforeFirst();
-            if(!numInstance.equals(""))
+            if (!numInstance.equals(""))
             {
-                if (resultPlaceRes.last()) {
+                if (resultPlaceRes.last())
+                {
                     int rows = resultPlaceRes.getRow();
-                    if (rows > 1) {
+                    if (rows > 1)
+                    {
                         throw new Exception("La requête a renvoyé plus d'une Place");
-                    }
-                    else if (rows == 1)
+                    } else if (rows == 1)
                     {
                         estRes = true;
                     }
                 }
                 resultPlaceRes.beforeFirst();
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(Place.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             Logger.getLogger(Place.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {
-            if (!result.next()) {
-                throw new Exception("La requête n'a pas abouti avec les id " + numPlace + "," + avionId + "," + numInstance );
+        try
+        {
+            if (!result.next())
+            {
+                throw new Exception("La requête n'a pas abouti avec les id " + numPlace + "," + avionId + "," + numInstance);
             }
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             Logger.getLogger(Place.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {
+        try
+        {
             this.numPlace = result.getInt("numPlace");
             this.idAvionP = result.getInt("idAvion");
-            this.position = result.getNString("position");
-            this.classe = result.getNString("classe");
+            this.position = result.getString("position");
+            this.classe = result.getString("classe");
             this.estReservee = estRes;
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(Place.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
-    
+
     public boolean equals(Place p)
     {
         boolean res = false;
-        if(p.idAvionP == this.idAvionP && p.numPlace == this.numPlace)
+        if (p.idAvionP == this.idAvionP && p.numPlace == this.numPlace)
         {
             res = true;
         }
-            
+
         return res;
     }
-   
+
 }

@@ -11,10 +11,15 @@ import DAL.ImportDAL;
 import Tables.Avion;
 import Tables.AvionFret;
 import Tables.AvionPassager;
+import Tables.Client;
+import Tables.InstanceVol;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
+import Tables.ReservationFret;
+import Tables.Reservation_Correspondances;
 import Tables.Ville;
+import Tables.Vol;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -90,6 +95,7 @@ public class ProjetAirChance extends Application {
         
         ImportDAL dal = new ImportDAL();
         ExportDAL dalExp = new ExportDAL();
+        DBManager.dbConnect();
         
         /*ArrayList<AvionFret> avionsF = dal.importTableAvionFret();
         
@@ -98,7 +104,8 @@ public class ProjetAirChance extends Application {
         
         ArrayList<AvionFret> avionsF2 = dal.importTableAvionFret(0, mod, 0, 0, null);*/
         try {
-            //dal.importTablePNT();
+
+            //dal.importTablePNT(0, "", "", "", "", "", "", 0, 1);
             //ArrayList<PNT> test = dal.importTablePNT(0, "", "", "", "", "", "", 0, null);
             
             /*
@@ -118,8 +125,53 @@ public class ProjetAirChance extends Application {
             PNC test = new PNC(23, "Dubooooosc", "Frank", "39", "rue de la Chimie", "38100", "St martin truc", 0, 1, lang);
             dalExp.exportPNC(test);
             */
+
+            /*
+            dal.importTableVol();
+            Vol v = new Vol(0, 1, 1000, 1000, 500, 100, 5, 0, 15, 1);
+            dalExp.exportVol(v);
+            */
+
+           //dal.importTableInstanceVol(0, 0, 0, 0, 0, 0, 0, "2018/02/15 10:30:00", "", "");
+           
+           /*
+           InstanceVol i = new InstanceVol();
+           i.importFromId("5");
+           i.fillEmployeInstanceVol();
+           i.setEtat("Annule");
+           dalExp.exportInstanceVol(i);
+           */
+            /*
+            Reservation_Correspondances r = new Reservation_Correspondances();
+            r.importFromIdClient("15");
+            ReservationFret rf = (ReservationFret) r.getReservations().get(1);
+            rf.setPoids(1);
+            rf.setVolume(5);
+            
+            
+            ReservationFret test = new ReservationFret();
+            test.setNumReservation(0);
+            test.setVolume(10000);
+            InstanceVol iv = new InstanceVol();
+            iv.importFromId("2");
+            test.setNumInstance(iv);
+            r.addReservations(test);
+            dalExp.exportReservationCorrespondance(r);*/
+ 
+             /*
+            ArrayList<Client> c = dal.importTableClient(15, "", "", "", "", 0, "", 0, "");
+            c.get(0).fillReservations();
+            */
+             ArrayList<Client> c = dal.importTableClient(15, "", "", "", "", 0, "", 0, "");
+             c.get(0).setCpClient(72000);
+             dalExp.exportTableClient(c);
+             
+             
+            
+            
             
             DBManager.commit();
+            DBManager.dbDisconnect();
         } catch (SQLException ex) {
             Logger.getLogger(ProjetAirChance.class.getName()).log(Level.SEVERE, null, ex);
         }

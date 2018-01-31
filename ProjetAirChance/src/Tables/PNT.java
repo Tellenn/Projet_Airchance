@@ -31,7 +31,8 @@ public class PNT implements PersonnelNavigant, TableInterface{
     private Ville idDerniereVille;
     private Map<Modele, Integer> piloteModele;
     
-    public PNT(){
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR PNT ">
+    public PNT() {
         this.idEmploye = 0;
         this.nomEmploye = "";
         this.prenomEmploye = "";
@@ -44,7 +45,7 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.piloteModele = new HashMap<>();
     }
     
-    public PNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille){
+    public PNT(int idEmploye, String nomEmploye, String prenomEmploye, String numRueEmploye, String rueEmploye, String cpEmploye, String villeEmploye, int heuresVol, int idDerniereVille) {
         this.idEmploye = idEmploye;
         this.nomEmploye = nomEmploye;
         this.prenomEmploye = prenomEmploye;
@@ -54,14 +55,15 @@ public class PNT implements PersonnelNavigant, TableInterface{
         this.villeEmploye = villeEmploye;
         this.heuresVol = heuresVol;
         this.idDerniereVille = new Ville();
-        this.idDerniereVille.importFromId(idDerniereVille+"");
+        this.idDerniereVille.importFromId(idDerniereVille + "");
         this.piloteModele = new HashMap<>();
-        fillPiloteModele();
         
     }
+
+// </editor-fold>
     
     
-    private void fillPiloteModele() {
+    public void fillPiloteModele() {
         String query = "Select * from PiloteModele where idEmploye="+this.idEmploye;
         ResultSet result;
         
@@ -131,7 +133,6 @@ public class PNT implements PersonnelNavigant, TableInterface{
             this.villeEmploye = result.getString("villeEmploye");
             this.heuresVol = result.getInt("heuresVol");
             this.idDerniereVille.importFromId(result.getInt("idDerniereVille")+"");
-            fillPiloteModele();
 
         } catch (SQLException ex) {
             Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,8 +141,8 @@ public class PNT implements PersonnelNavigant, TableInterface{
     }
     
     
-    
-      /**
+    // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    /**
      * @return the idEmploye
      */
     @Override
@@ -268,8 +269,8 @@ public class PNT implements PersonnelNavigant, TableInterface{
     public void setHeuresVol(int heuresVol) {
         this.heuresVol = heuresVol;
     }
-    
-        /**
+
+    /**
      * @return the idDerniereVille
      */
     public Ville getIdDerniereVille() {
@@ -282,8 +283,8 @@ public class PNT implements PersonnelNavigant, TableInterface{
     public void setIdDerniereVille(Ville idDerniereVille) {
         this.idDerniereVille = idDerniereVille;
     }
-    
-      /**
+
+    /**
      * @return the piloteModele
      */
     public Map<Modele, Integer> getPiloteModele() {
@@ -296,5 +297,7 @@ public class PNT implements PersonnelNavigant, TableInterface{
     public void setPiloteModele(Map<Modele, Integer> piloteModele) {
         this.piloteModele = piloteModele;
     }
+
+// </editor-fold>
 
 }

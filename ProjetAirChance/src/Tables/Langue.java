@@ -20,16 +20,20 @@ public class Langue implements TableInterface{
 
     private String nomLangue;
     
-    public Langue(){
+    // <editor-fold defaultstate="collapsed" desc=" CONSTRUCTOR LANGUE ">
+    public Langue() {
         this.nomLangue = "";
     }
     
-    public Langue(String nomLangue){
+    public Langue(String nomLangue) {
         this.nomLangue = nomLangue;
     }
+
+// </editor-fold>
     
     
-     /**
+     // <editor-fold defaultstate="collapsed" desc=" GETTERS/SETTERS ">
+    /**
      * @return the nomLangue
      */
     public String getNomLangue() {
@@ -42,6 +46,8 @@ public class Langue implements TableInterface{
     public void setNomLangue(String nomLangue) {
         this.nomLangue = nomLangue;
     }
+
+// </editor-fold>
     
     @Override
     public void showTable() {

@@ -34,7 +34,8 @@ CREATE TABLE Client(
 	villeClient 	VARCHAR2 (50)	,
 	heuresCumulees  NUMBER	 (10,0)	,
 	numPasseport    VARCHAR2 (25)	,
-	CONSTRAINT Client_Pk PRIMARY KEY (idClient)
+	CONSTRAINT Client_Pk PRIMARY KEY (idClient),
+	CONSTRAINT ck_Client_heuresCumulees CHECK (heuresCumulees >= 0)
 );
 
 ------------------------------------------------------------
@@ -119,7 +120,8 @@ CREATE TABLE Place(
 	idAvion   NUMBER(10,0) ,
 	position  VARCHAR2 (25) ,
 	classe    VARCHAR2 (25) ,
-	CONSTRAINT Place_Pk PRIMARY KEY (numPlace, idAvion)
+	CONSTRAINT Place_Pk PRIMARY KEY (numPlace, idAvion),
+	CONSTRAINT ck_Place_numPlace CHECK (numPlace > 0 AND numPlace != 13)
 );
 
 ------------------------------------------------------------
@@ -136,7 +138,8 @@ CREATE TABLE PersonnelNaviguant(
 	heuresVol 		NUMBER(10,0)  ,
 	typePN			VARCHAR2 (10) ,
 	idDerniereVille	NUMBER(10,0)  ,
-	CONSTRAINT PNT_Pk PRIMARY KEY (idEmploye)
+	CONSTRAINT PNT_Pk PRIMARY KEY (idEmploye),
+	CONSTRAINT ck_PN_heuresVol CHECK (heuresVol >= 0)
 );
 
 ------------------------------------------------------------
@@ -154,7 +157,9 @@ CREATE TABLE Modele(
 	nomModele  	VARCHAR2 (25) NOT NULL ,
 	nbPilotes  	NUMBER(10,0) ,
 	rayonAction NUMBER(10,0) ,
-	CONSTRAINT Modele_Pk PRIMARY KEY (nomModele)
+	CONSTRAINT Modele_Pk PRIMARY KEY (nomModele),
+	CONSTRAINT ck_Modele_nbPilotes CHECK (nbPilotes > 0),
+	CONSTRAINT ck_Modele_rayonAction CHECK (rayonAction > 0)
 );
 
 ------------------------------------------------------------

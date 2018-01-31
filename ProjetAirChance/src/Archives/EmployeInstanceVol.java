@@ -3,8 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tables;
+package Archives;
 
+import Tables.AvionFret;
+import Tables.InstanceVol;
+import Tables.PNC;
+import Tables.PNT;
+import Tables.PersonnelNavigant;
+import Tables.TableImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
