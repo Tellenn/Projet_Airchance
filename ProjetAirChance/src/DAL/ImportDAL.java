@@ -157,7 +157,7 @@ public class ImportDAL {
         
         /*
         Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN = 'PNC' and 
-        */
+        *//*
         ArrayList<PNC> personneDispo = new ArrayList<>();
         ArrayList<PNC> res = this.importTablePNC(0, null, null, null, null, null, null, 0, vDep);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
@@ -178,8 +178,8 @@ public class ImportDAL {
             }
             if(personneOk)
                 personneDispo.add(personne);
-        }
-        return personneDispo;
+        }*/
+        return null;
     }
     
     public ArrayList<PNT> importPNTDispo(String dateDepart,String dateArrivee,Ville vDep)
