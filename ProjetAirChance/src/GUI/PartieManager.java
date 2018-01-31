@@ -15,6 +15,7 @@ import Tables.PNT;
 import Tables.PersonnelNavigant;
 import Tables.Ville;
 import Tables.Vol;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -89,8 +90,18 @@ public class PartieManager
         System.out.println("6- Retour au menu principal");
         int choix = scan.nextInt();
         scan.nextLine();
-
+        
+        manager.changeAutocommit(false);
+        try
+        {
+            manager.dbChangeIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ArrayList<InstanceVol> allInstanceVol = importDAL.importTableInstanceVol();
+        
+        
         switch (choix)
         {
             case 1:
@@ -101,7 +112,7 @@ public class PartieManager
                 String dateDep = scan.nextLine();
                 System.out.println("Date d'arrivee ? format YYYY/MM/DD hh:mm:ss");
                 String dateArr = scan.nextLine();
-                System.out.println("Quel est l'ID de la ligne ?");
+                System.out.println("Quel est l'ID du vol ?");
                 int volID  = scan.nextInt();
                 scan.nextLine();
                 
@@ -181,7 +192,7 @@ public class PartieManager
                 }
                 break;
             case 3:
-                System.out.println("Quel est l'id du vol à supprimmer ? -1 pour retour.");
+                System.out.println("Quel est l'id de l'instanceVol à supprimmer ? -1 pour retour.");
                 choix = scan.nextInt();
                 scan.nextLine();
                 if (choix != -1)
@@ -267,6 +278,15 @@ public class PartieManager
         System.out.println("2- Retour au menu principal");
         int choix = scan.nextInt();
         scan.nextLine();
+        
+        manager.changeAutocommit(false);
+        try
+        {
+            manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         ArrayList<Vol> allVol = importDAL.importTableVol();
         switch (choix)
