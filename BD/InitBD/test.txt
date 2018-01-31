@@ -1,0 +1,2 @@
+Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN='PNC' and idDerniereVille=1 and (idEmploye not in (select idEmploye from InstanceVol naturalJoin PersonnelNaviguant where dateDepart>TO_DATE('2018/01/31 11:15:29','yyyy/mm/dd hh24:mi:ss')))
+;
