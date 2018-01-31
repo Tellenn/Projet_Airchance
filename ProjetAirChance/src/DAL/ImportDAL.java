@@ -17,11 +17,15 @@ import Tables.PNT;
 import Tables.Place;
 import Tables.Ville;
 import Tables.Vol;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,10 +63,14 @@ public class ImportDAL {
                 }
                 ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,false);
                 for (InstanceVol inst : v2 ){
-                    
-                    if(simpleDate.parse(inst.getDateArrive()).before(simpleDate.parse(dateDepart)))
+                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd' 'hh:mm:ss");
+                    Date tmp = simpleDate.parse(inst.getDateDepart());
+                    LocalDateTime date = LocalDateTime.of(tmp.getMonth(),tmp.getYear(),tmp.getDay(),tmp.getHours(),tmp.getMinutes(),tmp.getSeconds());
+                                        //TROUVER SOLUTION
+                    if(simpleDate.parse(date.plusMinutes(inst.getNumVol().getDuree()).toString()).before(simpleDate.parse(dateDepart)))//
                         avionOk = false;
                 }
+                
                 if(avionOk)
                     avionDispo.add(avP);
             }
@@ -154,53 +162,47 @@ public class ImportDAL {
     
     public ArrayList<PNC> importPNCDispo(String dateDepart,String dateArrivee,Ville vDep) throws ParseException
     {
-        
-        /*
-        Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN = 'PNC' and 
-        *//*
-        ArrayList<PNC> personneDispo = new ArrayList<>();
-        ArrayList<PNC> res = this.importTablePNC(0, null, null, null, null, null, null, 0, vDep);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
-        this.import
-        for(PNC personne : res){
-            boolean personneOk = true;
-            // A modifier pour vérifier que le PNC est bien dans le vol
-            ArrayList<InstanceVol> v = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,true);
-            for (InstanceVol inst : v){
-                if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
-                    personneOk = false;
+        ArrayList<PNC> res = new ArrayList<>();
+        
+        String req = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN = 'PNC' and idDerniereVille = "+vDep.getIdVille()+" and idEmploye not in("
+                + "select idEmploye from InstanceVol naturalJoin PersonnelNaviguant where dateDepart > "+simpleDate.format(new Date())+")";
+        
+        try
+        {
+            ResultSet result = DBManager.dbExecuteQuery(req);
+            
+            while (result.next()) {
+                int idEmployeRes = result.getInt("idEmploye");
+                PNC tmp = new PNC();
+                tmp.importFromId("" + idEmployeRes);
+                res.add(tmp);
             }
-            ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avF.getIdAvion(),dateDepart,null,false);
-            for (InstanceVol inst : v2 ){
-
-                if(simpleDate.parse(inst.getDateArrive()).before(simpleDate.parse(dateDepart)))
-                    personneOk = false;
-            }
-            if(personneOk)
-                personneDispo.add(personne);
-        }*/
-        return null;
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ImportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
     }
     
     public ArrayList<PNT> importPNTDispo(String dateDepart,String dateArrivee,Ville vDep)
     {
-        ArrayList<PNT> res = new ArrayList();
-        /*String query = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol natural join Vol"
-                + " where numInstance in (select numInstance from InstanceVol where dateArrivee = (select min(SYSDATE - dateArrivee) from InstanceVol)) and "
-                + "(dateArrivee+duree/2) <= '"+dateDepart+"' and idEmploye=(Select idEmploye from EmployeInstanceVol natural join InstanceVol "
-                + "natural join PersonnelNaviguant where typePN='PNC' and idDerniereVille = '"+vDep.getIdVille()+"')";
-        */
-        String query = "Select idEmploye from PersonnelNaviguant"
-                + " where typePN='PNT' and idDerniereVille = "+vDep.getIdVille()+"";
+        ArrayList<PNT> res = new ArrayList<>();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        String req = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN = 'PNT' and idDerniereVille = "+vDep.getIdVille()+" and idEmploye not in("
+                + "select idEmploye from InstanceVol naturalJoin PersonnelNaviguant where dateDepart > "+simpleDate.format(new Date())+")";
+        
         try
         {
-            ResultSet result = DBManager.dbExecuteQuery(query);
+            ResultSet result = DBManager.dbExecuteQuery(req);
             
             while (result.next()) {
                 int idEmployeRes = result.getInt("idEmploye");
                 PNT tmp = new PNT();
                 tmp.importFromId("" + idEmployeRes);
-                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
                 res.add(tmp);
             }
         } catch (SQLException ex)
