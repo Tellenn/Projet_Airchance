@@ -19,4 +19,8 @@ public interface Reservations
     public void setDateReservation(String dateReservation);
     
     public void importFromId(String id);
+    
+    public InstanceVol getNumInstance();
+    public void setNumInstance(InstanceVol numInstance);
+   
 }
