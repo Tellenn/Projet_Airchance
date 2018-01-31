@@ -120,6 +120,7 @@ public class Scénario1
             ArrayList<PNC> pncDispo;
             
             pncDispo = importDAL.importPNCDispo(dateDep, dateArr, numvol.getIdVilleOrigine());
+            System.out.println(pncDispo);
             AffichageArrayList.affichePNC(pncDispo);
             
             pnChoix.add(pncDispo.get(0));
@@ -137,7 +138,7 @@ public class Scénario1
             while (continu)
             {
                 System.out.println("Voulez vous valider ? (y ou n)");
-                String rep = scan.nextLine();
+                String rep = "n";
                 if (rep.equals("y"))
                 {
                     manager.commit();
@@ -153,8 +154,8 @@ public class Scénario1
             
         }catch(Exception e)
         {
-            Assert.assertFalse("There was an Exception"+e,true);
             Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, e);
+            Assert.assertFalse("There was an Exception"+e,true);
         }
     }
 }

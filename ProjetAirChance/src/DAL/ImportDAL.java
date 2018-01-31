@@ -166,8 +166,8 @@ public class ImportDAL {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
         ArrayList<PNC> res = new ArrayList<>();
         
-        String req = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN='PNC' and idDerniereVille="+vDep.getIdVille()+" and (idEmploye not in ("
-                + "select idEmploye from InstanceVol natural Join PersonnelNaviguant where dateDepart>"+"TO_DATE('" + simpleDate.format(new Date()) + "','yyyy/mm/dd hh24:mi:ss')"+"))";
+        String req = "(select idemploye from personnelNaviguant where idDerniereVille ="+vDep.getIdVille()+
+                " and typePN='PNC') MINUS (select idemploye from personnelNaviguant Natural join EmployeInstanceVol natural join InstanceVol where dateDepart> to_date(SYSDATE, 'yyyy/mm/dd hh24:mi:ss') and typePN='PNC' and etat!='Arrive')";
         
         try
         {
@@ -193,8 +193,8 @@ public class ImportDAL {
     {
         ArrayList<PNT> res = new ArrayList<>();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
-        String req = "Select idEmploye from PersonnelNaviguant natural join EmployeInstanceVol natural join InstanceVol where typePN = 'PNT' and idDerniereVille = "+vDep.getIdVille()+" and idEmploye not in("
-                + "select idEmploye from InstanceVol natural Join PersonnelNaviguant where dateDepart > "+"TO_DATE('" + simpleDate.format(new Date()) + "','yyyy/mm/dd hh24:mi:ss')"+"))";
+        String req = "(select idemploye from personnelNaviguant where idDerniereVille ="+vDep.getIdVille()+
+                " and typePN='PNT') MINUS (select idemploye from personnelNaviguant Natural join EmployeInstanceVol natural join InstanceVol where dateDepart> to_date(SYSDATE, 'yyyy/mm/dd hh24:mi:ss') and typePN='PNT' and etat!='Arrive')";
         
         try
         {

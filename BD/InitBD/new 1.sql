@@ -1,0 +1,1 @@
+(select idemploye from personnelNaviguant where idDerniereVille = 1 and type='PNC') MINUS (select idemploye from personnelNaviguant Natural join EmployeInstanceVol natural join InstanceVol where dateDepart> to_date(SYSDATE, 'yyyy/mm/dd hh24:mi:ss') and type='PNC' and etat!='Arrive');
