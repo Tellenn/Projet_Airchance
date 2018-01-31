@@ -17,7 +17,9 @@ import Tables.Ville;
 import Tables.Vol;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +85,8 @@ public class PartieManager
         System.out.println("2- Ajouter un instanceVol");
         System.out.println("3- Supprimer un InstanceVol");
         System.out.println("4- Modifier un InstanceVol");
-        System.out.println("5- Retour au menu principal");
+        System.out.println("5- Confirmer la terminaison d'un InstanceVol");
+        System.out.println("6- Retour au menu principal");
         int choix = scan.nextInt();
         scan.nextLine();
 
@@ -218,6 +221,39 @@ public class PartieManager
                 //TODO//
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             case 5:
+                System.out.println("Quel est l'ID de l'instanceVol a terminer ?");
+                int ivID  = scan.nextInt();
+                scan.nextLine();
+                InstanceVol temp = new InstanceVol();
+                temp.importFromId(""+ivID);
+                if (!temp.getEtat().equals("Cree") || !temp.getEtat().equals("Cree"))
+                {
+                    System.out.println("Erreur le vol est déja annulé ou arrivé");
+                }else
+                {
+                    temp.setEtat("Arrive");
+                    String date = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss").format(new Date());
+                    temp.setDateArrive(date);
+                    exportDAL.exportInstanceVol(temp);
+                }
+                continu = true;
+                while(continu)
+                {
+                    System.out.println("Voulez vous valider ? (y ou n)");
+                    String rep = scan.nextLine();
+                    if (rep.equals("y"))
+                    {   
+                        manager.commit();
+                        continu = false;
+                    }
+                    else if (rep.equals("n"))
+                    {
+                        manager.rollBack();
+                        continu = false;
+                    }
+                }
+                break;    
+            case 6:
                 mainMenu();
                 break;
         }
