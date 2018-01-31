@@ -560,22 +560,22 @@ public class ImportDAL {
         if (placesRestEco != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " placesRestEco=" + placesRestEco;
+            query += " placesRestEco>" + placesRestEco;
         }
         if (placesRestAff != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " placesRestAff=" + placesRestAff;
+            query += " placesRestAff>" + placesRestAff;
         }
         if (placesRestPrem != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " placesRestPrem=" + placesRestPrem;
+            query += " placesRestPrem>" + placesRestPrem;
         }
         if (poidsRest != 0) {
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
-            query += " poidsRest=" + poidsRest;
+            query += " poidsRest>" + poidsRest;
         }
         if (dateDepart != "") {
             query += isTheFirst ? " where" : " and";
@@ -590,7 +590,7 @@ public class ImportDAL {
         }
         if (!"".equals(etat)) {
             query += isTheFirst ? " where" : " and";
-            query += " idVilleDestination='" + etat + "'";
+            query += " etat='" + etat + "'";
         }
 
         ResultSet result;
@@ -787,12 +787,12 @@ public class ImportDAL {
             query += " classe<=" + classe;
 
         }
-        
+        /*
         if(!numInstance.equals("")){
             query += isTheFirst ? " where" : " and";
             isTheFirst = false;
             query += " numInstance="+numInstance;
-        }
+        }*/
         ArrayList<Place> placeTot = importTablePlace(query);
 
         if (!numInstance.equals("")) {

@@ -200,7 +200,7 @@ public class AffichageArrayList
     
     }
 
-    static void affichePlace(ArrayList<Place> importPlaceWithParameter) {
+    public static void affichePlace(ArrayList<Place> importPlaceWithParameter) {
         System.out.print("numPlace /");
         System.out.print("/ idAvion /");
         System.out.print("/ position /");

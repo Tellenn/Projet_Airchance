@@ -122,9 +122,9 @@ public class ExportDAL {
         }
         return 0;
     }
-    
-    public int readMaxNumReservationP(){
-        try{
+
+    public int readMaxNumReservationP() {
+        try {
             String query = "Select max(NumreservationP) from ReservationPassager";
             ResultSet res;
             res = DBManager.dbExecuteQuery(query);
@@ -135,9 +135,9 @@ public class ExportDAL {
         }
         return 0;
     }
-    
+
     private int readMaxNumReservationF() {
-        try{
+        try {
             String query = "Select max(NumreservationF) from ReservationFret";
             ResultSet res;
             res = DBManager.dbExecuteQuery(query);
@@ -148,12 +148,12 @@ public class ExportDAL {
         }
         return 0;
     }
-    
-    private int readMaxIdClient(){
-        try{
+
+    private int readMaxIdClient() {
+        try {
             String query = "Select max(idClient) from Client";
             ResultSet res;
-            res= DBManager.dbExecuteQuery(query);
+            res = DBManager.dbExecuteQuery(query);
             res.next();
             return res.getInt(1);
         } catch (SQLException | ClassNotFoundException ex) {
@@ -480,77 +480,77 @@ public class ExportDAL {
         }
     }
 
-    
-    public void deleteInstanceVol(InstanceVol iv) throws Exception
-    {
+    public void deleteInstanceVol(InstanceVol iv) throws Exception {
         ImportDAL impDAL = new ImportDAL();
-        if (iv.getEtat().equals("Arrive")||iv.getEtat().equals("En cours de vol")||iv.getEtat().equals("Annule"))
-        {
+        if (iv.getEtat().equals("Arrive") || iv.getEtat().equals("En cours de vol") || iv.getEtat().equals("Annule")) {
             throw new Exception("Le vol est déjà terminé");
-        }
-        else 
-        {
+        } else {
             String query;
-        
-            // suppression de EmployeInstanceVol
-            query = "DELETE FROM EmployeInstanceVol WHERE numInstance ="+iv.getNumInstance();
-            try
-            {
-                DBManager.dbExecuteUpdate(query);
-            } catch (SQLException ex)
-            {
+            ResultSet res;
+            query = "Select * from ResaVolPlace where numInstance=" + iv.getNumInstance();
+
+            try {
+                res = DBManager.dbExecuteQuery(query);
+                while (res.next()) {
+                    String queryIdClient = "Select * from ReservationPassager where numReservationP=" + res.getInt("numReservationP");
+                    ResultSet resClient = DBManager.dbExecuteQuery(queryIdClient);
+                    resClient.next();
+                    Reservation_Correspondances rc = new Reservation_Correspondances();
+                    rc.importFromIdClient("" + resClient.getInt("idClient"));
+                    
+                    
+                }
+            } catch (SQLException ex) {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex)
-            {
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
+
+            // suppression de EmployeInstanceVol
+            query = "DELETE FROM EmployeInstanceVol WHERE numInstance =" + iv.getNumInstance();
+            try {
+                DBManager.dbExecuteUpdate(query);
+            } catch (SQLException ex) {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             // on récupère le prochain vol sur la même ligne
             DateFormat format = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss", Locale.ENGLISH);
-            ArrayList<InstanceVol> autresVols = impDAL.importTableInstanceVol(0,iv.getNumVol().getNumVol(),0,0,0,0,0,"","","");
+            ArrayList<InstanceVol> autresVols = impDAL.importTableInstanceVol(0, iv.getNumVol().getNumVol(), 0, 0, 0, 0, 0, "", "", "");
             int newNumInstance = 0;
-            for(InstanceVol autreVol: autresVols)
-            {
-                if(autreVol.getNumInstance()!=iv.getNumInstance())
-                {
-                    if(format.parse(autreVol.getDateDepart()).after(format.parse(iv.getDateDepart())))
-                    {
+            for (InstanceVol autreVol : autresVols) {
+                if (autreVol.getNumInstance() != iv.getNumInstance()) {
+                    if (format.parse(autreVol.getDateDepart()).after(format.parse(iv.getDateDepart()))) {
                         newNumInstance = autreVol.getNumInstance();
                     }
                 }
             }
-            
+
             // on regarde si c'est du fret(2) ou du passager (1)
-            
-            if(iv.getNumVol().getType()==2)
-            {
-                if(newNumInstance == 0)
-                {
-                    query = "Delete FROM ReservationFret where numInstance = "+iv.getNumInstance();
-                }else
-                {
-                    query = "UPDATE ReservationFret SET numInstance=" + newNumInstance + " WHERE numInstance="+iv.getNumInstance();
+            if (iv.getNumVol().getType() == 2) {
+                if (newNumInstance == 0) {
+                    query = "Delete FROM ReservationFret where numInstance = " + iv.getNumInstance();
+                } else {
+                    query = "UPDATE ReservationFret SET numInstance=" + newNumInstance + " WHERE numInstance=" + iv.getNumInstance();
                 }
-                
-                try
-                {
+
+                try {
                     DBManager.dbExecuteUpdate(query);
-                } catch (SQLException ex)
-                {
+                } catch (SQLException ex) {
                     Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex)
-                {
+                } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
-            query = "UPDATE InstanceVol SET etat='" + "Annule" + "' WHERE numInstance="+iv.getNumInstance();
+
+            query = "UPDATE InstanceVol SET etat='" + "Annule" + "' WHERE numInstance=" + iv.getNumInstance();
         }
-        
+
     }
-    
-    public void exportInstanceVol(InstanceVol iv){
+
+    public void exportInstanceVol(InstanceVol iv) {
         ArrayList<InstanceVol> ivs = new ArrayList<>();
         ivs.add(iv);
         exportInstanceVol(ivs);
@@ -560,89 +560,84 @@ public class ExportDAL {
         int maxId;
         String query;
 
-        for (Reservations r : rc.getReservations()){
-            if (r instanceof ReservationPassager){
-                if (r.getNumReservation() == 0){
-                    maxId = readMaxNumReservationP() +1;
-                }else{
+        for (Reservations r : rc.getReservations()) {
+            if (r instanceof ReservationPassager) {
+                if (r.getNumReservation() == 0) {
+                    maxId = readMaxNumReservationP() + 1;
+                } else {
                     maxId = r.getNumReservation();
                 }
                 String queryDelete;
                 try {
-                    queryDelete = "Delete from ResaVolPlace where numReservationP="+r.getNumReservation()+" and numInstance="+ ((ReservationPassager)r).getNumInstance().getNumInstance()+" and numPlace="+((ReservationPassager) r).getNumPlace().getNumPlace()+" and idAvion="+((ReservationPassager) r).getIdAvion().getIdAvion();
+                    queryDelete = "Delete from ResaVolPlace where numReservationP=" + r.getNumReservation() + " and numInstance=" + ((ReservationPassager) r).getNumInstance().getNumInstance() + " and numPlace=" + ((ReservationPassager) r).getNumPlace().getNumPlace() + " and idAvion=" + ((ReservationPassager) r).getIdAvion().getIdAvion();
                     DBManager.dbExecuteUpdate(queryDelete);
-                    
-                    
+
                     exportReservationPassager(rc, (ReservationPassager) r, maxId);
-                    
-                    
-                    query = "Insert into ResaVolPlace values ("+r.getNumReservation()+", "+((ReservationPassager) r).getNumInstance().getNumInstance()+", "+((ReservationPassager) r).getNumPlace().getNumPlace()+", "+((ReservationPassager) r).getIdAvion().getIdAvion()+", "+r.getPrix()+")";
+
+                    query = "Insert into ResaVolPlace values (" + maxId + ", " + ((ReservationPassager) r).getNumInstance().getNumInstance() + ", " + ((ReservationPassager) r).getNumPlace().getNumPlace() + ", " + ((ReservationPassager) r).getIdAvion().getIdAvion() + ", " + r.getPrix() + ")";
                     DBManager.dbExecuteUpdate(query);
                 } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-            }
-            else if (r instanceof ReservationFret){
-                if (r.getNumReservation() == 0){
-                    maxId = readMaxNumReservationF() +1;
-                }else{
+
+            } else if (r instanceof ReservationFret) {
+                if (r.getNumReservation() == 0) {
+                    maxId = readMaxNumReservationF() + 1;
+                } else {
                     maxId = r.getNumReservation();
                 }
-                String queryDelete = "Delete from ReservationFret where numReservationF="+maxId;
-                try{
+                String queryDelete = "Delete from ReservationFret where numReservationF=" + maxId;
+                try {
                     DBManager.dbExecuteUpdate(queryDelete);
-                    String arrivée = (r.getDateReservation()!= "") ? "TO_DATE('" + r.getDateReservation() + "', 'yyyy/mm/dd hh24:mi:ss')" : "null";
-                    query = "Insert into ReservationFret values ("+maxId+", "+rc.getIdClient().getIdClient()+", "+((ReservationFret) r).getNumInstance().getNumInstance()+", "+((ReservationFret) r).getVolume()+", "+((ReservationFret) r).getPoids()+", "+arrivée+")";
-                
+                    String arrivée = (r.getDateReservation() != "") ? "TO_DATE('" + r.getDateReservation() + "', 'yyyy/mm/dd hh24:mi:ss')" : "null";
+                    query = "Insert into ReservationFret values (" + maxId + ", " + rc.getIdClient().getIdClient() + ", " + ((ReservationFret) r).getNumInstance().getNumInstance() + ", " + ((ReservationFret) r).getVolume() + ", " + ((ReservationFret) r).getPoids() + ", " + arrivée + ")";
+
                     DBManager.dbExecuteUpdate(query);
                 } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        
 
     }
-    
-    private void exportReservationPassager(Reservation_Correspondances rc, ReservationPassager r, int maxId){
+
+    private void exportReservationPassager(Reservation_Correspondances rc, ReservationPassager r, int maxId) {
         String query;
         ResultSet result;
-        
-        query = "Select * from ReservationPassager where numReservationP="+maxId;
+
+        query = "Select * from ReservationPassager where numReservationP=" + maxId;
         try {
             result = DBManager.dbExecuteQuery(query);
-            if(!result.next()){
+            if (!result.next()) {
 
-                query = "Insert into ReservationPassager values ("+maxId+", "+rc.getIdClient()+", TO_DATE('" + r.getDateReservation() + "', 'yyyy/mm/dd hh24:mi:ss'))";
+                query = "Insert into ReservationPassager values (" + maxId + ", " + rc.getIdClient().getIdClient() + ", TO_DATE('" + r.getDateReservation() + "', 'yyyy/mm/dd hh24:mi:ss'))";
                 DBManager.dbExecuteUpdate(query);
-            }else{
-                query = "Update ReservationPassager set idClient="+rc.getIdClient().getIdClient()+", dateReservation=TO_DATE('"+r.getDateReservation()+"', 'yyyy/mm/dd hh24:mi:ss') where numreservationP="+maxId;
+            } else {
+                query = "Update ReservationPassager set idClient=" + rc.getIdClient().getIdClient() + ", dateReservation=TO_DATE('" + r.getDateReservation() + "', 'yyyy/mm/dd hh24:mi:ss') where numreservationP=" + maxId;
                 DBManager.dbExecuteUpdate(query);
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void exportTableClient(ArrayList<Client> clients){
+
+    public void exportTableClient(ArrayList<Client> clients) {
         int maxId;
         String query;
 
         for (Client c : clients) {
             if (c.getIdClient() == 0) {
-                maxId = readMaxIdClient()+ 1;
-                query = "Insert into Client values (" + maxId + ", '" + c.getNomClient() + "', '" + c.getPrenomClient()+ "', '"
+                maxId = readMaxIdClient() + 1;
+                query = "Insert into Client values (" + maxId + ", '" + c.getNomClient() + "', '" + c.getPrenomClient() + "', '"
                         + c.getNumRueClient() + "', '" + c.getRueClient() + "', " + c.getCpClient() + ", '" + c.getVilleClient() + "', "
                         + c.getHeuresCumulees() + ", '" + c.getNumPasseport() + "')";
 
             } else {
                 maxId = c.getIdClient();
 
-
                 query = "Update Client set nomClient='" + c.getNomClient() + "', prenomClient='" + c.getPrenomClient() + "', numRueClient='" + c.getNumRueClient() + "', "
-                        + "rueClient='" + c.getRueClient() + "', cpClient=" + c.getCpClient() + ", villeClient='" + c.getVilleClient() + "', heuresCumulees="+c.getHeuresCumulees()+", numPasseport='"+c.getNumPasseport()+"'"
-                        + "where idclient="+maxId;
+                        + "rueClient='" + c.getRueClient() + "', cpClient=" + c.getCpClient() + ", villeClient='" + c.getVilleClient() + "', heuresCumulees=" + c.getHeuresCumulees() + ", numPasseport='" + c.getNumPasseport() + "'"
+                        + "where idclient=" + maxId;
 
             }
 
@@ -658,13 +653,30 @@ public class ExportDAL {
 
         }
     }
-    
-    public void exportTableClient(Client c){
+
+    public void exportTableClient(Client c) {
         ArrayList<Client> tmp = new ArrayList<>();
         tmp.add(c);
         exportTableClient(tmp);
     }
 
-
-
+    /*
+    public void deleteInstanceVol(int numInstance){
+        ImportDAL importDal = new ImportDAL();
+        String query = "Select * from ResaVolPlace where numInstance="+numInstance;
+        InstanceVol instanceToDelete = importDal.importTableInstanceVol(numInstance, 0, 0, 0, 0, 0, 0, "", "", "").get(0);
+        ArrayList<InstanceVol> instanceCouldReplace = importDal.importTableInstanceVol(0, instanceToDelete.getNumVol().getNumVol(), 0, 1, 1, 1, 0, instanceToDelete.getDateDepart(), "", "Cree");
+        ResultSet res;
+        
+        try{
+            res = DBManager.dbExecuteQuery(query);
+            while(res.next()){
+                for()
+            }
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     */
 }

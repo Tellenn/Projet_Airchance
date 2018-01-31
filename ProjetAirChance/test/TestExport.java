@@ -197,7 +197,7 @@ public class TestExport
             langues.add("Francais");
             langues.add("Allemand");
 
-            PNC pnc = new PNC(0,"Shepard","John","2","command center","12345","ATLANTIS",12000,1,langues);
+            PNC pnc = new PNC(0,"Shepard","John","2","command center","12345","ATLANTIS",12000,1);
             
            
             

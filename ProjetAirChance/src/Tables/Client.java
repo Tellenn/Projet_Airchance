@@ -196,7 +196,7 @@ public class Client {
         }
     }
 
-    void importFromId(String idClient) {
+    public void importFromId(String idClient) {
         ResultSet rs = getResultSetFromId(idClient);
         try {
             if(rs.last()){
