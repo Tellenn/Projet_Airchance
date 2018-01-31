@@ -19,6 +19,7 @@ import Tables.Ville;
 import Tables.Vol;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -40,19 +41,33 @@ public class ImportDAL {
         return importTableAvionFret(0, null, 0, 0, 0);
     }
     
-    public ArrayList<Avion> importAvionDispo(String type,String dateDepart,String dateArrivee,Ville vDep)
+    public ArrayList<Avion> importAvionDispo(String type,String dateDepart,String dateArrivee,Ville vDep) throws ParseException
     {
         ArrayList<Avion> avionDispo = new ArrayList<>();
         if (type.equals("passager"))
         {
             ArrayList<AvionPassager> a = importTableAvionPassager(0,null,0,0,0,vDep);
+            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
             for(AvionPassager avP : a)
             {
-                avionDispo.add(avP);
+                boolean avionOk = true;
+                ArrayList<InstanceVol> v = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,true);
+                for (InstanceVol inst : v){
+                    if(simpleDate.parse(inst.getDateDepart()).after(simpleDate.parse(dateArrivee)))
+                        avionOk = false;
+                }
+                ArrayList<InstanceVol> v2 = importTableInstanceVolByDate(avP.getIdAvion(),dateDepart,null,false);
+                for (InstanceVol inst : v2 ){
+                    
+                    if(simpleDate.parse(inst.getDateArrive()).before(simpleDate.parse(dateDepart)))
+                        avionOk = false;
+                }
+                if(avionOk)
+                    avionDispo.add(avP);
             }
         }
         else if (type.equals("fret"))
-        {
+        {   //public ArrayList<AvionFret> importTableAvionFret(int idAvion, Modele nomModele, int poidsDispo, int volumeDispo, int idDerniereVille)
             ArrayList<AvionFret> a = importTableAvionFret(0,null,0,0,vDep.getIdVille());
             for(AvionFret avF : a)
             {
@@ -523,6 +538,66 @@ public class ImportDAL {
         if (!"".equals(etat)) {
             query += isTheFirst ? " where" : " and";
             query += " idVilleDestination='" + etat + "'";
+        }
+
+        ResultSet result;
+        ArrayList<InstanceVol> iv = new ArrayList<>();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");
+        try {
+            result = DBManager.dbExecuteQuery(query);
+
+            while (result.next()) {
+                int numInstanceRes = result.getInt("numInstance");
+                int numVolRes = result.getInt("numVol");
+                int idAvionRes = result.getInt("idAvion");
+                int placesRestEcoRes = result.getInt("placesRestEco");
+                int placesRestAffRes = result.getInt("placesRestAff");
+                int placesRestPremRes = result.getInt("placesRestPrem");
+                int poidsRestRes = result.getInt("poidsRest");
+                String dateDepartRes = simpleDate.format(result.getDate("dateDepart"));
+                java.util.Date dateArriveeTmp = result.getDate("dateArrivee");
+
+                String dateArriveeRes = (dateArriveeTmp == null) ? "" : simpleDate.format(result.getDate("dateArrivee"));
+                String etatRes = result.getString("etat");
+                InstanceVol tmp = new InstanceVol(numInstanceRes, numVolRes, idAvionRes, placesRestEcoRes, placesRestAffRes, placesRestPremRes, poidsRestRes, dateDepartRes, dateArriveeRes, etatRes);
+                //PNC tmp = new PNC(idEmployeRes, nomEmployeRes, prenomEmployeRes, numRueRes, rueEmployeRes, cpEmployeRes, villeEmployeRes, heuresVolRes, idDerRes, languePNC);
+                iv.add(tmp);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AvionFret.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return iv;
+
+    }
+    
+    public ArrayList<InstanceVol> importTableInstanceVolByDate(int idAvion,String dateDepart, String dateArrivee, boolean sup) {
+        String query = "Select * from InstanceVol";
+        boolean isTheFirst = true;
+        if (idAvion != 0) {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            query += " idAvion=" + idAvion;
+        }
+        if (dateDepart != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            if(sup){
+                query += " dateDepart>TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }else{
+                query += " dateDepart<TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }
+            
+        }
+        if (dateArrivee != "") {
+            query += isTheFirst ? " where" : " and";
+            isTheFirst = false;
+            if(sup){
+                query += " dateDepart>TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }else{
+                query += " dateDepart<TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
+            }
         }
 
         ResultSet result;
