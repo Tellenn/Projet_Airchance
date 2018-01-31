@@ -98,15 +98,16 @@ public class PartieManager {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ArrayList<InstanceVol> allInstanceVol = importDAL.importTableInstanceVol();
+        
 
         int choix = -1;
         
         while(choix != 6){
             
-        }
+        
         switch (choix) {
             case 1:
+                ArrayList<InstanceVol> allInstanceVol = importDAL.importTableInstanceVol();
                 AffichageArrayList.afficheInstanceVol(allInstanceVol);
                 
                 choix = -1;
@@ -130,7 +131,7 @@ public class PartieManager {
                 int type = numvol.getType();
                 String typ;
                 if (type == 1) {
-                    typ = "passager";
+                    typ = "passagers";
                 } else {
                     typ = "fret";
                 }
@@ -201,6 +202,7 @@ public class PartieManager {
                 //manager.dbDisconnect();
                 break;
             case 3:
+                allInstanceVol = importDAL.importTableInstanceVol();
                 // <editor-fold defaultstate="collapsed" desc=" Supprimer InstanceVol ">
                 System.out.println("Quel est l'id de l'instanceVol à supprimmer ? -1 pour retour.");
                 choix = scan.nextInt();
@@ -291,6 +293,7 @@ public class PartieManager {
                 choix = scan.nextInt();
                 scan.nextLine();
                 break;
+            }
         }
     }
 

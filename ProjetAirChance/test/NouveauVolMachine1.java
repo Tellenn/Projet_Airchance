@@ -57,17 +57,22 @@ public class NouveauVolMachine1 {
     public void insertVol() throws SQLException {
         try {
             manager.dbConnect();
+            System.out.println("Connexion à la BD");
             manager.changeAutocommit(false);
             manager.dbChangeIsolation(Connection.TRANSACTION_READ_COMMITTED);
             
             Vol vol = new Vol(0, 2, 480, 5835, 0, 0, 0, 50000, 1, 9);
             ArrayList<Vol> vols = new ArrayList<>();
             vols.add(vol);
+            System.out.println("On insert le vol suivant :");
+            System.out.println(vol.getIdVilleOrigine().getNomVille() + " => " + vol.getIdVilleDestination().getNomVille());
             ExportDAL dal = new ExportDAL();
             dal.exportVol(vols);
             
             manager.commit();
+            System.out.println("Commit");
             manager.dbDisconnect();
+            System.out.println("Déconnexion de la BD");
         } catch (ClassNotFoundException ex) {
             Assert.assertFalse("There was an Exception"+ex,true);
             Logger.getLogger(NouveauVolMachine1.class.getName()).log(Level.SEVERE, null, ex);
