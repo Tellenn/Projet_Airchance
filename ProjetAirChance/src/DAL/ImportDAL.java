@@ -613,7 +613,7 @@ public class ImportDAL {
                 query += " dateDepart<TO_DATE('" + dateDepart + "', 'yyyy/mm/dd hh24:mi:ss')";
             }
         }
-        query += " etat<>'Annule'";
+        query += "and etat!='Annule'";
         ResultSet result;
         ArrayList<InstanceVol> iv = new ArrayList<>();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd' 'hh:mm:ss");

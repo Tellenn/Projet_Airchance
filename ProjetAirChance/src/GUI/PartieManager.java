@@ -52,6 +52,7 @@ public class PartieManager
         exportDAL = new ExportDAL();
         manager = new DBManager();
         manager.dbConnect();
+        manager.changeAutocommit(false);
 
         System.out.println("Que voulez vous faire ?");
         System.out.println("1- Gérer tous les InstanceVols prévus");
@@ -91,7 +92,6 @@ public class PartieManager
         int choix = scan.nextInt();
         scan.nextLine();
         
-        manager.changeAutocommit(false);
         try
         {
             manager.dbChangeIsolation(Connection.TRANSACTION_SERIALIZABLE);
@@ -106,6 +106,8 @@ public class PartieManager
         {
             case 1:
                 AffichageArrayList.afficheInstanceVol(allInstanceVol);
+                //à modifier
+                manager.dbDisconnect();
                 break;
             case 2:
                 System.out.println("Date de départ ? format YYYY/MM/DD hh:mm:ss");
@@ -198,6 +200,8 @@ public class PartieManager
                         continu = false;
                     }
                 }
+                //à modifier
+                manager.dbDisconnect();
                 break;
             case 3:
                 System.out.println("Quel est l'id de l'instanceVol à supprimmer ? -1 pour retour.");
@@ -235,10 +239,15 @@ public class PartieManager
                         continu = false;
                     }
                 }
+                //à modifier
+                manager.dbDisconnect();
                 break;
             case 4:
+                //à modifier
+                manager.dbDisconnect();
                 //TODO//
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
             case 5:
                 System.out.println("Quel est l'ID de l'instanceVol a terminer ?");
                 int ivID  = scan.nextInt();
@@ -271,6 +280,8 @@ public class PartieManager
                         continu = false;
                     }
                 }
+                //à modifier
+                manager.dbDisconnect();
                 break;    
             case 6:
                 mainMenu();
@@ -301,6 +312,8 @@ public class PartieManager
         {
             case 1:
                 AffichageArrayList.afficheVol(allVol);
+                //à modifier
+                manager.dbDisconnect();
                 break;
             case 2:
                 mainMenu();
