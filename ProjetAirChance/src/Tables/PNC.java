@@ -241,6 +241,8 @@ public class PNC implements PersonnelNavigant, TableInterface{
             tmp.importFromId(langueString.get(i));
             this.langues.add(tmp);
         }
+        
+        
     }
     
     @Override

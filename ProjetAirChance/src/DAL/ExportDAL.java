@@ -239,9 +239,14 @@ public class ExportDAL {
 
                 DBManager.dbExecuteUpdate(query);
 
+                if (pnc.getLangues().size() < 3){
+                    throw new Exception("Contrainte métier : un PNC doit connaitre au moins 3 Langues");
+                }
                 String queryDeleteLangue = "Delete from LanguePNC where idEmploye=" + maxId;
                 DBManager.dbExecuteUpdate(queryDeleteLangue);
 
+                
+                
                 for (Langue jack : pnc.getLangues()) {
                     queryLangue = "Insert into LanguePNC values ('" + jack.getNomLangue() + "', " + maxId + ")";
                     try {
@@ -252,6 +257,8 @@ public class ExportDAL {
                 }
 
             } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
