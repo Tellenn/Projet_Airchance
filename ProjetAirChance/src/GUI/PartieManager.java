@@ -254,7 +254,7 @@ public class PartieManager
                 scan.nextLine();
                 InstanceVol temp = new InstanceVol();
                 temp.importFromId(""+ivID);
-                if (!temp.getEtat().equals("Cree") || !temp.getEtat().equals("Cree"))
+                if (!temp.getEtat().equals("Cree") || !temp.getEtat().equals("En cours de Vol"))
                 {
                     System.out.println("Erreur le vol est déja annulé ou arrivé");
                 }else

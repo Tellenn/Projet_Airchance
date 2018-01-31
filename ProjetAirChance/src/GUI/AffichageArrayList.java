@@ -70,13 +70,20 @@ public class AffichageArrayList
         System.out.print("numPNC /");
         System.out.print("/ Nom /");
         System.out.print("/ Prenom /");
-         System.out.println();
-        for (PNC pnc : list)
+        System.out.println();
+        if (list==null)
         {
-            System.out.print(pnc.getIdEmploye());
-            System.out.print(" / "+pnc.getNomEmploye()+" / ");
-            System.out.print(" / "+pnc.getPrenomEmploye()+" / ");
-            System.out.println();
+            System.out.println("Il n'y a pas de PNC disponible");
+        }else
+        {
+            for (PNC pnc : list)
+            {
+
+                    System.out.print(pnc.getIdEmploye());
+                    System.out.print(" / "+pnc.getNomEmploye()+" / ");
+                    System.out.print(" / "+pnc.getPrenomEmploye()+" / ");
+                    System.out.println();
+            }
         }
     }
     public static void affichePNT(ArrayList<PNT> list)
@@ -84,13 +91,19 @@ public class AffichageArrayList
         System.out.print("numPNT /");
         System.out.print("/ Nom /");
         System.out.print("/ Prenom /");
-         System.out.println();
-        for (PNT pnc : list)
+        System.out.println();
+        if (list==null)
         {
-            System.out.print(pnc.getIdEmploye());
-            System.out.print(" / "+pnc.getNomEmploye()+" / ");
-            System.out.print(" / "+pnc.getPrenomEmploye()+" / ");
-            System.out.println();
+            System.out.println("Il n'y a pas de PNC disponible");
+        }else
+        {
+            for (PNT pnt : list)
+            {
+                System.out.print(pnt.getIdEmploye());
+                System.out.print(" / "+pnt.getNomEmploye()+" / ");
+                System.out.print(" / "+pnt.getPrenomEmploye()+" / ");
+                System.out.println();
+            }
         }
     }
     public static void afficheAvion(ArrayList<Avion> list)
