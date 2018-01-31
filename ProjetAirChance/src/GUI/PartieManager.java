@@ -133,8 +133,16 @@ public class PartieManager
                 
                 ArrayList<PersonnelNavigant> pnChoix = new ArrayList();
                 System.out.println("Voici les PNC dispo.");
-                ArrayList<PNC> pncDispo = importDAL.importPNCDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
-                AffichageArrayList.affichePNC(pncDispo);
+                ArrayList<PNC> pncDispo;
+                try
+                {
+                    pncDispo = importDAL.importPNCDispo(dateDep,dateArr,numvol.getIdVilleOrigine());
+                    AffichageArrayList.affichePNC(pncDispo);
+                } catch (ParseException ex)
+                {
+                    Logger.getLogger(PartieManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 System.out.println("Lesquels voulez vous prendre? mettre des virgules entre chaque id");
                 String pnc = scan.nextLine();
                 String[] s = pnc.split(",");
