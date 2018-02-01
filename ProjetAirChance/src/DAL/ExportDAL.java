@@ -637,6 +637,41 @@ public class ExportDAL {
             Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+       public void exportReservation(Reservation_Correspondances rc, Reservations r) {
+           String queryDelete, query;
+           int maxId;
+           if (r instanceof ReservationPassager){
+               queryDelete = "Delete from ResaVolPlace where numReservationP=" + r.getNumReservation() + " and numInstance=" + ((ReservationPassager) r).getNumInstance().getNumInstance() + " and numPlace=" + ((ReservationPassager) r).getNumPlace().getNumPlace() + " and idAvion=" + ((ReservationPassager) r).getIdAvion().getIdAvion();
+                if (r.getNumReservation() == 0) {
+                    maxId = readMaxNumReservationP() + 1;
+                } else {
+                    maxId = r.getNumReservation();
+                }
+               try{
+                   
+                    DBManager.dbExecuteUpdate(queryDelete);
+
+                    exportReservationPassager(rc, (ReservationPassager) r, maxId);
+
+                    
+                    ConstraintDAL c = new ConstraintDAL();
+                    float prix = r.getPrix();
+                    float coeff = 0.95f;
+                    if(c.reduction(rc.getIdClient().getIdClient())==true){
+                        prix = prix * coeff;
+                    }
+                    
+                    query = "Insert into ResaVolPlace values ("+maxId+", "+((ReservationPassager) r).getNumInstance().getNumInstance()+", "+((ReservationPassager) r).getNumPlace().getNumPlace()+", "+((ReservationPassager) r).getIdAvion().getIdAvion()+", "+prix+")";
+
+
+
+                    DBManager.dbExecuteUpdate(query);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(ExportDAL.class.getName()).log(Level.SEVERE, null, ex);
+                }
+           }
+       }
 
     public void exportTableClient(ArrayList<Client> clients) {
         int maxId;
@@ -696,4 +731,8 @@ public class ExportDAL {
         }
     }
      */
+
+ 
+
+    
 }

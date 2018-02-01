@@ -151,7 +151,7 @@ public class TestImport
         exp.exportAvionPassager(vionvion);
         
         ImportDAL imp = new ImportDAL();
-        ArrayList<Avion> avions = imp.importAvionDispo("passager", "2018/02/25 10:00:00", "2018/02/25 10:00:00", ville);
+        ArrayList<Avion> avions = imp.importAvionDispo("passagers", "2018/02/25 10:00:00", "2018/02/25 10:00:00", ville);
         
         if(avions.size() <= 0){
             assertFalse("error",true);
