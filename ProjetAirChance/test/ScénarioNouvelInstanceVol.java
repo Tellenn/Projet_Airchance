@@ -99,7 +99,7 @@ public class ScénarioNouvelInstanceVol
             String typ;
             if (type == 1)
             {
-                typ = "passager";
+                typ = "passagers";
             } else
             {
                 typ = "fret";
