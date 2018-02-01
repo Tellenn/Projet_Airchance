@@ -137,7 +137,8 @@ public class ScenarioNouvelleReservation {
             
             rc.addReservations(rp);
             System.out.println("Exportation de la réservation à suivre");
-            exportDAL.exportReservationCorrespondance(rc);
+            //exportDAL.exportReservationCorrespondance(rc);
+            exportDAL.exportReservation(rc, rp);
             System.out.println("Scénario terminé, en attente du commit");
             
             manager.commit();

@@ -9,6 +9,7 @@ import DAL.ExportDAL;
 import DAL.ImportDAL;
 import Tables.AvionFret;
 import Tables.AvionPassager;
+import Tables.Langue;
 import Tables.Modele;
 import Tables.PNC;
 import Tables.PNT;
@@ -161,7 +162,7 @@ public class TestExport
             ArrayList<Place> p = new ArrayList<>();
             for(int i=0;i<3;i++)
             {
-                p.add(new Place(i,"couloir","eco",false));
+                p.add(new Place(i+1,"couloir","eco",false));
             }
             avion.setPlaces(p);
             
@@ -199,7 +200,14 @@ public class TestExport
 
             PNC pnc = new PNC(0,"Shepard","John","2","command center","12345","ATLANTIS",12000,1);
             
-           
+            ArrayList<Langue> languesPNC = new ArrayList<>();
+            for(String s : langues){
+                Langue l = new Langue();
+                l.importFromId(s);
+                languesPNC.add(l);
+                
+            }
+           pnc.setLangues(languesPNC);
             
             ExportDAL dal = new ExportDAL();
             dal.exportPNC(pnc);
